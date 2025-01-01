@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { DashboardRoute } from "./dashboard.route";
 import { RoleRoute } from "./role.route";
 import { UserRoute } from "./user.route";
+import { PermissionRoute } from "./permission.route";
 
 const Router = express.Router();
 
@@ -14,5 +15,6 @@ Router.get("/status", (req, res) => {
 Router.use("/users", UserRoute);
 Router.use("/dashboards", DashboardRoute);
 Router.use("/role", RoleRoute);
+Router.use("/permission", PermissionRoute);
 
 export const APIs_V1 = Router;
