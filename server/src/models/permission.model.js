@@ -1,10 +1,8 @@
 import { DataTypes } from "sequelize";
 import sequelizeConnectionString from "~/config/database";
-import { UserRoleLinkModel } from "./user_role.model";
-import { UserModel } from "./user.model";
 
-export const RoleModel = sequelizeConnectionString.define(
-	"roles",
+export const PermissionModel = sequelizeConnectionString.define(
+	"permissions",
 	{
 		id: {
 			type: DataTypes.UUID,
@@ -12,15 +10,22 @@ export const RoleModel = sequelizeConnectionString.define(
 			primaryKey: true,
 		},
 		name: {
-			type: DataTypes.ENUM("admin", "user", "editor", "manager"),
+			type: DataTypes.ENUM(
+				"*",
+				"add_product",
+				"edit_product",
+				"delete_product",
+				"view_reports"
+			),
 			allowNull: false,
-			defaultValue: "user",
 		},
 		description: {
 			type: DataTypes.TEXT,
+			allowNull: true,
 		},
 	},
 	{
-		modelName: "Role",
+		freezeTableName: true,
+		modelName: "Permission",
 	}
 );

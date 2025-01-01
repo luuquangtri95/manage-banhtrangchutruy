@@ -1,6 +1,7 @@
+import bcrypt from "bcrypt";
 import { DataTypes } from "sequelize";
 import sequelizeConnectionString from "~/config/database";
-import bcrypt from "bcrypt";
+import { RoleModel } from "./role.model";
 
 export const UserModel = sequelizeConnectionString.define(
 	"users",
@@ -27,21 +28,12 @@ export const UserModel = sequelizeConnectionString.define(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		roleId: {
-			type: DataTypes.UUID,
-			allowNull: false,
-			references: {
-				model: "roles",
-				key: "id",
-			},
-		},
 		isActive: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: true,
 		},
 	},
 	{
-		sequelizeConnectionString,
 		modelName: "User",
 		hooks: {
 			beforeCreate: async (user) => {
