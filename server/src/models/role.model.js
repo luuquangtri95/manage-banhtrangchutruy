@@ -1,7 +1,5 @@
 import { DataTypes } from "sequelize";
 import sequelizeConnectionString from "~/config/database";
-import { UserRoleLinkModel } from "./user_role.model";
-import { UserModel } from "./user.model";
 
 export const RoleModel = sequelizeConnectionString.define(
 	"roles",

@@ -1,7 +1,6 @@
 import bcrypt from "bcrypt";
 import { DataTypes } from "sequelize";
 import sequelizeConnectionString from "~/config/database";
-import { RoleModel } from "./role.model";
 
 export const UserModel = sequelizeConnectionString.define(
 	"users",
