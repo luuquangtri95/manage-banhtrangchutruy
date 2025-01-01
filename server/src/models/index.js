@@ -3,12 +3,14 @@ import { RoleModel } from "./role.model";
 import { RolePermissionLinkModel } from "./role_permission.model";
 import { UserModel } from "./user.model";
 import { UserRoleLinkModel } from "./user_role.model";
+import { OrderModel } from "./order.model";
 
 // Gom tất cả models vào object models
 const models = [
 	UserModel, // Tạo bảng users trước
 	RoleModel, // Tạo bảng roles
 	PermissionModel, // Tạo bảng permissions
+	OrderModel,
 
 	//-------- bảng link sẽ đặt ở đây !
 	UserRoleLinkModel, // Tạo bảng user_roles
@@ -41,6 +43,11 @@ const setupAssociations = () => {
 		onDelete: "CASCADE",
 	});
 	//#endregion
+
+	//#region [n order - 1 user]
+	OrderModel.belongsTo(UserModel, { foreignKey: "user_id" });
+	UserModel.hasMany(OrderModel, { foreignKey: "user_id" });
+	//#endregion
 };
 
 (async () => {
@@ -50,7 +57,7 @@ const setupAssociations = () => {
 
 		// Đồng bộ tất cả các bảng theo thứ tự
 		for (const model of models) {
-			await model.sync({ force: true });
+			await model.sync({ alter: true });
 			console.log(`${model.name} created successfully!`);
 		}
 
