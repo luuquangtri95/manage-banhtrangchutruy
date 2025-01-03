@@ -29,7 +29,25 @@ const findAll = async (req, res) => {
 	}
 };
 
+const update = async (req, res) => {
+	try {
+		const orderId = req.params.orderId;
+	} catch (error) {
+		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+	}
+};
+
+const _delete = async (req, res) => {
+	try {
+		const orderId = req.params.orderId;
+	} catch (error) {
+		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+	}
+};
+
 export const OrderController = {
 	create,
 	findAll,
+	update,
+	delete: _delete,
 };
