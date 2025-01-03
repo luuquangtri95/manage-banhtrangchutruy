@@ -10,7 +10,7 @@ export const RoleModel = sequelizeConnectionString.define(
 			primaryKey: true,
 		},
 		name: {
-			type: DataTypes.ENUM("admin", "user", "editor", "manager"),
+			type: DataTypes.ENUM("admin", "user", "editor", "manager", "guest"),
 			allowNull: false,
 			defaultValue: "user",
 		},

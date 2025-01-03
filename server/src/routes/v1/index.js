@@ -4,6 +4,7 @@ import { DashboardRoute } from "./dashboard.route";
 import { RoleRoute } from "./role.route";
 import { UserRoute } from "./user.route";
 import { PermissionRoute } from "./permission.route";
+import { OrderRoute } from "./order.route";
 
 const Router = express.Router();
 
@@ -16,5 +17,6 @@ Router.use("/users", UserRoute);
 Router.use("/dashboards", DashboardRoute);
 Router.use("/role", RoleRoute);
 Router.use("/permission", PermissionRoute);
+Router.use("/orders", OrderRoute);
 
 export const APIs_V1 = Router;
