@@ -4,6 +4,7 @@ import { RolePermissionLinkModel } from "./role_permission.model";
 import { UserModel } from "./user.model";
 import { UserRoleLinkModel } from "./user_role.model";
 import { OrderModel } from "./order.model";
+import { CategoryModel } from "./category.model";
 
 // Gom tất cả models vào object models
 const models = [
@@ -11,6 +12,7 @@ const models = [
 	RoleModel, // Tạo bảng roles
 	PermissionModel, // Tạo bảng permissions
 	OrderModel,
+	CategoryModel,
 
 	//-------- bảng link sẽ đặt ở đây !
 	UserRoleLinkModel, // Tạo bảng user_roles

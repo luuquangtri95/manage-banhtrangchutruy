@@ -15,7 +15,8 @@ export const PermissionModel = sequelizeConnectionString.define(
 				"add_product",
 				"edit_product",
 				"delete_product",
-				"view_reports"
+				"view_reports",
+				"create_category"
 			),
 			allowNull: false,
 		},
