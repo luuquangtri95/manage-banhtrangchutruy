@@ -16,6 +16,8 @@ const findAll = async (req) => {
 		const _sort = req.query.sort || "asc";
 		const _order = req.query.order || "title"; // title
 		const _status = req.query.status;
+		const _startDate = req.query.startDate || "";
+		const _endDate = req.query.endDate || "";
 		/// ... many queries here
 
 		let payload = {
