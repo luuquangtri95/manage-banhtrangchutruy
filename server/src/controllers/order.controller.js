@@ -18,8 +18,18 @@ const create = async (req, res) => {
 
 const findAll = async (req, res) => {
 	try {
+		const metadata = await OrderService.findAll(req);
+
+		res.status(StatusCodes.OK).json({ metadata });
+	} catch (error) {
+		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+	}
+};
+
+const findById = async (req, res) => {
+	try {
 		const orderId = req.params.orderId;
-		const metadata = await OrderService.findAll(orderId);
+		const metadata = await OrderService.findById(orderId);
 
 		res.status(StatusCodes.OK).json({
 			metadata,
@@ -47,6 +57,7 @@ const _delete = async (req, res) => {
 
 export const OrderController = {
 	create,
+	findById,
 	findAll,
 	update,
 	delete: _delete,
