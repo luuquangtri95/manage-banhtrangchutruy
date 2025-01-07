@@ -10,6 +10,7 @@ export const OrderModel = sequelizeConnectionString.define(
 			defaultValue: DataTypes.UUIDV4,
 			primaryKey: true,
 		},
+		title: { type: DataTypes.STRING, allowNull: false },
 		fullname: {
 			type: DataTypes.STRING,
 			allowNull: false,

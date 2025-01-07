@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import { OrderModel } from "~/models/order.model";
 
 const findById = async (id) => {
@@ -10,16 +11,27 @@ const findById = async (id) => {
 
 const findAll = async (payload) => {
 	try {
-		const { page, limit } = payload;
+		const { page, limit, searchTerm, sort, order, status } = payload;
 
 		const _offset = (page - 1) * limit;
 
-		const where = {};
+		let where = {};
+
+		if (searchTerm) {
+			where.title = {
+				[Op.like]: `%${searchTerm}%`,
+			};
+		}
+
+		if (status) {
+			where.status = status;
+		}
 
 		const { count, rows } = await OrderModel.findAndCountAll({
 			where,
 			limit: limit,
 			offset: _offset,
+			order: [[order, sort]],
 			raw: true,
 		});
 
