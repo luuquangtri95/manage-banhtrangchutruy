@@ -46,7 +46,29 @@ const findAll = async (payload) => {
 	}
 };
 
+const findById = async (id) => {
+	try {
+		return await ProductModel.findOne({
+			where: {
+				id,
+			},
+		});
+	} catch (error) {
+		throw error;
+	}
+};
+
+const _delete = async (id) => {
+	try {
+		return await ProductModel.destroy({ where: { id } });
+	} catch (error) {
+		throw error;
+	}
+};
+
 export const ProductRepository = {
 	create,
 	findAll,
+	findById,
+	delete: _delete,
 };

@@ -24,6 +24,9 @@ const findAll = async (req, res) => {
 };
 const findById = async (req, res) => {
 	try {
+		const metadata = await ProductService.findById(req);
+
+		res.status(StatusCodes.OK).json({ metadata });
 	} catch (error) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
 	}
@@ -36,6 +39,9 @@ const update = async (req, res) => {
 };
 const _delete = async (req, res) => {
 	try {
+		const metadata = await ProductService.delete(req);
+
+		res.status(StatusCodes.OK).json({ message: "delete product success !" });
 	} catch (error) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
 	}

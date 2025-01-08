@@ -33,7 +33,29 @@ const findAll = async (req) => {
 	}
 };
 
+const findById = async (req) => {
+	try {
+		const productId = req.params.productId;
+
+		return await ProductRepository.findById(productId);
+	} catch (error) {
+		throw error;
+	}
+};
+
+const _delete = async (req) => {
+	try {
+		const productId = req.params.productId;
+
+		return await ProductRepository.delete(productId);
+	} catch (error) {
+		throw error;
+	}
+};
+
 export const ProductService = {
 	create,
 	findAll,
+	findById,
+	delete: _delete,
 };
