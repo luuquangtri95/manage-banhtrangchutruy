@@ -19,6 +19,7 @@ export const PermissionModel = sequelizeConnectionString.define(
 				"create_category"
 			),
 			allowNull: false,
+			defaultValue: "*",
 		},
 		description: {
 			type: DataTypes.TEXT,
