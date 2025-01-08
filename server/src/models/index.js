@@ -5,6 +5,8 @@ import { UserModel } from "./user.model";
 import { UserRoleLinkModel } from "./user_role.model";
 import { OrderModel } from "./order.model";
 import { CategoryModel } from "./category.model";
+import { ProductModel } from "./product.model";
+import { ProductCategoryModel } from "./product_category.model";
 
 // Gom tất cả models vào object models
 const models = [
@@ -13,10 +15,12 @@ const models = [
 	PermissionModel, // Tạo bảng permissions
 	OrderModel,
 	CategoryModel,
+	ProductModel,
 
 	//-------- bảng link sẽ đặt ở đây !
 	UserRoleLinkModel, // Tạo bảng user_roles
 	RolePermissionLinkModel, // Tạo bảng roles_permissions
+	ProductCategoryModel,
 	// ... các models về sau luôn luôn đặt dưới đây
 ];
 
@@ -49,6 +53,26 @@ const setupAssociations = () => {
 	//#region [n order - 1 user]
 	OrderModel.belongsTo(UserModel, { foreignKey: "user_id" });
 	UserModel.hasMany(OrderModel, { foreignKey: "user_id" });
+	//#endregion
+
+	//#region [category - product]
+	//#region [1 category - n products]
+	ProductModel.belongsToMany(CategoryModel, {
+		through: ProductCategoryModel,
+		foreignKey: "product_id",
+		otherKey: "category_id",
+		onDelete: "CASCADE",
+	});
+	//#endregion
+
+	//#region [1 product - n category]
+	CategoryModel.belongsToMany(ProductModel, {
+		through: ProductCategoryModel,
+		foreignKey: "category_id",
+		otherKey: "product_id",
+		onDelete: "CASCADE",
+	});
+	//#endregion
 	//#endregion
 };
 
