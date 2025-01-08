@@ -1,62 +1,50 @@
 import { StatusCodes } from "http-status-codes";
-import { OrderService } from "~/services/order.service";
+import { ProductService } from "~/services/product.service";
 
 const create = async (req, res) => {
 	try {
-		const metadata = await OrderService.create(req);
+		const metadata = await ProductService.create(req);
 
 		res.status(StatusCodes.OK).json({
-			message: "create data success !",
 			metadata,
+			message: "create product success !",
 		});
 	} catch (error) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
 	}
 };
-
 const findAll = async (req, res) => {
 	try {
-		const metadata = await OrderService.findAll(req);
+		const metadata = await ProductService.findAll(req);
 
 		res.status(StatusCodes.OK).json({ metadata });
 	} catch (error) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
 	}
 };
-
 const findById = async (req, res) => {
 	try {
-		const orderId = req.params.orderId;
-		const metadata = await OrderService.findById(orderId);
-
-		res.status(StatusCodes.OK).json({
-			metadata,
-		});
 	} catch (error) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
 	}
 };
-
 const update = async (req, res) => {
 	try {
-		const orderId = req.params.orderId;
 	} catch (error) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
 	}
 };
-
 const _delete = async (req, res) => {
 	try {
-		const orderId = req.params.orderId;
 	} catch (error) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
 	}
 };
 
-export const OrderController = {
+export const ProductController = {
 	create,
-	findById,
 	findAll,
+	findById,
 	update,
 	delete: _delete,
 };

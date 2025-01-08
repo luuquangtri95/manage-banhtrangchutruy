@@ -38,8 +38,10 @@ const findAll = async (req) => {
 	}
 };
 
-const create = async (payload) => {
+const create = async (req) => {
 	try {
+		const payload = req.body;
+
 		return await OrderRepository.create(payload);
 	} catch (error) {
 		throw error;
