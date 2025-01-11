@@ -7,7 +7,7 @@ export const AuthProvider = ({ children }) => {
 	const [userInfo, setUserInfo] = useState(null);
 
 	const role = "admin";
-	const authenticated = false;
+	const authenticated = true;
 
 	const handleLogin = async (data) => {
 		const res = await UserApi.login(data);
