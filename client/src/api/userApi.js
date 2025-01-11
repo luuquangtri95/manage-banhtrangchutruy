@@ -1,6 +1,6 @@
 import authorizedAxiosInstance from "../utils/authorizedAxios";
 
-const UserApis = {
+const UserApi = {
 	login: async (data) => {
 		const url = "/users/login";
 		return await authorizedAxiosInstance.post(url, data);
@@ -12,4 +12,4 @@ const UserApis = {
 	},
 };
 
-export default UserApis;
+export default UserApi;

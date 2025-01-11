@@ -1,17 +1,22 @@
 import { createContext, useState } from "react";
+import UserApi from "../api/userApi";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
 	const [userInfo, setUserInfo] = useState(null);
 
-	const role = "guest";
-	const authenticated = true;
+	const role = "admin";
+	const authenticated = false;
 
-	const handleAccess = async () => {};
+	const handleLogin = async (data) => {
+		const res = await UserApi.login(data);
+
+		console.log("res", res);
+	};
 
 	return (
-		<AuthContext.Provider value={{ role, authenticated, onAccess: handleAccess }}>
+		<AuthContext.Provider value={{ role, authenticated, onLogin: handleLogin }}>
 			{children}
 		</AuthContext.Provider>
 	);

@@ -5,11 +5,16 @@ import LoginPage from "../pages/LoginPage";
 import UserPage from "../pages/user";
 import GuestPage from "../pages/guest";
 import UnauthorizedPage from "../pages/UnauthorizedPage";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const AppRoutes = () => {
+	const { authenticated, role } = useContext(AuthContext);
+
 	return (
 		<Router>
 			<Routes>
+				{/* Public routes */}
 				<Route
 					path="/login"
 					element={<LoginPage />}
@@ -19,37 +24,69 @@ const AppRoutes = () => {
 					element={<UnauthorizedPage />}
 				/>
 
-				{/* protected routes */}
+				{/* Protected admin routes */}
 				<Route
-					path="/admin"
+					path="/admin/*"
 					element={
 						<ProtectedRouteContext roles={["admin"]}>
-							<AdminPage />
+							<Routes>
+								<Route
+									path=""
+									element={<AdminPage />}
+								/>
+							</Routes>
 						</ProtectedRouteContext>
 					}
 				/>
 
+				{/* Protected user routes */}
 				<Route
-					path="/user"
+					path="/user/*"
 					element={
-						<ProtectedRouteContext roles={["admin", "user"]}>
-							<UserPage />
+						<ProtectedRouteContext roles={["user"]}>
+							<Routes>
+								<Route
+									path=""
+									element={<UserPage />}
+								/>
+							</Routes>
 						</ProtectedRouteContext>
 					}
 				/>
 
+				{/* Protected guest routes */}
 				<Route
-					path="/guest"
+					path="/guest/*"
 					element={
-						<ProtectedRouteContext roles={["admin", "user", "guest"]}>
-							<GuestPage />
+						<ProtectedRouteContext roles={["guest"]}>
+							<Routes>
+								<Route
+									path=""
+									element={<GuestPage />}
+								/>
+							</Routes>
 						</ProtectedRouteContext>
 					}
 				/>
 
+				{/* Fallback route */}
 				<Route
 					path="*"
-					element={<Navigate to="/login" />}
+					element={
+						authenticated ? (
+							<Navigate
+								to={
+									role === "admin"
+										? "/admin"
+										: role === "user"
+										? "/user"
+										: "/guest"
+								}
+							/>
+						) : (
+							<Navigate to="/login" />
+						)
+					}
 				/>
 			</Routes>
 		</Router>
