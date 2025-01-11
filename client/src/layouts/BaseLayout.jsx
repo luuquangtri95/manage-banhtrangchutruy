@@ -11,7 +11,7 @@ function BaseLayout({ children }) {
 		<div>
 			<div className="top-bar h-[50px] bg-[#ffe9cf] p-2">
 				<div className="flex justify-between items-center h-full">
-					<div>Managerment Page</div>
+					<div>Managerment</div>
 
 					<div className="avatar w-[35px] h-[35px] rounded-[50%] bg-black"></div>
 				</div>
@@ -61,11 +61,34 @@ function BaseLayout({ children }) {
 					<div className="mt-3">
 						{isCollapse ? (
 							<ul>
+								<li>Tạo đơn hàng</li>
 								<li className="">Quản lý đơn hàng</li>
 								<li>Thống kê</li>
 							</ul>
 						) : (
 							<div className="flex items-center flex-col gap-[15px]">
+								<button>
+									<svg
+										width="25px"
+										height="25px"
+										viewBox="0 0 21 21"
+										xmlns="http://www.w3.org/2000/svg">
+										<g
+											fill="none"
+											fill-rule="evenodd"
+											stroke="#000000"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											transform="translate(3 3)">
+											<path d="m7 1.5h-4.5c-1.1045695 0-2 .8954305-2 2v9.0003682c0 1.1045695.8954305 2 2 2h10c1.1045695 0 2-.8954305 2-2v-4.5003682" />
+
+											<path d="m14.5.46667982c.5549155.5734054.5474396 1.48588056-.0167966 2.05011677l-6.9832034 6.98320341-3 1 1-3 6.9874295-7.04563515c.5136195-.5178979 1.3296676-.55351813 1.8848509-.1045243z" />
+
+											<path d="m12.5 2.5.953 1" />
+										</g>
+									</svg>
+								</button>
+
 								<button>
 									<svg
 										width="25px"
