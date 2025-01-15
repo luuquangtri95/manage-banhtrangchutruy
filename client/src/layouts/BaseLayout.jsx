@@ -49,7 +49,7 @@ function BaseLayout() {
 						isCollapse ? "w-[60px]" : "w-[250px]"
 					} p-2 transition-all`}>
 					<div>
-						<p className={`${isCollapse ? "text-center" : "text-right"}`}>
+						<p className={`${isCollapse ? "text-center" : ""}`}>
 							{isCollapse ? (
 								<button onClick={handleCollapse}>
 									<Icon type="arrow-right" />
@@ -67,23 +67,27 @@ function BaseLayout() {
 					<div className="mt-3">
 						{isCollapse ? (
 							<div className="flex items-center flex-col gap-[15px]">
-								<NavLink to="/dashboard/admin/orders">
+								<NavLink to="/dashboard/admin/orders/create">
 									<Icon type="icon-create" />
 								</NavLink>
 
-								<NavLink to="/dashboard/admin/products">
+								<NavLink to="/dashboard/admin/orders">
 									<Icon type="icon-manager-order" />
 								</NavLink>
 
-								<NavLink>
+								<NavLink to="/dashboard/admin/products">
+									<Icon type="icon-products" />
+								</NavLink>
+
+								<NavLink to="/dashboard/admin/analytic">
 									<Icon type="icon-analytic" />
 								</NavLink>
 
-								<NavLink>
+								<NavLink to="/dashboard/admin/wholesale-price">
 									<Icon type="icon-price" />
 								</NavLink>
 
-								<NavLink>
+								<NavLink to="/dashboard/admin/users">
 									<Icon type="icon-user-group" />
 								</NavLink>
 							</div>
@@ -113,6 +117,18 @@ function BaseLayout() {
 								</NavLink>
 
 								<NavLink
+									end
+									to="/dashboard/admin/products"
+									className={({ isActive }) =>
+										`flex gap-2 mb-3 hover:bg-[#ffe9cf] p-1 transition-all rounded-md ${
+											isActive ? "bg-[#ffe9cf]" : ""
+										}`
+									}>
+									<Icon type="icon-products" />
+									<p>Quản lý sản phẩm</p>
+								</NavLink>
+
+								<NavLink
 									to="/dashboard/admin/analytic"
 									className={({ isActive }) =>
 										`flex gap-2 mb-3 hover:bg-[#ffe9cf] p-1 transition-all rounded-md ${
@@ -124,7 +140,7 @@ function BaseLayout() {
 								</NavLink>
 
 								<NavLink
-									to="/dashboard/admin/prices"
+									to="/dashboard/admin/wholesale-price"
 									className={({ isActive }) =>
 										`flex gap-2 mb-3 hover:bg-[#ffe9cf] p-1 transition-all rounded-md ${
 											isActive ? "bg-[#ffe9cf]" : ""

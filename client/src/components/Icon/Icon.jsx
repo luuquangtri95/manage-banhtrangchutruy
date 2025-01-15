@@ -198,6 +198,111 @@ c2.098-1.39,3.357-3.737,3.357-6.254C347.118,315.421,345.856,313.073,343.759,311.
 					</svg>
 				);
 
+			case "icon-products":
+				return (
+					<svg
+						width="25px"
+						height="25px"
+						viewBox="0 0 24.00 24.00"
+						version="1.1"
+						xmlns="http://www.w3.org/2000/svg"
+						xmlns:xlink="http://www.w3.org/1999/xlink"
+						fill="#000000">
+						<g
+							id="SVGRepo_bgCarrier"
+							stroke-width="0"
+						/>
+
+						<g
+							id="SVGRepo_tracerCarrier"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke="#CCCCCC"
+							stroke-width="0.048"
+						/>
+
+						<g id="SVGRepo_iconCarrier">
+							{" "}
+							<title />{" "}
+							<g
+								fill="none"
+								fill-rule="evenodd"
+								id="页面-1"
+								stroke-width="0.72">
+								{" "}
+								<g
+									id="导航图标"
+									transform="translate(-325.000000, -80.000000)">
+									{" "}
+									<g
+										id="编组"
+										transform="translate(325.000000, 80.000000)">
+										{" "}
+										<polygon
+											fill="#FFFFFF"
+											fill-opacity="0.01"
+											fill-rule="nonzero"
+											id="路径"
+											points="24 0 0 0 0 24 24 24"
+										/>{" "}
+										<polygon
+											id="路径"
+											points="22 7 12 2 2 7 2 17 12 22 22 17"
+											stroke="#212121"
+											stroke-linejoin="round"
+											stroke-width="0.72"
+										/>{" "}
+										<line
+											id="路径"
+											stroke="#212121"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="0.72"
+											x1="2"
+											x2="12"
+											y1="7"
+											y2="12"
+										/>{" "}
+										<line
+											id="路径"
+											stroke="#212121"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="0.72"
+											x1="12"
+											x2="12"
+											y1="22"
+											y2="12"
+										/>{" "}
+										<line
+											id="路径"
+											stroke="#212121"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="0.72"
+											x1="22"
+											x2="12"
+											y1="7"
+											y2="12"
+										/>{" "}
+										<line
+											id="路径"
+											stroke="#212121"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="0.72"
+											x1="17"
+											x2="7"
+											y1="4.5"
+											y2="9.5"
+										/>{" "}
+									</g>{" "}
+								</g>{" "}
+							</g>{" "}
+						</g>
+					</svg>
+				);
+
 			default:
 				break;
 		}
