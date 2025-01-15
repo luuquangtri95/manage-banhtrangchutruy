@@ -7,6 +7,19 @@ import GuestPage from "../pages/guest";
 import UnauthorizedPage from "../pages/UnauthorizedPage";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import BaseLayout from "../layouts/BaseLayout";
+import OrdersPage from "../pages/order";
+import ProductsPage from "../pages/product";
+
+const FallbackRoute = () => {
+	const { authenticated, role } = useContext(AuthContext);
+
+	if (!authenticated) {
+		return <Navigate to="/login" />;
+	}
+
+	return <Navigate to={`/dashboard/${role}`} />;
+};
 
 const AppRoutes = () => {
 	const { authenticated, role } = useContext(AuthContext);
@@ -24,69 +37,59 @@ const AppRoutes = () => {
 					element={<UnauthorizedPage />}
 				/>
 
-				{/* Protected admin routes */}
+				{/* Base layout with protected routes */}
 				<Route
-					path="/admin/*"
+					path="/dashboard"
 					element={
-						<ProtectedRouteContext roles={["admin"]}>
-							<Routes>
-								<Route
-									path=""
-									element={<AdminPage />}
-								/>
-							</Routes>
+						<ProtectedRouteContext roles={["admin", "user", "guest"]}>
+							<BaseLayout />
 						</ProtectedRouteContext>
-					}
-				/>
+					}>
+					<Route
+						index
+						element={
+							<Navigate
+								to={role === "admin" ? "/dashboard/admin" : "/dashboard/user"}
+							/>
+						}
+					/>
 
-				{/* Protected user routes */}
-				<Route
-					path="/user/*"
-					element={
-						<ProtectedRouteContext roles={["user"]}>
-							<Routes>
-								<Route
-									path=""
-									element={<UserPage />}
-								/>
-							</Routes>
-						</ProtectedRouteContext>
-					}
-				/>
+					<Route
+						path="admin"
+						element={<AdminPage />}>
+						<Route
+							path="orders"
+							element={<OrdersPage />}
+						/>
+						<Route
+							path="products"
+							element={<ProductsPage />}
+						/>
+					</Route>
 
-				{/* Protected guest routes */}
-				<Route
-					path="/guest/*"
-					element={
-						<ProtectedRouteContext roles={["guest"]}>
-							<Routes>
-								<Route
-									path=""
-									element={<GuestPage />}
-								/>
-							</Routes>
-						</ProtectedRouteContext>
-					}
-				/>
+					<Route
+						path="user"
+						element={<UserPage />}>
+						<Route
+							path="orders"
+							element={<OrdersPage />}
+						/>
+						<Route
+							path="products"
+							element={<ProductsPage />}
+						/>
+					</Route>
+
+					<Route
+						path="guest"
+						element={<GuestPage />}
+					/>
+				</Route>
 
 				{/* Fallback route */}
 				<Route
 					path="*"
-					element={
-						authenticated ? (
-							<Navigate
-								to={
-									role === "admin"
-										? "/admin"
-										: role === "user"
-										? "/user"
-										: "/guest"
-								}
-							/>
-						) : (
-							<Navigate to="/login" />
-						)
-					}
+					element={<FallbackRoute />}
 				/>
 			</Routes>
 		</Router>

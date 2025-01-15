@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Icon from "../components/Icon/Icon";
+import { Outlet } from "react-router";
 
-function BaseLayout({ children }) {
+function BaseLayout() {
 	const [isCollapse, setIsCollapse] = useState(true);
 
 	const handleCollapse = () => {
@@ -127,7 +128,7 @@ function BaseLayout({ children }) {
 				</div>
 
 				<div className="p-2 flex-1 bg-[##fafafa]">
-					<div>{children}</div>
+					<Outlet />
 				</div>
 			</div>
 		</div>
