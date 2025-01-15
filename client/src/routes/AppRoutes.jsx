@@ -10,6 +10,10 @@ import { AuthContext } from "../context/AuthContext";
 import BaseLayout from "../layouts/BaseLayout";
 import OrdersPage from "../pages/order";
 import ProductsPage from "../pages/product";
+import OrderCreate from "../pages/order/create/OrderCreate";
+import OrderList from "../pages/order/list";
+import AnalyticPage from "../pages/analytic";
+import UsersPage from "../pages/users";
 
 const FallbackRoute = () => {
 	const { authenticated, role } = useContext(AuthContext);
@@ -59,8 +63,27 @@ const AppRoutes = () => {
 						element={<AdminPage />}>
 						<Route
 							path="orders"
-							element={<OrdersPage />}
+							element={<OrdersPage />}>
+							<Route
+								index
+								element={<OrderList />}
+							/>
+							<Route
+								path="create"
+								element={<OrderCreate />}
+							/>
+						</Route>
+
+						<Route
+							path="analytic"
+							element={<AnalyticPage />}
 						/>
+
+						<Route
+							path="users"
+							element={<UsersPage />}
+						/>
+
 						<Route
 							path="products"
 							element={<ProductsPage />}

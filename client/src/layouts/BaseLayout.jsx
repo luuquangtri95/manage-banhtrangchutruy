@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { NavLink, Outlet, useNavigate } from "react-router";
+import { NavLink, Outlet } from "react-router";
 import Logo from "../assets/logo.jpg";
 import Icon from "../components/Icon/Icon";
 
 function BaseLayout() {
-	const [isCollapse, setIsCollapse] = useState(true);
+	const [isCollapse, setIsCollapse] = useState(false);
 
 	const handleCollapse = () => {
 		setIsCollapse(!isCollapse);
@@ -90,7 +90,7 @@ function BaseLayout() {
 						) : (
 							<ul>
 								<NavLink
-									to="/dashboard/admin/orders"
+									to="/dashboard/admin/orders/create"
 									className={({ isActive }) =>
 										`flex gap-2 mb-3 hover:bg-[#ffe9cf] p-1 transition-all rounded-md ${
 											isActive ? "bg-[#ffe9cf]" : ""
@@ -101,7 +101,8 @@ function BaseLayout() {
 								</NavLink>
 
 								<NavLink
-									to="/dashboard/admin/products"
+									end
+									to="/dashboard/admin/orders"
 									className={({ isActive }) =>
 										`flex gap-2 mb-3 hover:bg-[#ffe9cf] p-1 transition-all rounded-md ${
 											isActive ? "bg-[#ffe9cf]" : ""
@@ -112,7 +113,7 @@ function BaseLayout() {
 								</NavLink>
 
 								<NavLink
-									to="/dashboard/admin/analytics"
+									to="/dashboard/admin/analytic"
 									className={({ isActive }) =>
 										`flex gap-2 mb-3 hover:bg-[#ffe9cf] p-1 transition-all rounded-md ${
 											isActive ? "bg-[#ffe9cf]" : ""
