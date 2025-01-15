@@ -64,30 +64,55 @@ function BaseLayout() {
 						<div className="divider w-full h-[1px] bg-[#eee]"></div>
 					</div>
 
-					<div className="mt-3">
+					<div className="mt-2">
 						{isCollapse ? (
-							<div className="flex items-center flex-col gap-[15px]">
-								<NavLink to="/dashboard/admin/orders/create">
+							<div className="flex items-center flex-col">
+								<NavLink
+									to="/dashboard/admin/orders/create"
+									className={({ isActive }) =>
+										`p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
+									}>
 									<Icon type="icon-create" />
 								</NavLink>
 
-								<NavLink to="/dashboard/admin/orders">
+								<NavLink
+									end
+									to="/dashboard/admin/orders"
+									className={({ isActive }) =>
+										`p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
+									}>
 									<Icon type="icon-manager-order" />
 								</NavLink>
 
-								<NavLink to="/dashboard/admin/products">
+								<NavLink
+									to="/dashboard/admin/products"
+									className={({ isActive }) =>
+										`p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
+									}>
 									<Icon type="icon-products" />
 								</NavLink>
 
-								<NavLink to="/dashboard/admin/analytic">
+								<NavLink
+									to="/dashboard/admin/analytic"
+									className={({ isActive }) =>
+										`p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
+									}>
 									<Icon type="icon-analytic" />
 								</NavLink>
 
-								<NavLink to="/dashboard/admin/wholesale-price">
+								<NavLink
+									to="/dashboard/admin/wholesale-price"
+									className={({ isActive }) =>
+										`p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
+									}>
 									<Icon type="icon-price" />
 								</NavLink>
 
-								<NavLink to="/dashboard/admin/users">
+								<NavLink
+									to="/dashboard/admin/users"
+									className={({ isActive }) =>
+										`p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
+									}>
 									<Icon type="icon-user-group" />
 								</NavLink>
 							</div>
