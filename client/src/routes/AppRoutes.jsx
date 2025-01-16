@@ -15,6 +15,7 @@ import OrderList from "../pages/order/list";
 import AnalyticPage from "../pages/analytic";
 import UsersPage from "../pages/users";
 import WholesalePrice from "../pages/wholesale-price";
+import CategoryPage from "../pages/category/CategoryPage";
 
 const FallbackRoute = () => {
 	const { authenticated, role } = useContext(AuthContext);
@@ -74,6 +75,11 @@ const AppRoutes = () => {
 								element={<OrderCreate />}
 							/>
 						</Route>
+
+						<Route
+							path="categories"
+							element={<CategoryPage />}
+						/>
 
 						<Route
 							path="analytic"
