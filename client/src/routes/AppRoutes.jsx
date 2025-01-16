@@ -12,7 +12,24 @@ import GuestPage from "../pages/guest";
 import UnauthorizedPage from "../pages/UnauthorizedPage";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import GuestOrderList from "../pages/guest/GuestOrderList";
+import BaseLayout from "../layouts/BaseLayout";
+import OrdersPage from "../pages/order";
+import ProductsPage from "../pages/product";
+import OrderCreate from "../pages/order/create/OrderCreate";
+import OrderList from "../pages/order/list";
+import AnalyticPage from "../pages/analytic";
+import UsersPage from "../pages/users";
+import WholesalePrice from "../pages/wholesale-price";
+
+const FallbackRoute = () => {
+  const { authenticated, role } = useContext(AuthContext);
+
+  if (!authenticated) {
+    return <Navigate to="/login" />;
+  }
+
+  return <Navigate to={`/dashboard/${role}`} />;
+};
 
 const AppRoutes = () => {
   const { authenticated, role } = useContext(AuthContext);
@@ -24,63 +41,49 @@ const AppRoutes = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
-        {/* Protected admin routes */}
+        {/* Base layout with protected routes */}
         <Route
-          path="/admin/*"
+          path="/dashboard"
           element={
-            <ProtectedRouteContext roles={["admin"]}>
-              <Routes>
-                <Route path="" element={<AdminPage />} />
-              </Routes>
+            <ProtectedRouteContext roles={["admin", "user", "guest"]}>
+              <BaseLayout />
             </ProtectedRouteContext>
           }
-        />
+        >
+          <Route
+            index
+            element={
+              <Navigate
+                to={role === "admin" ? "/dashboard/admin" : "/dashboard/user"}
+              />
+            }
+          />
 
-        {/* Protected user routes */}
-        <Route
-          path="/user/*"
-          element={
-            <ProtectedRouteContext roles={["user"]}>
-              <Routes>
-                <Route path="" element={<UserPage />} />
-              </Routes>
-            </ProtectedRouteContext>
-          }
-        />
+          <Route path="admin" element={<AdminPage />}>
+            <Route path="orders" element={<OrdersPage />}>
+              <Route index element={<OrderList />} />
+              <Route path="create" element={<OrderCreate />} />
+            </Route>
 
-        {/* Protected guest routes */}
-        <Route
-          path="/guest/*"
-          element={
-            <ProtectedRouteContext roles={["guest"]}>
-              <Routes>
-                <Route path="" element={<GuestPage />} />
-              </Routes>
-            </ProtectedRouteContext>
-          }
-        />
+            <Route path="analytic" element={<AnalyticPage />} />
+
+            <Route path="wholesale-price" element={<WholesalePrice />} />
+
+            <Route path="users" element={<UsersPage />} />
+
+            <Route path="products" element={<ProductsPage />} />
+          </Route>
+
+          <Route path="user" element={<UserPage />}>
+            <Route path="orders" element={<OrdersPage />} />
+            <Route path="products" element={<ProductsPage />} />
+          </Route>
+
+          <Route path="guest" element={<GuestPage />} />
+        </Route>
 
         {/* Fallback route */}
-        <Route
-          path="*"
-          element={
-            authenticated ? (
-              <Navigate
-                to={
-                  role === "admin"
-                    ? "/admin"
-                    : role === "user"
-                    ? "/user"
-                    : "/guest"
-                }
-              />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-
-        <Route path="/orders" element={<GuestOrderList />} />
+        <Route path="*" element={<FallbackRoute />} />
       </Routes>
     </Router>
   );

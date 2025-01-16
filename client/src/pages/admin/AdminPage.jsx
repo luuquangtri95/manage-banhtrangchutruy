@@ -1,7 +1,14 @@
-import BaseLayout from "../../layouts/BaseLayout";
+import { Outlet } from "react-router";
 
 function AdminPage(props) {
-	return <BaseLayout>admin page</BaseLayout>;
+	return (
+		<div>
+			<h1 className="text-[26px] font-bold">Welcome to Admin 😉</h1>
+			<div className="admin-content">
+				<Outlet />
+			</div>
+		</div>
+	);
 }
 
 export default AdminPage;
