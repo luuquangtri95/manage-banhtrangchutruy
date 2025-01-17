@@ -20,6 +20,9 @@ import OrderList from "../pages/order/list";
 import AnalyticPage from "../pages/analytic";
 import UsersPage from "../pages/users";
 import WholesalePrice from "../pages/wholesale-price";
+import UserOrderPage from "../pages/user/Order/UserOrderPage";
+import UserOrderList from "../pages/user/OrderList/UserOrderList";
+import UserOrderCreate from "../pages/user/OrderCreate/UserOrderCreate";
 
 const FallbackRoute = () => {
   const { authenticated, role } = useContext(AuthContext);
@@ -75,8 +78,12 @@ const AppRoutes = () => {
           </Route>
 
           <Route path="user" element={<UserPage />}>
-            <Route path="orders" element={<OrdersPage />} />
-            <Route path="products" element={<ProductsPage />} />
+            {/* <Route path="orders" element={<OrdersPage />} />
+            <Route path="products" element={<ProductsPage />} /> */}
+            <Route path="orders" element={<UserOrderPage />}>
+              <Route index element={<UserOrderList />} />
+              <Route path="create" element={<UserOrderCreate />} />
+            </Route>
           </Route>
 
           <Route path="guest" element={<GuestPage />} />
