@@ -1,14 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router";
 import Logo from "../assets/logo.jpg";
 import Icon from "../components/Icon/Icon";
 
 function BaseLayout() {
   const [isCollapse, setIsCollapse] = useState(false);
+  const [renderContent, setRenderContent] = useState(true);
 
   const handleCollapse = () => {
     setIsCollapse(!isCollapse);
   };
+
+  useEffect(() => {
+    if (isCollapse) {
+      // Nếu menu thu nhỏ, ẩn nội dung ngay lập tức
+      setRenderContent(false);
+    } else {
+      // Nếu menu mở rộng, chờ 300ms (thời gian transition) trước khi render nội dung
+      const timer = setTimeout(() => {
+        setRenderContent(true);
+      }, 50); // Thời gian đồng bộ với CSS transition
+      return () => clearTimeout(timer); // Dọn dẹp timeout nếu `isCollapse` thay đổi trước khi hết thời gian
+    }
+  }, [isCollapse]);
 
   return (
     <div className="h-[100vh] flex flex-col">
@@ -67,10 +81,10 @@ function BaseLayout() {
           </div>
 
           <div className="mt-2">
-            {isCollapse ? (
+            {isCollapse && (
               <div className="flex items-center flex-col">
                 <NavLink
-                  to="/dashboard/admin/orders/create"
+                  to={`/dashboard/admin/orders/create`}
                   className={({ isActive }) =>
                     `p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
                   }
@@ -95,6 +109,15 @@ function BaseLayout() {
                   }
                 >
                   <Icon type="icon-products" />
+                </NavLink>
+
+                <NavLink
+                  to="/dashboard/admin/categories"
+                  className={({ isActive }) =>
+                    `p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
+                  }
+                >
+                  <Icon type="icon-category" />
                 </NavLink>
 
                 <NavLink
@@ -124,12 +147,14 @@ function BaseLayout() {
                   <Icon type="icon-user-group" />
                 </NavLink>
               </div>
-            ) : (
+            )}
+
+            {renderContent && !isCollapse && (
               <ul>
                 <NavLink
                   to="/dashboard/admin/orders/create"
                   className={({ isActive }) =>
-                    `flex gap-2 mb-3 hover:bg-[#ffe9cf] p-1 transition-all rounded-md ${
+                    `p-3 flex gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
                       isActive ? "bg-[#ffe9cf]" : ""
                     }`
                   }
@@ -142,7 +167,7 @@ function BaseLayout() {
                   end
                   to="/dashboard/admin/orders"
                   className={({ isActive }) =>
-                    `flex gap-2 mb-3 hover:bg-[#ffe9cf] p-1 transition-all rounded-md ${
+                    `p-3 flex gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
                       isActive ? "bg-[#ffe9cf]" : ""
                     }`
                   }
@@ -155,7 +180,7 @@ function BaseLayout() {
                   end
                   to="/dashboard/admin/products"
                   className={({ isActive }) =>
-                    `flex gap-2 mb-3 hover:bg-[#ffe9cf] p-1 transition-all rounded-md ${
+                    `p-3 flex gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
                       isActive ? "bg-[#ffe9cf]" : ""
                     }`
                   }
@@ -165,9 +190,22 @@ function BaseLayout() {
                 </NavLink>
 
                 <NavLink
+                  end
+                  to="/dashboard/admin/categories"
+                  className={({ isActive }) =>
+                    `p-3 flex gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
+                      isActive ? "bg-[#ffe9cf]" : ""
+                    }`
+                  }
+                >
+                  <Icon type="icon-category" />
+                  <p>Quản lý danh mục</p>
+                </NavLink>
+
+                <NavLink
                   to="/dashboard/admin/analytic"
                   className={({ isActive }) =>
-                    `flex gap-2 mb-3 hover:bg-[#ffe9cf] p-1 transition-all rounded-md ${
+                    `p-3 flex gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
                       isActive ? "bg-[#ffe9cf]" : ""
                     }`
                   }
@@ -179,7 +217,7 @@ function BaseLayout() {
                 <NavLink
                   to="/dashboard/admin/wholesale-price"
                   className={({ isActive }) =>
-                    `flex gap-2 mb-3 hover:bg-[#ffe9cf] p-1 transition-all rounded-md ${
+                    `p-3 flex gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
                       isActive ? "bg-[#ffe9cf]" : ""
                     }`
                   }
@@ -191,7 +229,7 @@ function BaseLayout() {
                 <NavLink
                   to="/dashboard/admin/users"
                   className={({ isActive }) =>
-                    `flex gap-2 mb-3 hover:bg-[#ffe9cf] p-1 transition-all rounded-md ${
+                    `p-3 flex gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
                       isActive ? "bg-[#ffe9cf]" : ""
                     }`
                   }
