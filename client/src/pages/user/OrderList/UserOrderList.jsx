@@ -9,7 +9,7 @@ function UserOrderList() {
   const [orderData, setOrderData] = useState([]);
   const [pagination, setPagination] = useState({});
 
-  const handleGetAllData = async (page = 1, limit = 3) => {
+  const handleGetAllData = async (page = 1, limit = 10) => {
     try {
       const res = await fetch(
         `http://localhost:8017/v1/orders/?page=${page}&limit=${limit}`,
@@ -44,36 +44,45 @@ function UserOrderList() {
     }));
   };
 
-  //   console.log("pagination", pagination);
-
-  const numberPagination = (currentPage, totalPage) => {
+  const numberPagination = () => {
     const indexPage = 1;
     const pages = [];
-    const indexAll = pagination.total_page;
+    const totalPage = pagination.total_page;
     const cur = pagination.page;
-    console.log("cur", cur);
 
-    // console.log("currentPage", currentPage);
-    // console.log("totalPage", totalPage);
+    //Pham vi trang hien thi
+    const left = Math.max(indexPage + 1, cur - 1);
+    const right = Math.min(totalPage - 1, cur + 1);
 
-    //Trang dau va cuoi
-    const left = Math.max(cur);
-    console.log("left", left);
+    //them trang dau tien zo mang de luon hien
+    pages.push(1);
 
-    for (let i = indexPage; i <= indexAll; i++) {
+    if (left > 2) {
+      pages.push("...");
+    }
+
+    for (let i = left; i <= right; i++) {
       pages.push(i);
     }
-    // console.log("pages", pages);
+
+    if (right < totalPage - 1) {
+      pages.push("...");
+    }
+
+    //trang cuoi cung luon hien
+    pages.push(totalPage);
+
     return pages;
   };
 
   const handleSetPage = (page) => {
-    // console.log("chuyen den trang", page);
     setPagination((prev) => ({
       ...prev,
       page,
     }));
   };
+
+  console.log("pagination", pagination);
 
   useEffect(() => {
     navigate(
@@ -83,72 +92,74 @@ function UserOrderList() {
   }, [pagination.page]);
 
   return (
-    <div className="page-order-list">
+    <div className="page-order-list text-[14px]">
       <div className="pt-[40px] max-w-[1100px] m-auto">
         <div className="text-2xl font-bold mb-4 text-center">Order List</div>
-        <div className="render-list">
-          <div className="border text-left mb-4">
-            <div className="tab-header">
-              <div className="flex bg-gray-100 font-medium">
-                <div className="number p-2 w-[50px] border-r"></div>
-                <div className="name p-2 w-[150px] border-r">Name</div>
-                <div className="address p-2 flex-1 border-r">Address</div>
-                <div className="phone p-2 w-[130px] border-r">Phone</div>
-                <div className="delivery_date p-2 w-[115px] border-r ">
-                  Delivery date
+        <div className="order-wrapper relative flex flex-col w-full h-full text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
+          <div className="render-list">
+            <div className="border text-left">
+              <div className="tab-header">
+                <div className="flex bg-gray-100 font-medium">
+                  <div className="number p-2 w-[50px] border-r"></div>
+                  <div className="name p-2 w-[150px] border-r">Name</div>
+                  <div className="address p-2 flex-1 border-r">Address</div>
+                  <div className="phone p-2 w-[130px] border-r">Phone</div>
+                  <div className="delivery_date p-2 w-[115px] border-r ">
+                    Delivery date
+                  </div>
+                  <div className="item p-2 w-[180px] border-r">Product</div>
+                  <div className="quantity p-2 w-[80px] border-r">Quantity</div>
+                  <div className="status p-2 w-[84px]">Status</div>
                 </div>
-                <div className="item p-2 w-[180px] border-r">Product</div>
-                <div className="quantity p-2 w-[80px] border-r">Quantity</div>
-                <div className="status p-2 w-[84px]">Status</div>
+              </div>
+              <div className="tab-content">
+                {orderData.length > 0 ? (
+                  orderData.map((item, index) => (
+                    <div key={index} className="flex border-t min-h-[50px]">
+                      <NumberSeria
+                        pagination={pagination}
+                        data={orderData}
+                        index={index}
+                      />
+                      <div className="product p-2 w-[150px] border-r flex items-center">
+                        {item.fullname}
+                      </div>
+                      <div className="address p-2 flex-1 border-r flex items-center">
+                        {item.address}
+                      </div>
+                      <div className="phone p-2 w-[130px] border-r flex items-center">
+                        {item.phone}
+                      </div>
+                      <div className="delivery_date p-2 w-[115px] border-r flex items-center">
+                        {new Date(item.delivery_date).toLocaleDateString()}
+                      </div>
+                      <div className="item p-2 w-[180px] border-r flex items-center">
+                        {item.data_json?.item?.name ||
+                          item.data_json?.items?.name}
+                      </div>
+                      <div className="quantity p-2 w-[80px] border-r flex items-center">
+                        {item.data_json?.item?.quantity ||
+                          item.data_json?.items?.quantity}
+                      </div>
+                      <Badge value={item.status} type="pending" />
+                    </div>
+                  ))
+                ) : (
+                  <p className="p-2 flex justify-center items-center border-t min-h-[50px]">
+                    No Product
+                  </p>
+                )}
               </div>
             </div>
-            <div className="tab-content">
-              {orderData.length > 0 ? (
-                orderData.map((item, index) => (
-                  <div key={index} className="flex border-t min-h-[50px]">
-                    <NumberSeria
-                      pagination={pagination}
-                      data={orderData}
-                      index={index}
-                    />
-                    <div className="product p-2 w-[150px] border-r flex items-center">
-                      {item.fullname}
-                    </div>
-                    <div className="address p-2 flex-1 border-r flex items-center">
-                      {item.address}
-                    </div>
-                    <div className="phone p-2 w-[130px] border-r flex items-center">
-                      {item.phone}
-                    </div>
-                    <div className="delivery_date p-2 w-[115px] border-r flex items-center">
-                      {new Date(item.delivery_date).toLocaleDateString()}
-                    </div>
-                    <div className="item p-2 w-[180px] border-r flex items-center">
-                      {item.data_json?.item?.name ||
-                        item.data_json?.items?.name}
-                    </div>
-                    <div className="quantity p-2 w-[80px] border-r flex items-center">
-                      {item.data_json?.item?.quantity ||
-                        item.data_json?.items?.quantity}
-                    </div>
-                    <Badge value={item.status} type="pending" />
-                  </div>
-                ))
-              ) : (
-                <p className="p-2 flex justify-center items-center border-t min-h-[50px]">
-                  No Product
-                </p>
-              )}
-            </div>
           </div>
+          <Pagination
+            handleNextPage={handleNextPage}
+            handlePrevPage={handlePrevPage}
+            pagination={pagination}
+            numberPagination={numberPagination()}
+            handleSetPage={handleSetPage}
+          />
         </div>
-        <Pagination
-          handleNextPage={handleNextPage}
-          handlePrevPage={handlePrevPage}
-          pagination={pagination}
-          numberPagination={numberPagination()}
-          handleSetPage={handleSetPage}
-        />
       </div>
     </div>
   );
