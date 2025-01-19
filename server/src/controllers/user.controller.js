@@ -28,7 +28,8 @@ const login = async (req, res) => {
 		const accessToken = await JwtProvider.generateToken(
 			_userInfo,
 			ACCESS_TOKEN_SECRET_SIGNATURE,
-			"1h"
+			// "1h"
+			5
 		);
 
 		const refreshToken = await JwtProvider.generateToken(
@@ -66,6 +67,11 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
 	try {
+		// xoá cookie
+		res.clearCookie("accessToken");
+		res.clearCookie("refreshToken");
+
+		res.status(StatusCodes.OK).json({ message: "Logout API success !" });
 	} catch (error) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
 	}
@@ -73,8 +79,36 @@ const logout = async (req, res) => {
 
 const refreshToken = async (req, res) => {
 	try {
+		const refreshTokenFromCookie = req.cookies?.refreshToken;
+
+		const refreshTokenDecoded = await JwtProvider.verifyToken(
+			refreshTokenFromCookie,
+			env.REFRESH_TOKEN_SECRET_SIGNATURE
+		);
+
+		const userInfo = {
+			id: refreshTokenDecoded.id,
+			email: refreshTokenDecoded.email,
+		};
+
+		const accessToken = await JwtProvider.generateToken(
+			userInfo,
+			ACCESS_TOKEN_SECRET_SIGNATURE,
+			5
+		);
+
+		res.cookie("accessToken", accessToken, {
+			httpOnly: true,
+			secure: true,
+			sameSite: "none",
+			maxAge: ms("14 days"),
+		});
+
+		res.status(StatusCodes.OK).json({ accessToken });
 	} catch (error) {
-		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+			message: "Refresh Token API failed !",
+		});
 	}
 };
 
