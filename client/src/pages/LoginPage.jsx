@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import Logo from "../assets/logo.jpg";
+import { toast } from "react-toastify";
 
 function LoginPage(props) {
 	const [userInfo, setUserInfo] = useState({
@@ -11,7 +12,11 @@ function LoginPage(props) {
 	const { onLogin } = useContext(AuthContext);
 
 	const handleLogin = () => {
-		onLogin(userInfo);
+		if (!userInfo.email || !userInfo.password) {
+			toast.error("Missing username or password !");
+		} else {
+			onLogin(userInfo);
+		}
 	};
 
 	const handleChange = (name, event) => {

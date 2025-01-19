@@ -26,6 +26,10 @@ authorizedAxiosInstance.interceptors.request.use(
 	}
 );
 
+//#region [hold promise]
+let refreshTokenPromise = null;
+//#endregion
+
 // - Can thiệp vào giữa những response API
 authorizedAxiosInstance.interceptors.response.use(
 	(response) => {
@@ -50,30 +54,38 @@ authorizedAxiosInstance.interceptors.response.use(
 		//#region [- xử lý mã GONE để phục vụ việc refresh_token]
 		const originalRequest = error.config;
 
-		if (error.response?.status === 410 && !originalRequest._retry) {
-			originalRequest._retry = true;
+		if (error.response?.status === 410 && originalRequest) {
+			if (!refreshTokenPromise) {
+				refreshTokenPromise = UserApi.refresh_token()
+					.then(() => {
+						// accessToken tự map lại vào cookie rồi khi API refreshToken called
+					})
+					.catch((__error) => {
+						UserApi.logout().then(() => {
+							localStorage.removeItem("userInfo");
 
-			UserApi.refresh_token()
-				.then(() => {
-					// accessToken tự map lại vào cookie rồi khi API refreshToken called
+							location.href = "/login";
+						});
 
-					return authorizedAxiosInstance(originalRequest);
-				})
-				.catch((__error) => {
-					UserApi.logout().then(() => {
-						localStorage.removeItem("userInfo");
-
-						location.href = "/login";
+						return Promise.reject(__error);
+					})
+					.finally(() => {
+						refreshTokenPromise = null;
 					});
+			}
 
-					return Promise.reject(__error);
-				});
+			return refreshTokenPromise.then(() => {
+				// fetch lại toàn bộ req bị lỗi khì accessToken chưa được tạo lại
+				return authorizedAxiosInstance(originalRequest);
+			});
 		}
 		//#endregion
 
+		//#region [- xử lý lỗi 4xx không chứa lỗi GONE 410]
 		if (error.response?.status !== 410) {
 			toast.error(error.response?.data?.message || error?.message);
 		}
+		//#endregion
 
 		return Promise.reject(error);
 	}
