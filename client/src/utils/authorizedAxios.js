@@ -1,5 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
+import UserApi from "../api/userApi";
 
 let authorizedAxiosInstance = axios.create({
 	baseURL: "http://localhost:8017/v1",
@@ -36,8 +37,38 @@ authorizedAxiosInstance.interceptors.response.use(
 		// Bất kì mã trạng thái nào lọt ra ngoài tầm 2xx đều khiến hàm này được trigger\
 		// Làm gì đó với lỗi response
 
-		//#region [- xử lý mã GONE để phục vụ việc refresh_token]
+		//#region [- Nhận lỗi 401 từ backend là logout luôn]
+		if (error.response?.status === 401) {
+			UserApi.logout().then(() => {
+				localStorage.removeItem("userInfo");
 
+				location.href = "/login";
+			});
+		}
+		//#endregion
+
+		//#region [- xử lý mã GONE để phục vụ việc refresh_token]
+		const originalRequest = error.config;
+
+		if (error.response?.status === 410 && !originalRequest._retry) {
+			originalRequest._retry = true;
+
+			UserApi.refresh_token()
+				.then(() => {
+					// accessToken tự map lại vào cookie rồi khi API refreshToken called
+
+					return authorizedAxiosInstance(originalRequest);
+				})
+				.catch((__error) => {
+					UserApi.logout().then(() => {
+						localStorage.removeItem("userInfo");
+
+						location.href = "/login";
+					});
+
+					return Promise.reject(__error);
+				});
+		}
 		//#endregion
 
 		if (error.response?.status !== 410) {

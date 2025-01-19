@@ -1078,6 +1078,55 @@ c2.098-1.39,3.357-3.737,3.357-6.254C347.118,315.421,345.856,313.073,343.759,311.
 					</svg>
 				);
 
+			case "icon-support":
+				return (
+					<svg
+						width="25px"
+						height="25px"
+						viewBox="0 0 24 24"
+						role="img"
+						xmlns="http://www.w3.org/2000/svg"
+						aria-labelledby="supportIconTitle"
+						stroke="#000000"
+						strokeWidth="1"
+						strokeLinecap="square"
+						strokeLinejoin="miter"
+						fill="none"
+						color="#000000">
+						{" "}
+						<title id="supportIconTitle">Support</title>{" "}
+						<path
+							d="M18,9 L16,9 C14.8954305,9 14,9.8954305 14,11 L14,13 C14,14.1045695 14.8954305,15 16,15 L16,15 C17.1045695,15 18,14.1045695 18,13 L18,9 C18,4.02943725 13.9705627,0 9,0 C4.02943725,0 0,4.02943725 0,9 L0,13 C1.3527075e-16,14.1045695 0.8954305,15 2,15 L2,15 C3.1045695,15 4,14.1045695 4,13 L4,11 C4,9.8954305 3.1045695,9 2,9 L0,9"
+							transform="translate(3 3)"
+						/>{" "}
+						<path d="M21,14 L21,18 C21,20 20.3333333,21 19,21 C17.6666667,21 16,21 14,21" />{" "}
+					</svg>
+				);
+
+			case "icon-logout":
+				return (
+					<svg
+						width="25px"
+						height="25px"
+						viewBox="0 0 24 24"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg">
+						<path
+							d="M15 12L2 12M2 12L5.5 9M2 12L5.5 15"
+							stroke="#1C274C"
+							strokeWidth="1.5"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+						/>
+						<path
+							d="M9.00195 7C9.01406 4.82497 9.11051 3.64706 9.87889 2.87868C10.7576 2 12.1718 2 15.0002 2L16.0002 2C18.8286 2 20.2429 2 21.1215 2.87868C22.0002 3.75736 22.0002 5.17157 22.0002 8L22.0002 16C22.0002 18.8284 22.0002 20.2426 21.1215 21.1213C20.3531 21.8897 19.1752 21.9862 17 21.9983M9.00195 17C9.01406 19.175 9.11051 20.3529 9.87889 21.1213C10.5202 21.7626 11.4467 21.9359 13 21.9827"
+							stroke="#1C274C"
+							strokeWidth="1.5"
+							strokeLinecap="round"
+						/>
+					</svg>
+				);
+
 			default:
 				break;
 		}

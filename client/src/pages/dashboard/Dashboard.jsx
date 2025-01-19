@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router";
-import Logo from "../assets/logo.jpg";
-import Icon from "../components/Icon/Icon";
-import { AuthContext } from "../context/AuthContext";
-import authorizedAxiosInstance from "../utils/authorizedAxios";
+import Logo from "../../assets/logo.jpg";
+import Icon from "../../components/Icon/Icon";
+import { AuthContext } from "../../context/AuthContext";
+import authorizedAxiosInstance from "../../utils/authorizedAxios";
 
-function BaseLayout() {
+function Dashboard() {
 	const [isCollapse, setIsCollapse] = useState(false);
 	const [renderContent, setRenderContent] = useState(true);
 	const { userInfo, onLogout } = useContext(AuthContext);
@@ -180,7 +180,7 @@ function BaseLayout() {
 							{renderContent && !isCollapse && (
 								<ul>
 									<NavLink
-										to="/dashboard/order-create"
+										to="/dashboard/orders/create"
 										className={({ isActive }) =>
 											`p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
 												isActive ? "bg-[#ffe9cf]" : ""
@@ -227,7 +227,7 @@ function BaseLayout() {
 									</NavLink>
 
 									<NavLink
-										to="/dashboard/analytic"
+										to="/dashboard/analytics"
 										className={({ isActive }) =>
 											`p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
 												isActive ? "bg-[#ffe9cf]" : ""
@@ -292,4 +292,4 @@ function BaseLayout() {
 	);
 }
 
-export default BaseLayout;
+export default Dashboard;
