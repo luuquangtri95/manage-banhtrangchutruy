@@ -2,6 +2,7 @@ import express from "express";
 import { StatusCodes } from "http-status-codes";
 import { DashboardRoute } from "./dashboard.route";
 import { UserRoute } from "./user.route";
+import { AuthMiddleware } from "~/middlewares/auth.middleware";
 
 const Router = express.Router();
 
@@ -15,7 +16,7 @@ Router.use("/users", UserRoute);
 //#endregion
 
 //#region [PROTECTED ROUTE]
-Router.use("/dashboards", DashboardRoute);
+Router.use("/dashboards", AuthMiddleware.isAuthorized, DashboardRoute);
 //#endregion
 
 export const APIs_V1 = Router;
