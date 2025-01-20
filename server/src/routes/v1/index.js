@@ -1,11 +1,7 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
 import { DashboardRoute } from "./dashboard.route";
-import { RoleRoute } from "./role.route";
 import { UserRoute } from "./user.route";
-import { PermissionRoute } from "./permission.route";
-import { OrderRoute } from "./order.route";
-import { ProductRoute } from "./product.route";
 
 const Router = express.Router();
 
@@ -14,11 +10,12 @@ Router.get("/status", (req, res) => {
 	res.status(StatusCodes.OK).json({ message: "APIs V1 are ready to use." });
 });
 
+//#region [UNPROTECTED ROUTE]
 Router.use("/users", UserRoute);
+//#endregion
+
+//#region [PROTECTED ROUTE]
 Router.use("/dashboards", DashboardRoute);
-Router.use("/role", RoleRoute);
-Router.use("/permission", PermissionRoute);
-Router.use("/orders", OrderRoute);
-Router.use("/products", ProductRoute);
+//#endregion
 
 export const APIs_V1 = Router;

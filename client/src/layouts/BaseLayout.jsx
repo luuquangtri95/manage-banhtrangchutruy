@@ -1,15 +1,27 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router";
 import Logo from "../assets/logo.jpg";
 import Icon from "../components/Icon/Icon";
+import { AuthContext } from "../context/AuthContext";
+import authorizedAxiosInstance from "../utils/authorizedAxios";
 
 function BaseLayout() {
   const [isCollapse, setIsCollapse] = useState(false);
   const [renderContent, setRenderContent] = useState(true);
+  const { userInfo, onLogout } = useContext(AuthContext);
 
   const handleCollapse = () => {
     setIsCollapse(!isCollapse);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await authorizedAxiosInstance.get(`/dashboards/access`);
+
+      console.log(res);
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (isCollapse) {
@@ -19,7 +31,7 @@ function BaseLayout() {
       // Nếu menu mở rộng, chờ 300ms (thời gian transition) trước khi render nội dung
       const timer = setTimeout(() => {
         setRenderContent(true);
-      }, 50); // Thời gian đồng bộ với CSS transition
+      }, 100); // Thời gian đồng bộ với CSS transition
       return () => clearTimeout(timer); // Dọn dẹp timeout nếu `isCollapse` thay đổi trước khi hết thời gian
     }
   }, [isCollapse]);
@@ -80,165 +92,198 @@ function BaseLayout() {
             <div className="divider w-full h-[1px] bg-[#eee]"></div>
           </div>
 
-          <div className="mt-2">
-            {isCollapse && (
-              <div className="flex items-center flex-col">
-                <NavLink
-                  to={`/dashboard/admin/orders/create`}
-                  className={({ isActive }) =>
-                    `p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
-                  }
-                >
-                  <Icon type="icon-create" />
-                </NavLink>
+          <div className="mt-2 flex flex-col">
+            <div className="">
+              {isCollapse && (
+                <div className="flex items-center flex-col">
+                  <NavLink
+                    to={`/dashboard/order-create`}
+                    className={({ isActive }) =>
+                      `p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
+                    }
+                  >
+                    <Icon type="icon-create" />
+                  </NavLink>
 
-                <NavLink
-                  end
-                  to="/dashboard/admin/orders"
-                  className={({ isActive }) =>
-                    `p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
-                  }
-                >
-                  <Icon type="icon-manager-order" />
-                </NavLink>
+                  <NavLink
+                    end
+                    to="/dashboard/orders"
+                    className={({ isActive }) =>
+                      `p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
+                    }
+                  >
+                    <Icon type="icon-manager-order" />
+                  </NavLink>
 
-                <NavLink
-                  to="/dashboard/admin/products"
-                  className={({ isActive }) =>
-                    `p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
-                  }
-                >
-                  <Icon type="icon-products" />
-                </NavLink>
+                  <NavLink
+                    to="/dashboard/products"
+                    className={({ isActive }) =>
+                      `p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
+                    }
+                  >
+                    <Icon type="icon-products" />
+                  </NavLink>
 
-                <NavLink
-                  to="/dashboard/admin/categories"
-                  className={({ isActive }) =>
-                    `p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
-                  }
-                >
-                  <Icon type="icon-category" />
-                </NavLink>
+                  <NavLink
+                    to="/dashboard/categories"
+                    className={({ isActive }) =>
+                      `p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
+                    }
+                  >
+                    <Icon type="icon-category" />
+                  </NavLink>
 
-                <NavLink
-                  to="/dashboard/admin/analytic"
-                  className={({ isActive }) =>
-                    `p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
-                  }
-                >
-                  <Icon type="icon-analytic" />
-                </NavLink>
+                  <NavLink
+                    to="/dashboard/analytic"
+                    className={({ isActive }) =>
+                      `p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
+                    }
+                  >
+                    <Icon type="icon-analytic" />
+                  </NavLink>
 
-                <NavLink
-                  to="/dashboard/admin/wholesale-price"
-                  className={({ isActive }) =>
-                    `p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
-                  }
-                >
-                  <Icon type="icon-price" />
-                </NavLink>
+                  <NavLink
+                    to="/dashboard/wholesale-price"
+                    className={({ isActive }) =>
+                      `p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
+                    }
+                  >
+                    <Icon type="icon-price" />
+                  </NavLink>
 
-                <NavLink
-                  to="/dashboard/admin/users"
-                  className={({ isActive }) =>
-                    `p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
-                  }
-                >
-                  <Icon type="icon-user-group" />
-                </NavLink>
-              </div>
-            )}
+                  <NavLink
+                    to="/dashboard/users"
+                    className={({ isActive }) =>
+                      `p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
+                    }
+                  >
+                    <Icon type="icon-user-group" />
+                  </NavLink>
 
-            {renderContent && !isCollapse && (
-              <ul>
-                <NavLink
-                  to="/dashboard/admin/orders/create"
-                  className={({ isActive }) =>
-                    `p-3 flex gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
-                      isActive ? "bg-[#ffe9cf]" : ""
-                    }`
-                  }
-                >
-                  <Icon type="icon-create" />
-                  <p>Tạo đơn hàng</p>
-                </NavLink>
+                  <NavLink
+                    to="/123"
+                    className={({ isActive }) =>
+                      `p-3 rounded-md ${isActive ? "bg-[#ffe9cf]" : "bg-none"}`
+                    }
+                  >
+                    <Icon type="icon-support" />
+                  </NavLink>
+                </div>
+              )}
 
-                <NavLink
-                  end
-                  to="/dashboard/admin/orders"
-                  className={({ isActive }) =>
-                    `p-3 flex gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
-                      isActive ? "bg-[#ffe9cf]" : ""
-                    }`
-                  }
-                >
-                  <Icon type="icon-manager-order" />
-                  <p>Quản lý đơn hàng</p>
-                </NavLink>
+              {renderContent && !isCollapse && (
+                <ul>
+                  <NavLink
+                    to="/dashboard/order-create"
+                    className={({ isActive }) =>
+                      `p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
+                        isActive ? "bg-[#ffe9cf]" : ""
+                      }`
+                    }
+                  >
+                    <Icon type="icon-create" />
+                    <p>Tạo đơn hàng</p>
+                  </NavLink>
 
-                <NavLink
-                  end
-                  to="/dashboard/admin/products"
-                  className={({ isActive }) =>
-                    `p-3 flex gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
-                      isActive ? "bg-[#ffe9cf]" : ""
-                    }`
-                  }
-                >
-                  <Icon type="icon-products" />
-                  <p>Quản lý sản phẩm</p>
-                </NavLink>
+                  <NavLink
+                    end
+                    to="/dashboard/orders"
+                    className={({ isActive }) =>
+                      `p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
+                        isActive ? "bg-[#ffe9cf]" : ""
+                      }`
+                    }
+                  >
+                    <Icon type="icon-manager-order" />
+                    <p>Quản lý đơn hàng</p>
+                  </NavLink>
 
-                <NavLink
-                  end
-                  to="/dashboard/admin/categories"
-                  className={({ isActive }) =>
-                    `p-3 flex gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
-                      isActive ? "bg-[#ffe9cf]" : ""
-                    }`
-                  }
-                >
-                  <Icon type="icon-category" />
-                  <p>Quản lý danh mục</p>
-                </NavLink>
+                  <NavLink
+                    end
+                    to="/dashboard/products"
+                    className={({ isActive }) =>
+                      `p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
+                        isActive ? "bg-[#ffe9cf]" : ""
+                      }`
+                    }
+                  >
+                    <Icon type="icon-products" />
+                    <p>Quản lý sản phẩm</p>
+                  </NavLink>
 
-                <NavLink
-                  to="/dashboard/admin/analytic"
-                  className={({ isActive }) =>
-                    `p-3 flex gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
-                      isActive ? "bg-[#ffe9cf]" : ""
-                    }`
-                  }
-                >
-                  <Icon type="icon-analytic" />
-                  <p>Thống kê</p>
-                </NavLink>
+                  <NavLink
+                    end
+                    to="/dashboard/categories"
+                    className={({ isActive }) =>
+                      `p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
+                        isActive ? "bg-[#ffe9cf]" : ""
+                      }`
+                    }
+                  >
+                    <Icon type="icon-category" />
+                    <p>Quản lý danh mục</p>
+                  </NavLink>
 
-                <NavLink
-                  to="/dashboard/admin/wholesale-price"
-                  className={({ isActive }) =>
-                    `p-3 flex gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
-                      isActive ? "bg-[#ffe9cf]" : ""
-                    }`
-                  }
-                >
-                  <Icon type="icon-price" />
-                  <p>Giá sỉ</p>
-                </NavLink>
+                  <NavLink
+                    to="/dashboard/analytic"
+                    className={({ isActive }) =>
+                      `p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
+                        isActive ? "bg-[#ffe9cf]" : ""
+                      }`
+                    }
+                  >
+                    <Icon type="icon-analytic" />
+                    <p>Thống kê</p>
+                  </NavLink>
 
-                <NavLink
-                  to="/dashboard/admin/users"
-                  className={({ isActive }) =>
-                    `p-3 flex gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
-                      isActive ? "bg-[#ffe9cf]" : ""
-                    }`
-                  }
-                >
-                  <Icon type="icon-user-group" />
-                  <p>Thành viên</p>
-                </NavLink>
-              </ul>
-            )}
+                  <NavLink
+                    to="/dashboard/wholesale-price"
+                    className={({ isActive }) =>
+                      `p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
+                        isActive ? "bg-[#ffe9cf]" : ""
+                      }`
+                    }
+                  >
+                    <Icon type="icon-price" />
+                    <p>Giá sỉ</p>
+                  </NavLink>
+
+                  <NavLink
+                    to="/dashboard/users"
+                    className={({ isActive }) =>
+                      `p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
+                        isActive ? "bg-[#ffe9cf]" : ""
+                      }`
+                    }
+                  >
+                    <Icon type="icon-user-group" />
+                    <p>Thành viên</p>
+                  </NavLink>
+
+                  <NavLink
+                    to="/123"
+                    className={({ isActive }) =>
+                      `p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
+                        isActive ? "bg-[#ffe9cf]" : ""
+                      }`
+                    }
+                  >
+                    <Icon type="icon-support" />
+                    <p>Liên hệ hỗ trợ</p>
+                  </NavLink>
+                </ul>
+              )}
+            </div>
+
+            <div className="flex-1">
+              <button
+                className="p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md"
+                onClick={onLogout}
+              >
+                <Icon type="icon-logout" />
+                Logout
+              </button>
+            </div>
           </div>
         </div>
 
