@@ -1,12 +1,82 @@
+import { useEffect, useState } from "react";
+import ProductApi from "../../api/productApi";
+import FormField from "../../components/FormField";
 import Icon from "../../components/Icon/Icon";
-import { PRODUCT_LIST } from "../../mock/product";
+import Popup from "../../components/Popup";
+
+const INIT_FORMDATA = {
+	name: {
+		value: "",
+		error: "",
+	},
+	price: {
+		value: "",
+		error: "",
+	},
+	quantity: {
+		value: 100,
+		error: "",
+	},
+};
 
 function ProductsPage() {
+	const [isOpen, setIsOpen] = useState(false);
+	const [products, setProducts] = useState([]);
+	const [formData, setFormData] = useState(INIT_FORMDATA);
+
+	const handleOpenPopupCreateProduct = () => {
+		setIsOpen(true);
+	};
+
+	const handleClosePopup = () => {
+		setIsOpen(false);
+	};
+
+	const handleChange = (name, event) => {
+		const { value } = event.target;
+
+		setFormData((prev) => ({
+			...prev,
+			[name]: { ...prev[name], value },
+		}));
+	};
+
+	const handleSubmit = async () => {
+		try {
+			const _formData = Object.keys(formData).reduce((_acc, _crr) => {
+				_acc[_crr] = formData[_crr].value;
+
+				return _acc;
+			}, {});
+
+			await ProductApi.create(_formData);
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setFormData(INIT_FORMDATA);
+			setIsOpen(false);
+			findAllProducts();
+		}
+	};
+
+	const findAllProducts = async () => {
+		const res = await ProductApi.findAll();
+		const products = res.metadata.result;
+
+		setProducts(products);
+	};
+
+	useEffect(() => {
+		findAllProducts();
+	}, []);
+
 	return (
 		<div className="mt-3 p-1">
 			<div className="w-full flex justify-between items-center mb-3 mt-1 ">
 				<div>
-					<div className="flex gap-2 border rounded-md p-[8px] hover:bg-[#ffe9cf] hover:underline cursor-pointer transition-all">
+					<div
+						className="flex gap-2 border rounded-md p-[8px] hover:bg-[#ffe9cf] hover:underline cursor-pointer transition-all"
+						onClick={handleOpenPopupCreateProduct}>
 						<Icon type="icon-create" />
 						<p>Tạo sản phẩm</p>
 					</div>
@@ -53,7 +123,7 @@ function ProductsPage() {
 						</tr>
 					</thead>
 					<tbody>
-						{PRODUCT_LIST.map((_item, index) => (
+						{products.map((_item, index) => (
 							<tr
 								className="hover:bg-slate-50 border-b border-slate-200"
 								key={index}>
@@ -102,6 +172,42 @@ function ProductsPage() {
 					</div>
 				</div>
 			</div>
+
+			<Popup
+				isOpen={isOpen}
+				title="Form tạo sản phẩm"
+				onClose={handleClosePopup}
+				onSubmit={handleSubmit}>
+				<div>
+					<div className="form-control">
+						<FormField
+							label="Tên sản phẩm"
+							type="text"
+							name="product-name"
+							value={formData.name.value}
+							onChange={(e) => handleChange("name", e)}
+						/>
+					</div>
+					<div className="form-control">
+						<FormField
+							label="Giá"
+							type="number"
+							name="product-price"
+							value={formData.price.value}
+							onChange={(e) => handleChange("price", e)}
+						/>
+					</div>
+					<div className="form-control">
+						<FormField
+							label="Số lượng"
+							type="number"
+							name="product-quantity"
+							value={formData.quantity.value}
+							onChange={(e) => handleChange("quantity", e)}
+						/>
+					</div>
+				</div>
+			</Popup>
 		</div>
 	);
 }
