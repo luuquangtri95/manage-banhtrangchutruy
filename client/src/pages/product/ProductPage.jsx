@@ -3,6 +3,7 @@ import ProductApi from "../../api/productApi";
 import FormField from "../../components/FormField";
 import Icon from "../../components/Icon/Icon";
 import Popup from "../../components/Popup";
+import { formatDateWithIntl } from "../../helpers/convertDate";
 
 const INIT_FORMDATA = {
 	name: {
@@ -69,6 +70,16 @@ function ProductsPage() {
 	useEffect(() => {
 		findAllProducts();
 	}, []);
+
+	const handleDeleteProduct = async (id) => {
+		try {
+			await ProductApi.delete(id);
+		} catch (error) {
+			console.log(error);
+		} finally {
+			findAllProducts();
+		}
+	};
 
 	return (
 		<div className="mt-3 p-1">
@@ -142,7 +153,20 @@ function ProductsPage() {
 									<p className="text-sm text-slate-500">Active</p>
 								</td>
 								<td className="p-4 py-5">
-									<p className="text-sm text-slate-500">2024-08-15</p>
+									<p className="text-sm text-slate-500">
+										{formatDateWithIntl(_item.createdAt)}
+									</p>
+								</td>
+								<td className="p-4 py-5">
+									<div className="flex item-center gap-2">
+										<button>
+											<Icon type="icon-edit" />
+										</button>
+
+										<button onClick={() => handleDeleteProduct(_item.id)}>
+											<Icon type="icon-delete" />
+										</button>
+									</div>
 								</td>
 							</tr>
 						))}
