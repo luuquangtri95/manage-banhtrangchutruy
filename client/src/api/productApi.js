@@ -2,20 +2,21 @@ import authorizedAxiosInstance from "../utils/authorizedAxios";
 
 const ProductApi = {
   create: async (data) => {
-    const url = "/users/login";
+    const url = "/dashboards/products/create";
     return await authorizedAxiosInstance.post(url, data);
   },
-  logout: async () => {
-    const url = "/users/logout";
-    return await authorizedAxiosInstance.delete(url);
+  getAll: async () => {
+    const url = "/dashboards/products";
+    console.log("url", url);
+    return await authorizedAxiosInstance.get(url);
   },
-  refresh_token: async () => {
-    const url = "/users/refresh_token";
-    return await authorizedAxiosInstance.put(url);
+  update: async (id) => {
+    const url = "/dashboards/products/id";
+    return await authorizedAxiosInstance.put(url, id);
   },
-  register: async (data) => {
-    const url = "/users/register";
-    return await authorizedAxiosInstance.post(url, data);
+  delete: async (id) => {
+    const url = "/dashboards/products/id";
+    return await authorizedAxiosInstance.post(url, id);
   },
 };
 

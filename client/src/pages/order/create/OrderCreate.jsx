@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import authorizedAxiosInstance from "../../../utils/authorizedAxios";
 import Button from "../../../components/Button/Button";
 import FormField from "../../../components/FormField/FormField";
+import OrderApi from "../../../api/orderApi";
+import PopupSucces from "../../../components/Popup/Succes";
+import ProductApi from "../../../api/productApi";
+import PopupError from "../../../components/Popup/PopupError/PopupError";
+import ModalSelectProduct from "../../../components/Modal/ModalSelectProduct";
 
 function OrderCreate(props) {
   const initFormData = {
@@ -11,7 +16,7 @@ function OrderCreate(props) {
     phone: "023424144",
     delivery_date: "2/2/2025",
     data_json: {
-      item: [{ name: "", quantity: 1 }],
+      item: [{ name: "Banh trang muoi bo", quantity: 1 }],
     },
     status: "pending",
   };
@@ -22,15 +27,48 @@ function OrderCreate(props) {
   const [products, setProducts] = useState([]);
   const [errorMessage, setErrorMessage] = useState(false);
 
-  const handleChange = () => {};
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-  const handleGetDataProduct = () => {};
+  const handleGetProduct = async () => {
+    try {
+      const res = await ProductApi.getAll();
+      console.log("res APi", res);
+      setProducts(res.data.metadata.result);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
-  const handleSubmitOrder = () => {};
+  useEffect(() => {
+    handleGetProduct();
+  }, []);
+
+  const handleSelectProduct = () => {};
+
+  const handleSubmitOrder = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await OrderApi.create(formData);
+      setIsPopupOpen(true);
+      setFormData(initFormData);
+      setTimeout(() => {
+        setIsPopupOpen(false);
+      }, 2000);
+      return res;
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   return (
     <div className="w-full">
-      <div className="pt-[40px] m-auto">
+      <div className="pt-[46px] m-auto">
         <div className="order-create border relative flex p-6 flex-col w-full h-full text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
           <div className="text-2xl font-bold mb-[35px]  text-center">
             Order Product Form
@@ -64,6 +102,20 @@ function OrderCreate(props) {
               name="phone"
               onChange={handleChange}
             />
+            {/* <FormField
+              label="Products"
+              type="text"
+              value={formData.name}
+              name="name"
+              onClick={() => setIsModalOpen(true)}
+            />
+            <FormField
+              label="Quantity"
+              type="number"
+              value={formData.quantity}
+              name="quantity"
+              onChange={(e) => handleChange(e)}
+            /> */}
             {formData.data_json.item.map((itemProduct, index) => (
               <div key={index} className="flex gap-4">
                 <div className="flex-1">
@@ -99,18 +151,18 @@ function OrderCreate(props) {
           </form>
         </div>
       </div>
-      {/* <ModalSelectProduct
+      <ModalSelectProduct
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         products={products}
-        onSelect={handleSelectProduct}
-      /> */}
+      />
+
       {/* Thông báo lỗi */}
-      {/* <PopupError
+      <PopupError
         message="Bạn đã chọn sản phẩm này rồi 😊"
         isVisible={errorMessage}
       />
-      <PopupSucces message="Create data success !!!" isVisible={isPopupOpen} /> */}
+      <PopupSucces message="Create data success !!!" isVisible={isPopupOpen} />
     </div>
   );
 }
