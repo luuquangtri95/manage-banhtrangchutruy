@@ -1,28 +1,64 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import Logo from "../assets/logo.jpg";
-import { toast } from "react-toastify";
+import FormField from "../components/FormField";
 
 function LoginPage(props) {
 	const [userInfo, setUserInfo] = useState({
-		email: "",
-		password: "",
+		email: {
+			value: "",
+			error: "",
+			validate: (value) => {
+				if (!value.trim()) return "Email is required.";
+				if (!/\S+@\S+\.\S+/.test(value)) return "Invalid email format.";
+				return "";
+			},
+		},
+		password: {
+			value: "",
+			error: "",
+			validate: (value) => {
+				if (!value.trim()) return "Password is required.";
+				if (value.length < 4) return "Password must be at least 4 characters.";
+				return "";
+			},
+		},
 	});
 
 	const { onLogin } = useContext(AuthContext);
 
 	const handleLogin = () => {
-		if (!userInfo.email || !userInfo.password) {
-			toast.error("Missing username or password !");
-		} else {
-			onLogin(userInfo);
+		let hasError = false;
+
+		const newUserInfo = { ...userInfo };
+		for (const key in newUserInfo) {
+			const field = newUserInfo[key];
+			const error = field.validate(field.value);
+			if (error) {
+				hasError = true;
+				newUserInfo[key].error = error;
+			}
 		}
+
+		setUserInfo(newUserInfo);
+
+		// Nếu có lỗi, không gửi dữ liệu
+		if (hasError) return;
+
+		const submittedData = Object.keys(userInfo).reduce((acc, key) => {
+			acc[key] = userInfo[key].value;
+			return acc;
+		}, {});
+
+		onLogin(submittedData);
 	};
 
 	const handleChange = (name, event) => {
+		const { value } = event.target;
+
 		setUserInfo((prev) => ({
 			...prev,
-			[name]: event.target.value,
+			[name]: { ...prev[name], value, error: "" },
 		}));
 	};
 
@@ -55,32 +91,24 @@ function LoginPage(props) {
 
 						<div>
 							<div className="form-control">
-								<label
-									htmlFor=""
-									className="text-[12px] lg:text-[14px]">
-									Email:
-								</label>
-								<br />
-								<input
-									className="form-field border w-full rounded-md p-2"
+								<FormField
+									label="Email"
+									name="email"
 									type="email"
-									value={userInfo.email}
+									value={userInfo.email.value}
 									onChange={(e) => handleChange("email", e)}
+									error={userInfo.email.error}
 								/>
 							</div>
 
 							<div className="form-control">
-								<label
-									htmlFor=""
-									className="text-[12px] lg:text-[14px]">
-									Mật khẩu:
-								</label>
-								<br />
-								<input
-									className="form-field border w-full rounded-md p-2"
+								<FormField
+									label="Mật khẩu"
+									name="password"
 									type="password"
-									value={userInfo.password}
+									value={userInfo.password.value}
 									onChange={(e) => handleChange("password", e)}
+									error={userInfo.password.error}
 								/>
 							</div>
 

@@ -9,14 +9,17 @@ export const AuthProvider = ({ children }) => {
 	const navigate = useNavigate();
 
 	const handleLogin = async (data) => {
-		const res = await UserApi.login(data);
+		const userInfo = await UserApi.login(data);
 
-		localStorage.setItem("userInfo", JSON.stringify(res.data));
-		setUserInfo(res.data);
+		delete userInfo.accessToken;
+		delete userInfo.refreshToken;
+
+		localStorage.setItem("userInfo", JSON.stringify(userInfo));
+		setUserInfo(userInfo);
 
 		// redirect page dashboard
 
-		navigate(`/dashboard`);
+		navigate(`/dashboard/orders/create`);
 	};
 
 	const handleLogout = async () => {
