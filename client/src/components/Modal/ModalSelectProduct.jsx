@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
 
 ModalSelectProduct.propTypes = {
   isOpen: PropTypes.bool.isRequired,
@@ -18,13 +17,7 @@ ModalSelectProduct.propTypes = {
   ).isRequired,
 };
 
-function ModalSelectProduct({ isOpen, onClose, onSelect, products }) {
-  //   const [ischecked, setIsChecked] = useState([]);
-
-  //   const handleCheckProduct = (product) => {
-
-  //   };
-
+function ModalSelectProduct({ isOpen, onClose, onSelect, products, formData }) {
   return (
     isOpen && (
       <div className="popup-modal fixed inset-0 bg-gray-600 bg-opacity-50 w-full h-full flex flex-wrap justify-center items-center">
@@ -52,7 +45,12 @@ function ModalSelectProduct({ isOpen, onClose, onSelect, products }) {
                     }}
                   >
                     <div className="checkbox border-r w-[40px] flex items-center justify-center">
-                      <input type="checkbox"></input>
+                      <input
+                        type="checkbox"
+                        checked={formData.data_json.item.some(
+                          (product) => product.name === item.name
+                        )}
+                      ></input>
                     </div>
                     <div className="p-2 border-r flex-1">{item.name}</div>
                     <div className="p-2 border-r w-[140px]">{item.price}</div>
@@ -63,7 +61,7 @@ function ModalSelectProduct({ isOpen, onClose, onSelect, products }) {
                   </div>
                 ))
               ) : (
-                <p>No Product</p>
+                <p className="p-3 text-center border-t">No Product</p>
               )}
             </div>
             <div className="flex justify-center">

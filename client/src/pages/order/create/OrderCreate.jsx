@@ -4,10 +4,9 @@ import FormField from "../../../components/FormField/FormField";
 import OrderApi from "../../../api/orderApi";
 import PopupSucces from "../../../components/Popup/Succes";
 import ProductApi from "../../../api/productApi";
-import PopupError from "../../../components/Popup/PopupError/PopupError";
 import ModalSelectProduct from "../../../components/Modal/ModalSelectProduct";
 
-function OrderCreate(props) {
+function OrderCreate() {
   const INIT_FORMDATA = {
     title: "Order ",
     fullname: "Taipham",
@@ -15,7 +14,7 @@ function OrderCreate(props) {
     phone: "023424144",
     delivery_date: "2/2/2025",
     data_json: {
-      item: [{ name: "Banh trang muoi bo", quantity: 1 }],
+      item: [{ name: "", quantity: 1 }],
     },
     status: "pending",
   };
@@ -24,7 +23,6 @@ function OrderCreate(props) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [products, setProducts] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,11 +32,26 @@ function OrderCreate(props) {
     }));
   };
 
+  const handleChangeQuantity = (index, value) => {
+    setFormData((prev) => {
+      const updateQuantity = [...prev.data_json.item];
+      console.log("updateQuantity", updateQuantity);
+      updateQuantity[index].quantity = value;
+      return {
+        ...prev,
+        data_json: {
+          ...prev.data_json,
+          item: updateQuantity,
+        },
+      };
+    });
+  };
+
   const handleGetProduct = async () => {
     try {
       const res = await ProductApi.findAll();
-      console.log("res APi", res);
-      setProducts(res.data.metadata.result);
+      setProducts(res.metadata.result);
+      return res;
     } catch (error) {
       console.log("error", error);
     }
@@ -48,7 +61,44 @@ function OrderCreate(props) {
     handleGetProduct();
   }, []);
 
-  const handleSelectProduct = () => {};
+  // Chon san pham
+  const handleSelectProduct = (selectItem) => {
+    // console.log("selectItem", selectItem);
+    setFormData((prev) => {
+      const updateItems = [...prev.data_json.item];
+
+      // Kiểm tra nếu sản phẩm đã tồn tại trong danh sách
+      const existingIndex = updateItems.findIndex(
+        (item) => item.name === selectItem.name
+      );
+      console.log("existingIndex", existingIndex);
+
+      if (existingIndex !== -1) {
+        updateItems.splice(existingIndex, 1);
+      } else {
+        const emptyName = updateItems.findIndex((item) => !item.name);
+        if (emptyName !== -1) {
+          updateItems[emptyName] = {
+            ...updateItems[emptyName],
+            name: selectItem.name,
+          };
+        } else {
+          updateItems.push({
+            name: selectItem.name,
+            quantity: 1,
+          });
+        }
+      }
+
+      return {
+        ...prev,
+        data_json: {
+          ...prev.data_json,
+          item: updateItems,
+        },
+      };
+    });
+  };
 
   const handleSubmitOrder = async (e) => {
     e.preventDefault();
@@ -104,13 +154,15 @@ function OrderCreate(props) {
             {formData.data_json.item.map((itemProduct, index) => (
               <div key={index} className="flex gap-4">
                 <div className="flex-1">
-                  <FormField
-                    label={`Products ${index + 1}`}
-                    type="text"
-                    value={itemProduct.name}
-                    name="name"
-                    onClick={handleGetProduct}
-                  />
+                  <div className="block text-sm font-medium text-gray-700 mb-1">
+                    {`Product ${index + 1}`}
+                  </div>
+                  <div
+                    className="flex items-center min-h-[42px] cursor-pointer border rounded-lg px-3 py-2 transition-all border-gray-300 bg-white"
+                    onClick={() => setIsModalOpen(true)}
+                  >
+                    {itemProduct.name}
+                  </div>
                 </div>
                 <div className="quantity">
                   <FormField
@@ -118,7 +170,9 @@ function OrderCreate(props) {
                     type="number"
                     value={itemProduct.quantity}
                     name="quantity"
-                    onChange={(e) => handleChange(e, index)}
+                    onChange={(e) =>
+                      handleChangeQuantity(index, e.target.value)
+                    }
                   />
                 </div>
               </div>
@@ -140,13 +194,11 @@ function OrderCreate(props) {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         products={products}
+        onSelect={handleSelectProduct}
+        formData={formData}
       />
 
       {/* Thông báo lỗi */}
-      <PopupError
-        message="Bạn đã chọn sản phẩm này rồi 😊"
-        isVisible={errorMessage}
-      />
       <PopupSucces message="Create data success !!!" isVisible={isPopupOpen} />
     </div>
   );
