@@ -5,7 +5,7 @@ const OrderApi = {
     const url = "dashboards/orders/create";
     return await authorizedAxiosInstance.post(url, data);
   },
-  getAll: async () => {
+  findAll: async () => {
     const url = "dashboards/orders";
     return await authorizedAxiosInstance.get(url);
   },

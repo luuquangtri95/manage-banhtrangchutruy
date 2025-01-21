@@ -5,18 +5,21 @@ const ProductApi = {
     const url = "/dashboards/products/create";
     return await authorizedAxiosInstance.post(url, data);
   },
-  getAll: async () => {
+  findAll: async (params) => {
     const url = "/dashboards/products";
-    console.log("url", url);
+    return await authorizedAxiosInstance.get(url, params);
+  },
+  findById: async (productId) => {
+    const url = `/dashboards/products/${productId}`;
     return await authorizedAxiosInstance.get(url);
   },
-  update: async (id) => {
-    const url = "/dashboards/products/id";
-    return await authorizedAxiosInstance.put(url, id);
+  update: async (data) => {
+    const url = `/dashboards/products/${data.id}`;
+    return await authorizedAxiosInstance.put(url, data);
   },
-  delete: async (id) => {
-    const url = "/dashboards/products/id";
-    return await authorizedAxiosInstance.post(url, id);
+  delete: async (productId) => {
+    const url = `/dashboards/products/${productId}`;
+    return await authorizedAxiosInstance.delete(url);
   },
 };
 

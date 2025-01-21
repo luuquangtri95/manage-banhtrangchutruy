@@ -8,7 +8,7 @@ import authorizedAxiosInstance from "../../utils/authorizedAxios";
 function Dashboard() {
 	const [isCollapse, setIsCollapse] = useState(false);
 	const [renderContent, setRenderContent] = useState(true);
-	const { userInfo, onLogout } = useContext(AuthContext);
+	const { onLogout } = useContext(AuthContext);
 
 	const handleCollapse = () => {
 		setIsCollapse(!isCollapse);

@@ -1127,6 +1127,31 @@ c2.098-1.39,3.357-3.737,3.357-6.254C347.118,315.421,345.856,313.073,343.759,311.
 					</svg>
 				);
 
+			case "icon-close":
+				return (
+					<svg
+						width="20px"
+						height="20px"
+						viewBox="-0.5 0 25 25"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg">
+						<path
+							d="M3 21.32L21 3.32001"
+							stroke="#000000"
+							strokeWidth="1.5"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+						/>
+						<path
+							d="M3 3.32001L21 21.32"
+							stroke="#000000"
+							strokeWidth="1.5"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+						/>
+					</svg>
+				);
+
 			default:
 				break;
 		}

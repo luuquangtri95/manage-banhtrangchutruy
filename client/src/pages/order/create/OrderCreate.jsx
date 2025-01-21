@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import authorizedAxiosInstance from "../../../utils/authorizedAxios";
 import Button from "../../../components/Button/Button";
 import FormField from "../../../components/FormField/FormField";
 import OrderApi from "../../../api/orderApi";
@@ -9,7 +8,7 @@ import PopupError from "../../../components/Popup/PopupError/PopupError";
 import ModalSelectProduct from "../../../components/Modal/ModalSelectProduct";
 
 function OrderCreate(props) {
-  const initFormData = {
+  const INIT_FORMDATA = {
     title: "Order ",
     fullname: "Taipham",
     address: "101 nguyen van banh, phuong 5, quan phu nhuan",
@@ -21,7 +20,7 @@ function OrderCreate(props) {
     status: "pending",
   };
 
-  const [formData, setFormData] = useState(initFormData);
+  const [formData, setFormData] = useState(INIT_FORMDATA);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [products, setProducts] = useState([]);
@@ -37,7 +36,7 @@ function OrderCreate(props) {
 
   const handleGetProduct = async () => {
     try {
-      const res = await ProductApi.getAll();
+      const res = await ProductApi.findAll();
       console.log("res APi", res);
       setProducts(res.data.metadata.result);
     } catch (error) {
@@ -56,7 +55,7 @@ function OrderCreate(props) {
     try {
       const res = await OrderApi.create(formData);
       setIsPopupOpen(true);
-      setFormData(initFormData);
+      setFormData(INIT_FORMDATA);
       setTimeout(() => {
         setIsPopupOpen(false);
       }, 2000);
@@ -102,20 +101,6 @@ function OrderCreate(props) {
               name="phone"
               onChange={handleChange}
             />
-            {/* <FormField
-              label="Products"
-              type="text"
-              value={formData.name}
-              name="name"
-              onClick={() => setIsModalOpen(true)}
-            />
-            <FormField
-              label="Quantity"
-              type="number"
-              value={formData.quantity}
-              name="quantity"
-              onChange={(e) => handleChange(e)}
-            /> */}
             {formData.data_json.item.map((itemProduct, index) => (
               <div key={index} className="flex gap-4">
                 <div className="flex-1">
@@ -124,7 +109,7 @@ function OrderCreate(props) {
                     type="text"
                     value={itemProduct.name}
                     name="name"
-                    onClick={handleGetDataProduct}
+                    onClick={handleGetProduct}
                   />
                 </div>
                 <div className="quantity">
