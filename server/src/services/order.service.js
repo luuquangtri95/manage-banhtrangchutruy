@@ -48,8 +48,25 @@ const create = async (req) => {
 	}
 };
 
+const update = async (req) => {
+	const paylaod = req.body;
+	const orderId = req.params.orderId;
+};
+
+const _delete = async (req) => {
+	try {
+		const orderId = req.params.orderId;
+
+		return await OrderRepository.delete(orderId);
+	} catch (error) {
+		throw error;
+	}
+};
+
 export const OrderService = {
 	create,
 	findById,
 	findAll,
+	update,
+	delete: _delete,
 };

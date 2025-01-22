@@ -59,8 +59,17 @@ const create = async (payload) => {
 	}
 };
 
+const _delete = async (id) => {
+	try {
+		return await OrderModel.destroy({ where: { id } });
+	} catch (error) {
+		throw error;
+	}
+};
+
 export const OrderRepository = {
 	create,
 	findById,
 	findAll,
+	delete: _delete,
 };

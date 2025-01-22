@@ -47,7 +47,9 @@ const update = async (req, res) => {
 
 const _delete = async (req, res) => {
 	try {
-		const orderId = req.params.orderId;
+		const metadata = await OrderService.delete(req);
+
+		res.status(StatusCodes.OK).json({ message: "delete order success !" });
 	} catch (error) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
 	}
