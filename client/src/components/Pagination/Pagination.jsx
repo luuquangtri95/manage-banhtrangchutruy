@@ -24,13 +24,14 @@ function Pagination(props) {
 
   const limitItem = pagination.limit;
   const totalItem = pagination.total_item;
+  const pageNum = numberPagination();
 
   return (
     <div className="flex justify-between items-center px-4 py-3 test-sm">
       <div className="text-slate-500">
         Showing <b>{limitItem} </b>of <b>{totalItem}</b>
       </div>
-      <div className="pagination flex gap-1 justify-between mt-2 mb-6">
+      <div className="pagination flex gap-1 justify-between">
         <button
           className="prev bg-white border rounded-md px-2 py-1 disabled:bg-gray-400 hover:border-slate-400 disabled:cursor-not-allowed disabled:opacity-70"
           onClick={handlePrevPage}
@@ -43,7 +44,7 @@ function Pagination(props) {
       </div> */}
 
         <div className="pagination-number flex gap-1 justify-center items-center">
-          {numberPagination.map((itemPage, index) => (
+          {pageNum.map((itemPage, index) => (
             <span
               key={index}
               className={`p-1 border h-[36px] min-w-[36px] flex items-center justify-center rounded-md cursor-pointer hover:border-slate-400

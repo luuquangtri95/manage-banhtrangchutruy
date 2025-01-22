@@ -5,16 +5,20 @@ const OrderApi = {
     const url = "dashboards/orders/create";
     return await authorizedAxiosInstance.post(url, data);
   },
-  findAll: async () => {
+  findAll: async (params) => {
+    // console.log("params", params);
     const url = "dashboards/orders";
-    return await authorizedAxiosInstance.get(url);
+    // const fullUrl = `${url}?${new URLSearchParams(params).toString()}`;
+    // console.log("fullUrl", fullUrl);
+    return await authorizedAxiosInstance.get(url, { params });
   },
   update: async (id) => {
     const url = "dashboards/orders/update/id";
     return await authorizedAxiosInstance.put(url, id);
   },
   delete: async (id) => {
-    const url = "dashboards/orders/delete/id";
+    const url = `dashboards/orders/${id}`;
+    console.log("url", url);
     return await authorizedAxiosInstance.delete(url, id);
   },
 };

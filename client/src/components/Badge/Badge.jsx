@@ -22,7 +22,7 @@ function Badge(props) {
 
   return (
     <div
-      className="status p-2 w-[84px] flex items-center text-[14px]"
+      className="status p-2 w-[84px] flex items-center text-[14px] border-r"
       value={type}
     >
       <span
