@@ -39,7 +39,9 @@ const findById = async (req, res) => {
 
 const update = async (req, res) => {
 	try {
-		const orderId = req.params.orderId;
+		const metadata = await OrderService.update(req);
+
+		res.status(StatusCodes.OK).json({ message: "update order success !", metadata });
 	} catch (error) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
 	}

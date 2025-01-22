@@ -49,8 +49,14 @@ const create = async (req) => {
 };
 
 const update = async (req) => {
-	const paylaod = req.body;
-	const orderId = req.params.orderId;
+	try {
+		const payload = req.body;
+		const orderId = req.params.orderId;
+
+		return await OrderRepository.update(payload, orderId);
+	} catch (error) {
+		throw error;
+	}
 };
 
 const _delete = async (req) => {
