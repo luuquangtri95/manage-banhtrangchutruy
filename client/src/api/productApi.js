@@ -7,7 +7,7 @@ const ProductApi = {
 	},
 	findAll: async (params) => {
 		const url = "/dashboards/products";
-		return await authorizedAxiosInstance.get(url, params);
+		return await authorizedAxiosInstance.get(url, { params });
 	},
 	findById: async (productId) => {
 		const url = `/dashboards/products/${productId}`;

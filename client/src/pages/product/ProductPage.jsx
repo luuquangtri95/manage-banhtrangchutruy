@@ -4,6 +4,8 @@ import FormField from "../../components/FormField";
 import Icon from "../../components/Icon/Icon";
 import Popup from "../../components/Popup";
 import { formatDateWithIntl } from "../../helpers/convertDate";
+import useDebounce from "../../hooks/useDebounce";
+import queryString from "query-string";
 
 const INIT_FORMDATA = {
 	name: {
@@ -24,6 +26,15 @@ function ProductsPage() {
 	const [isOpen, setIsOpen] = useState(false);
 	const [products, setProducts] = useState([]);
 	const [formData, setFormData] = useState(INIT_FORMDATA);
+	const [searchTerm, setSearchTerm] = useState("");
+	const searchDebounce = useDebounce(searchTerm, 500);
+
+	const [pagination, setPagination] = useState({
+		page: 1,
+		limit: 3,
+		total_page: 10,
+		total_item: 10,
+	});
 
 	const handleOpenPopupCreateProduct = () => {
 		setIsOpen(true);
@@ -61,15 +72,18 @@ function ProductsPage() {
 	};
 
 	const findAllProducts = async () => {
-		const res = await ProductApi.findAll();
+		const res = await ProductApi.findAll({ searchTerm: searchDebounce });
 		const products = res.metadata.result;
 
 		setProducts(products);
+		setPagination((prev) => ({ ...prev, ...res.metadata.pagination }));
 	};
 
-	useEffect(() => {
-		findAllProducts();
-	}, []);
+	const handleSearchChange = (e) => {
+		const { value } = e.target;
+
+		setSearchTerm(value);
+	};
 
 	const handleDeleteProduct = async (id) => {
 		try {
@@ -80,6 +94,10 @@ function ProductsPage() {
 			findAllProducts();
 		}
 	};
+
+	useEffect(() => {
+		findAllProducts();
+	}, [searchDebounce]);
 
 	return (
 		<div className="mt-3 p-1">
@@ -96,6 +114,8 @@ function ProductsPage() {
 					<div className="w-full max-w-sm min-w-[200px] relative">
 						<div className="relative">
 							<input
+								onChange={handleSearchChange}
+								value={searchTerm}
 								className="bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
 								placeholder="Tìm kiếm sản phẩm..."
 							/>
@@ -159,11 +179,13 @@ function ProductsPage() {
 								</td>
 								<td className="p-4 py-5">
 									<div className="flex item-center gap-2">
-										<button>
+										<button className="border p-2 rounded-md">
 											<Icon type="icon-edit" />
 										</button>
 
-										<button onClick={() => handleDeleteProduct(_item.id)}>
+										<button
+											className="border p-2 rounded-md"
+											onClick={() => handleDeleteProduct(_item.id)}>
 											<Icon type="icon-delete" />
 										</button>
 									</div>
@@ -175,24 +197,25 @@ function ProductsPage() {
 
 				<div className="flex justify-between items-center px-4 py-3">
 					<div className="text-sm text-slate-500">
-						Showing <b>1-5</b> of 45
+						Showing <b>1-5</b> of {pagination.total_page}
 					</div>
 					<div className="flex space-x-1">
-						<button className="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-slate-500 bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease">
-							Prev
-						</button>
-						<button className="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-white bg-slate-800 border border-slate-800 rounded hover:bg-slate-600 hover:border-slate-600 transition duration-200 ease">
-							1
-						</button>
+						{!pagination.total_page <= 1 && (
+							<button className="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-slate-500 bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease">
+								Prev
+							</button>
+						)}
 						<button className="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-slate-500 bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease">
 							2
 						</button>
 						<button className="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-slate-500 bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease">
 							3
 						</button>
-						<button className="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-slate-500 bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease">
-							Next
-						</button>
+						{pagination.total_page > 1 && (
+							<button className="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-slate-500 bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease">
+								Next
+							</button>
+						)}
 					</div>
 				</div>
 			</div>
