@@ -11,14 +11,14 @@ const isAuthorized = async (req, res, next) => {
 			return;
 		}
 
-		console.log("accessTokenFromCookie", accessTokenFromCookie);
+		// console.log("accessTokenFromCookie", accessTokenFromCookie);
 
 		const accessTokenDecoded = await JwtProvider.verifyToken(
 			accessTokenFromCookie,
 			env.ACCESS_TOKEN_SECRET_SIGNATURE
 		);
 
-		console.log("accessTokenDecoded", accessTokenDecoded);
+		// console.log("accessTokenDecoded", accessTokenDecoded);
 
 		req.jwtDecoded = accessTokenDecoded;
 

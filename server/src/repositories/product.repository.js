@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import { ProductModel } from "~/models/product.model";
 
 const create = async (payload) => {
@@ -17,7 +18,7 @@ const findAll = async (payload) => {
 		let where = {};
 
 		if (searchTerm) {
-			where.title = {
+			where.name = {
 				[Op.like]: `%${searchTerm}%`,
 			};
 		}
