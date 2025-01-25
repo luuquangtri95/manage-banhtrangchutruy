@@ -19,7 +19,8 @@ const findAll = async (req) => {
     const _startDate = req.query.startDate || "";
     const _endDate = req.query.endDate || "";
     /// ... many queries here
-    console.log("_searchTerm", _searchTerm);
+    console.log("_startDate", _startDate);
+    console.log("_endDate", _endDate);
 
     let payload = {
       page: _page,
@@ -27,8 +28,8 @@ const findAll = async (req) => {
       searchTerm: _searchTerm,
       sort: _sort,
       order: _order,
-      // startDate: _startDate,
-      // endDate: _endDate,
+      startDate: _startDate,
+      endDate: _endDate,
     };
 
     if (_status) {
@@ -46,7 +47,7 @@ const create = async (req) => {
   try {
     const payload = req.body;
 
-    return await OrderRepository.create(payload);
+    return await OrderRepository.createWithTransaction(payload);
   } catch (error) {
     throw error;
   }
