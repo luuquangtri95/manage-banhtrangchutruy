@@ -1,91 +1,75 @@
-import React from "react";
+import PropTypes from "prop-types";
 
-const Pagination = ({ currentPage, totalPages, onPageChange }) => {
-	// Tạo mảng các số trang hiển thị
-	const getPaginationNumbers = () => {
-		const pages = [];
+Pagination.propTypes = {
+	handleNextPage: PropTypes.func.isRequired,
+	handlePrevPage: PropTypes.func.isRequired,
+	pagination: PropTypes.shape({
+		page: PropTypes.number.isRequired,
+		limit: PropTypes.number.isRequired,
+		total_page: PropTypes.number.isRequired,
+		total_item: PropTypes.number.isRequired,
+	}).isRequired,
+	numberPagination: PropTypes.func.isRequired,
+	handleSetPage: PropTypes.func.isRequired,
+	orderList: PropTypes,
+};
 
-		if (totalPages <= 3) {
-			// Nếu tổng số trang nhỏ hơn hoặc bằng 3, hiển thị toàn bộ
-			for (let i = 1; i <= totalPages; i++) {
-				pages.push(i);
-			}
-		} else {
-			// Nếu tổng số trang lớn hơn 3
-			pages.push(1, 2); // Luôn hiển thị 1 và 2
+function Pagination(props) {
+	const {
+		handleNextPage,
+		handlePrevPage,
+		pagination,
+		numberPagination,
+		handleSetPage,
+		orderList,
+	} = props;
 
-			if (currentPage > 3) {
-				// Thêm dấu "..." khi trang hiện tại >= 4
-				pages.push("...");
-			}
-
-			if (currentPage > 3 && currentPage < totalPages - 1) {
-				// Nếu không ở trang đầu hoặc cuối, thêm trang hiện tại
-				pages.push(currentPage);
-			}
-
-			if (currentPage === totalPages - 1) {
-				// Nếu gần trang cuối, hiển thị trang gần cuối
-				pages.push(currentPage);
-			}
-
-			if (currentPage === totalPages) {
-				// Nếu là trang cuối cùng
-				pages.push(totalPages - 1);
-			}
-
-			if (currentPage < totalPages - 1) {
-				// Nếu chưa ở trang cuối, hiển thị "..."
-				pages.push("...");
-			}
-
-			// Luôn hiển thị trang cuối
-			pages.push(totalPages);
-		}
-
-		return pages;
-	};
-
-	const paginationNumbers = getPaginationNumbers();
+	const totalItem = pagination.total_item;
+	const pageNum = numberPagination();
 
 	return (
-		<div className="flex items-center gap-2">
-			{/* Nút "Prev" */}
-			<button
-				disabled={currentPage === 1}
-				onClick={() => onPageChange(currentPage - 1)}
-				className="px-3 py-1 rounded-md bg-gray-100 hover:bg-gray-200 disabled:bg-gray-300">
-				Prev
-			</button>
+		<div className="flex justify-between items-center px-4 py-3 test-sm">
+			<div className="text-slate-500">
+				Showing <b>{orderList.length} </b>of <b>{totalItem}</b>
+			</div>
+			{pagination.total_page > 1 && (
+				<div className="pagination flex gap-1 justify-between">
+					<button
+						className="prev bg-white border rounded-md px-2 py-1 disabled:bg-gray-400 hover:border-slate-400 disabled:cursor-not-allowed disabled:opacity-70"
+						onClick={handlePrevPage}
+						disabled={pagination.page === 1}>
+						Prev
+					</button>
+					{/* <div className="num-page py-2 min-w-[46px] flex justify-center items-center ">
+        <span>{pagination.page}</span>/<span>{pagination.total_page}</span>
+      </div> */}
+					<div className="pagination-number flex gap-1 justify-center items-center">
+						{pageNum.map((itemPage, index) => (
+							<span
+								key={index}
+								className={`p-1 border h-[36px] min-w-[36px] flex items-center justify-center rounded-md cursor-pointer hover:border-slate-400
+              ${itemPage === pagination.page ? "bg-slate-800 text-white" : ""}
+              `}
+								onClick={() => {
+									if (itemPage !== "...") {
+										handleSetPage(itemPage);
+									}
+								}}>
+								{itemPage}
+							</span>
+						))}
+					</div>
 
-			{/* Các số trang */}
-			{paginationNumbers.map((page, index) => (
-				<React.Fragment key={index}>
-					{page === "..." ? (
-						<span className="px-3">...</span>
-					) : (
-						<button
-							onClick={() => onPageChange(page)}
-							className={`px-3 py-1 rounded-md ${
-								page === currentPage
-									? "bg-blue-500 text-white"
-									: "bg-gray-100 hover:bg-gray-200"
-							}`}>
-							{page}
-						</button>
-					)}
-				</React.Fragment>
-			))}
-
-			{/* Nút "Next" */}
-			<button
-				disabled={currentPage === totalPages}
-				onClick={() => onPageChange(currentPage + 1)}
-				className="px-3 py-1 rounded-md bg-gray-100 hover:bg-gray-200 disabled:bg-gray-300">
-				Next
-			</button>
+					<button
+						className="next px-2 py-1 bg-white border rounded-md disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 hover:border-slate-400"
+						onClick={handleNextPage}
+						disabled={pagination.page === pagination.total_page}>
+						Next
+					</button>
+				</div>
+			)}
 		</div>
 	);
-};
+}
 
 export default Pagination;

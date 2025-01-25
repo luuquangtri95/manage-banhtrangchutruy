@@ -1,19 +1,19 @@
 import PropTypes from "prop-types";
 
-Button.propTypes = {
+ButtonSubmit.propTypes = {
   type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
 };
 
-function Button(props) {
+function ButtonSubmit(props) {
   const { type, name } = props;
   return (
     <button
       type={type}
-      className="mt-4 py-2 px-3 text-white rounded bg-orange-500 hover:bg-orange-700"
+      className="mt-4  text-white rounded bg-orange-500 hover:bg-orange-700"
     >
       {name}
     </button>
   );
 }
-export default Button;
+export default ButtonSubmit;

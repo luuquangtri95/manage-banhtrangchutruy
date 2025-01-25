@@ -1,11 +1,9 @@
 import { Outlet } from "react-router";
 
-function OrdersPage(props) {
+export default function UserOrderPage() {
   return (
     <div>
       <Outlet />
     </div>
   );
 }
-
-export default OrdersPage;
