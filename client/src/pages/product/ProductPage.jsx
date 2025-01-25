@@ -8,9 +8,31 @@ import { formatDateWithIntl } from "../../helpers/convertDate";
 import ProductFilterForm from "./components/ProductFilterForm/ProductFilterForm";
 
 const INIT_FORMDATA = {
-	name: { value: "", error: "" },
-	price: { value: "", error: "" },
-	quantity: { value: 100, error: "" },
+	name: {
+		value: "",
+		type: "text",
+		error: "",
+		validate: (value) => {
+			if (!value.trim()) return "Tên sản phẩm bắt buộc";
+			if (value.length < 5) return "Tên phải lớn hơn 6 ký tự";
+		},
+	},
+	price: {
+		value: "",
+		type: "number",
+		error: "",
+		validate: (value) => {
+			if (value < 1000) return "giá tiền phải lớn hơn 1000";
+		},
+	},
+	quantity: {
+		value: 100,
+		type: "number",
+		error: "",
+		validate: (value) => {
+			if (value === 0 || value < 10) return "Số lượng phải lớn hơn 10";
+		},
+	},
 };
 
 const DEFAULT_PAGINATION = {
@@ -48,19 +70,40 @@ function ProductsPage() {
 
 	const handlePopupToggle = () => {
 		setIsOpen((prev) => !prev);
+		setFormData(INIT_FORMDATA);
 	};
 
 	const handleFormChange = (name, value) => {
 		setFormData((prev) => ({
 			...prev,
-			[name]: { ...prev[name], value },
+			[name]: { ...prev[name], value, error: "" },
 		}));
 	};
 
-	const handleFormSubmit = async () => {
-		const formattedData = Object.fromEntries(
-			Object.entries(formData).map(([key, field]) => [key, field.value])
-		);
+	const handleCreateProduct = async () => {
+		let hasError = false;
+
+		const newFormData = { ...formData };
+		for (const key in newFormData) {
+			const field = newFormData[key];
+			if ("validate" in field) {
+				const error = field?.validate(field.value);
+				if (error) {
+					hasError = true;
+					newFormData[key].error = error;
+				}
+			}
+		}
+
+		setFormData(newFormData);
+
+		// Nếu có lỗi, không gửi dữ liệu
+		if (hasError) return;
+
+		const formattedData = Object.keys(formData).reduce((acc, key) => {
+			acc[key] = formData[key].value;
+			return acc;
+		}, {});
 
 		try {
 			await ProductApi.create(formattedData);
@@ -196,16 +239,17 @@ function ProductsPage() {
 
 			<Popup
 				isOpen={isOpen}
-				title="Create Product"
+				title="Form tạo sản phẩm"
 				onClose={handlePopupToggle}
-				onSubmit={handleFormSubmit}>
+				onSubmit={handleCreateProduct}>
 				{Object.keys(formData).map((key) => (
 					<FormField
 						key={key}
 						label={key.charAt(0).toUpperCase() + key.slice(1)}
-						type="text"
+						type={formData[key].type}
 						value={formData[key].value}
 						onChange={(e) => handleFormChange(key, e.target.value)}
+						error={formData[key].error}
 					/>
 				))}
 			</Popup>
