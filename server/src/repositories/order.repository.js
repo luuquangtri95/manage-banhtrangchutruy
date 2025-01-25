@@ -91,7 +91,7 @@ const createWithTransaction = async (payload) => {
 	const transaction = await sequelizeConnectionString.transaction();
 
 	try {
-		const { title, fullname, address, phone, delivery_date, data_json, status } = payload;
+		const { data_json } = payload;
 
 		const productNames = data_json.item.map((item) => item.name);
 		const products = await ProductModel.findAll({
@@ -125,13 +125,7 @@ const createWithTransaction = async (payload) => {
 
 		const newOrder = await OrderModel.create(
 			{
-				title,
-				fullname,
-				address,
-				phone,
-				delivery_date,
-				data_json,
-				status,
+				...payload,
 			},
 			{ transaction }
 		);
