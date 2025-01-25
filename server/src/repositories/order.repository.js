@@ -100,6 +100,10 @@ const createWithTransaction = async (payload) => {
 			lock: true,
 		});
 
+		if (products.length === 0) {
+			throw new Error("No matching products found in the database.");
+		}
+
 		const productMap = products.reduce((acc, product) => {
 			acc[product.name] = product;
 			return acc;
@@ -119,22 +123,22 @@ const createWithTransaction = async (payload) => {
 			}
 
 			product.quantity -= item.quantity;
-
-			await product.save({ transaction });
+			await product.save({ transaction }).catch((err) => {
+				throw new Error(`Failed to save product ${product.name}: ${err.message}`);
+			});
 		}
 
-		const newOrder = await OrderModel.create(
-			{
-				...payload,
-			},
-			{ transaction }
-		);
+		const newOrder = await OrderModel.create({ ...payload }, { transaction });
 
 		await transaction.commit();
 
 		return newOrder;
 	} catch (error) {
-		await transaction.rollback();
+		try {
+			await transaction.rollback();
+		} catch (rollbackError) {
+			console.error("Rollback failed:", rollbackError);
+		}
 		throw error;
 	}
 };
