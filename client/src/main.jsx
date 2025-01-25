@@ -10,7 +10,11 @@ createRoot(document.getElementById("root")).render(
 	<Router>
 		<AuthProvider>
 			<AppRoutes />
-			<ToastContainer />
+			<ToastContainer
+				position="bottom-right"
+				theme="dark"
+				autoClose={700}
+			/>
 		</AuthProvider>
 	</Router>
 );
