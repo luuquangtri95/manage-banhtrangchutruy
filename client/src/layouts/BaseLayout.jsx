@@ -284,7 +284,7 @@ function BaseLayout() {
 					</div>
 				</div>
 
-				<div className="p-2 flex-1 bg-[##fafafa]">
+				<div className="p-2 flex-1 bg-[#fafafa]">
 					<Outlet />
 				</div>
 			</div>
