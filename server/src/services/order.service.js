@@ -19,8 +19,7 @@ const findAll = async (req) => {
     const _startDate = req.query.startDate || "";
     const _endDate = req.query.endDate || "";
     /// ... many queries here
-    console.log("_startDate", _startDate);
-    console.log("_endDate", _endDate);
+    console.log("_searchTerm", _searchTerm);
 
     let payload = {
       page: _page,
@@ -28,8 +27,8 @@ const findAll = async (req) => {
       searchTerm: _searchTerm,
       sort: _sort,
       order: _order,
-      startDate: _startDate,
-      endDate: _endDate,
+      // startDate: _startDate,
+      // endDate: _endDate,
     };
 
     if (_status) {
