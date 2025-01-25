@@ -19,6 +19,8 @@ const findAll = async (req) => {
     const _startDate = req.query.startDate || "";
     const _endDate = req.query.endDate || "";
     /// ... many queries here
+    console.log("_startDate", _startDate);
+    console.log("_endDate", _endDate);
 
     let payload = {
       page: _page,
@@ -26,11 +28,14 @@ const findAll = async (req) => {
       searchTerm: _searchTerm,
       sort: _sort,
       order: _order,
+      startDate: _startDate,
+      endDate: _endDate,
     };
 
     if (_status) {
       payload.status = _status;
     }
+    console.log("payload", payload);
 
     return await OrderRepository.findAll({ ...payload });
   } catch (error) {
@@ -48,8 +53,31 @@ const create = async (req) => {
   }
 };
 
+const update = async (req) => {
+  try {
+    const payload = req.body;
+    const orderId = req.params.orderId;
+
+    return await OrderRepository.update(payload, orderId);
+  } catch (error) {
+    throw error;
+  }
+};
+
+const _delete = async (req) => {
+  try {
+    const orderId = req.params.orderId;
+
+    return await OrderRepository.delete(orderId);
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const OrderService = {
   create,
   findById,
   findAll,
+  update,
+  delete: _delete,
 };

@@ -12,6 +12,10 @@ const OrderApi = {
     // console.log("fullUrl", fullUrl);
     return await authorizedAxiosInstance.get(url, { params });
   },
+  findById: async (id) => {
+    const url = `/dashboards/orders/${id}`;
+    return await authorizedAxiosInstance.get(url);
+  },
   update: async (id) => {
     const url = "dashboards/orders/update/id";
     return await authorizedAxiosInstance.put(url, id);

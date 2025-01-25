@@ -1,66 +1,111 @@
-import { Op } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 import { OrderModel } from "~/models/order.model";
 
 const findById = async (id) => {
-	try {
-		return await OrderModel.findById({ where: { id }, raw: true });
-	} catch (error) {
-		throw error;
-	}
+  try {
+    return await OrderModel.findById({ where: { id }, raw: true });
+  } catch (error) {
+    throw error;
+  }
 };
 
 const findAll = async (payload) => {
-	try {
-		const { page, limit, searchTerm, sort, order, status } = payload;
+  try {
+    const { page, limit, searchTerm, sort, order, status, startDate, endDate } =
+      payload;
 
-		const _offset = (page - 1) * limit;
+    const _offset = (page - 1) * limit;
+    let where = {};
 
-		let where = {};
+    if (searchTerm) {
+      // where.title = {
+      // 	[Op.like]: `%${searchTerm}%`,
+      // };
+      where = {
+        [Op.or]: [
+          { title: { [Op.iLike]: `%${searchTerm}%` } },
+          { fullname: { [Op.iLike]: `%${searchTerm}%` } },
+          Sequelize.where(
+            Sequelize.cast(Sequelize.col("phone"), "TEXT"), // Chuyển `phone` thành chuỗi
+            {
+              [Op.iLike]: `%${searchTerm}%`,
+            }
+          ),
+        ],
+      };
+    }
 
-		if (searchTerm) {
-			where.title = {
-				[Op.like]: `%${searchTerm}%`,
-			};
-		}
+    // Lọc theo ngày
+    if (startDate && endDate) {
+      where.delivery_date = {
+        [Op.between]: [startDate, endDate],
+      };
+    } else if (startDate) {
+      where.delivery_date = {
+        [Op.gte]: startDate,
+      };
+    } else if (endDate) {
+      where.delivery_date = {
+        [Op.lte]: endDate,
+      };
+    }
 
-		if (status) {
-			where.status = status;
-		}
+    if (status) {
+      where.status = status;
+    }
 
-		const { count, rows } = await OrderModel.findAndCountAll({
-			where,
-			limit: limit,
-			offset: _offset,
-			order: [[order, sort]],
-			raw: true,
-		});
+    const { count, rows } = await OrderModel.findAndCountAll({
+      where,
+      limit: limit,
+      offset: _offset,
+      order: [[order || "delivery_date", sort]],
+      raw: true,
+    });
 
-		const _metadata = {
-			result: rows,
-			pagination: {
-				page: page,
-				limit: limit,
-				total_page: Math.ceil(count / limit),
-				total_item: count,
-			},
-		};
+    const _metadata = {
+      result: rows,
+      pagination: {
+        page: page,
+        limit: limit,
+        total_page: Math.ceil(count / limit),
+        total_item: count,
+      },
+    };
 
-		return _metadata;
-	} catch (error) {
-		throw error;
-	}
+    return _metadata;
+  } catch (error) {
+    throw error;
+  }
 };
 
 const create = async (payload) => {
-	try {
-		return (await OrderModel.create(payload)).toJSON();
-	} catch (error) {
-		throw error;
-	}
+  try {
+    return (await OrderModel.create(payload)).toJSON();
+  } catch (error) {
+    throw error;
+  }
+};
+
+const update = async (payload, id) => {
+  try {
+    return await OrderModel.update({ ...payload }, { where: { id } });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const _delete = async (id) => {
+  try {
+    return await OrderModel.destroy({ where: { id } });
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const OrderRepository = {
-	create,
-	findById,
-	findAll,
+  create,
+  findById,
+  findAll,
+  update,
+  delete: _delete,
 };
