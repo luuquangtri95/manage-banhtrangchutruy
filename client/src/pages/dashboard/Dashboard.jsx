@@ -166,6 +166,16 @@ function Dashboard() {
 									</NavLink>
 
 									<NavLink
+										to="/dashboard/partners"
+										className={({ isActive }) =>
+											`p-3 rounded-md ${
+												isActive ? "bg-[#ffe9cf]" : "bg-none"
+											}`
+										}>
+										<Icon type="icon-partner" />
+									</NavLink>
+
+									<NavLink
 										to="/123"
 										className={({ isActive }) =>
 											`p-3 rounded-md ${
@@ -266,6 +276,17 @@ function Dashboard() {
 												isActive ? "bg-[#ffe9cf]" : ""
 											}`
 										}>
+										<Icon type="icon-partner" />
+										<p>Quản lý đối tác</p>
+									</NavLink>
+
+									<NavLink
+										to="/123"
+										className={({ isActive }) =>
+											`p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
+												isActive ? "bg-[#ffe9cf]" : ""
+											}`
+										}>
 										<Icon type="icon-support" />
 										<p>Liên hệ hỗ trợ</p>
 									</NavLink>
@@ -284,7 +305,7 @@ function Dashboard() {
 					</div>
 				</div>
 
-				<div className="p-2 flex-1 bg-[##fafafa]">
+				<div className="p-2 flex-1 bg-[#fafafa] relative">
 					<Outlet />
 				</div>
 			</div>

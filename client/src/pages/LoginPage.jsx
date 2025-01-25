@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
-import { AuthContext } from "../context/AuthContext";
 import Logo from "../assets/logo.jpg";
 import FormField from "../components/FormField";
+import { AuthContext } from "../context/AuthContext";
 
 function LoginPage(props) {
 	const [userInfo, setUserInfo] = useState({
