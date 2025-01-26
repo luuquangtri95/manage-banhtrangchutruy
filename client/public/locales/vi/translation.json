@@ -8,5 +8,14 @@
     "members": "Thành viên",
     "manage_partners": "Quản lý đối tác",
     "contact_support": "Liên hệ hỗ trợ",
-    "logout": "Đăng xuất"
+    "logout": "Đăng xuất",
+    
+    "order_list": "Danh sách đặt hàng",
+    "product_name": "Tên sản phẩm",
+    "price":"Giá",
+    "quantity":"Số lượng",
+    "status":"Trạng thái",
+    "created_date": "Ngày tạo",
+    "actions": "Hành động"
+
 }

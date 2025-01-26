@@ -7,6 +7,7 @@ import Popup from "../../components/Popup";
 import { formatDateWithIntl } from "../../helpers/convertDate";
 import ProductFilterForm from "./components/ProductFilterForm/ProductFilterForm";
 import { useTranslation } from "react-i18next";
+import { formatPrice } from "../../helpers/formatPrice";
 
 const INIT_FORMDATA = {
 	name: {
@@ -50,7 +51,7 @@ function ProductsPage() {
 	const [loading, setLoading] = useState(false);
 	const [filters, setFilters] = useState({ page: 1, limit: 3, searchTerm: "" });
 	const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	useEffect(() => {
 		fetchProducts();
@@ -158,7 +159,7 @@ function ProductsPage() {
 				key={index}
 				className="hover:bg-slate-50 border-b border-slate-200">
 				<td className="p-4 py-5 font-semibold text-sm text-slate-800">{product.name}</td>
-				<td className="p-4 py-5 text-sm text-slate-500">{product.price}</td>
+				<td className="p-4 py-5 text-sm text-slate-500">{formatPrice(product.price)}</td>
 				<td className="p-4 py-5 text-sm text-slate-500">{product.quantity}</td>
 				<td className="p-4 py-5 text-sm text-slate-500">Active</td>
 				<td className="p-4 py-5 text-sm text-slate-500">
@@ -201,18 +202,18 @@ function ProductsPage() {
 					<thead>
 						<tr>
 							{[
-								"Tên sản phẩm",
-								"Giá (vnđ)",
-								"Số lượng",
-								"Trạng thái",
-								"Ngày tạo",
-								"Hành động",
+								"product_name",
+								"price",
+								"quantity",
+								"status",
+								"created_date",
+								"actions",
 							].map((header, idx) => (
 								<th
 									key={idx}
 									className="p-4 border-b border-slate-200 bg-[#ffe9cf]"
 									style={{ width: `${100 / 6}%` }}>
-									<p className="text-sm font-normal leading-none">{header}</p>
+									<p className="text-sm font-normal leading-none">{t(header)}</p>
 								</th>
 							))}
 						</tr>
