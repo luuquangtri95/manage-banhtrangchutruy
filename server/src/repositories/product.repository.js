@@ -9,6 +9,14 @@ const create = async (payload) => {
 	}
 };
 
+const update = async (payload, id) => {
+	try {
+		return await ProductModel.update({ ...payload }, { where: { id } });
+	} catch (error) {
+		throw error;
+	}
+};
+
 const findAll = async (payload) => {
 	try {
 		const { page, limit, searchTerm, sort, order } = payload;
@@ -70,6 +78,7 @@ const _delete = async (id) => {
 export const ProductRepository = {
 	create,
 	findAll,
+	update,
 	findById,
 	delete: _delete,
 };
