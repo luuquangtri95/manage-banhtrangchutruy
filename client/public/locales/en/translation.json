@@ -19,5 +19,6 @@
     "actions": "Actions",
     
     "create_new_product":"Create New Product",
-    "search_product":"Search product"
+    "search_product":"Search Product",
+    "edit_product": "Edit Product"
 }

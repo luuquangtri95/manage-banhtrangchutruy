@@ -46,6 +46,7 @@ const DEFAULT_PAGINATION = {
 
 function ProductsPage() {
 	const [popupData, setPopupData] = useState(null);
+	const [productDelete, setProductDelete] = useState(null);
 	const [products, setProducts] = useState([]);
 	const [formData, setFormData] = useState(INIT_FORMDATA);
 	const [loading, setLoading] = useState(false);
@@ -106,15 +107,23 @@ function ProductsPage() {
 		}));
 	};
 
-	const handleDeleteProduct = async (id) => {
+	const handleDeleteProduct = async () => {
+		if (!productDelete) return;
+
 		try {
-			await ProductApi.delete(id);
-			toast.success("Product deleted successfully");
+			await ProductApi.delete(productDelete.id);
+			toast.success(`Product "${productDelete.name}" deleted successfully`);
 			fetchProducts();
 		} catch (error) {
-			console.log("handleDeleteProduct error", error);
 			toast.error("Failed to delete product");
+			console.log("handleDeleteProduct error", error);
+		} finally {
+			setProductDelete(null);
 		}
+	};
+
+	const handleCancelDelete = () => {
+		setProductDelete(null);
 	};
 
 	const handlePageChange = (newPage) => {
@@ -176,6 +185,10 @@ function ProductsPage() {
 		}
 	};
 
+	const handleConfirmDelete = (product) => {
+		setProductDelete(product); // Đặt sản phẩm cần xóa
+	};
+
 	const renderSkeleton = () =>
 		Array.from({ length: 3 }).map((_, rowIndex) => (
 			<tr
@@ -212,7 +225,7 @@ function ProductsPage() {
 						</button>
 						<button
 							className="border p-2 rounded-md"
-							onClick={() => handleDeleteProduct(product.id)}>
+							onClick={() => handleConfirmDelete(product)}>
 							<Icon type="icon-delete" />
 						</button>
 					</div>
@@ -282,7 +295,7 @@ function ProductsPage() {
 
 			<Popup
 				isOpen={popupData}
-				title={popupData?.id ? "Chỉnh sửa sản phẩm" : "Tạo sản phẩm"}
+				title={popupData?.id ? t("edit_product") : t("create_new_product")}
 				onClose={handleClosePopup}
 				onSubmit={handlePopupSubmit}>
 				{Object.keys(formData).map((key) => (
@@ -295,6 +308,16 @@ function ProductsPage() {
 						error={formData[key].error}
 					/>
 				))}
+			</Popup>
+
+			<Popup
+				isOpen={!!productDelete}
+				title="Confirm Delete"
+				onClose={handleCancelDelete}
+				onSubmit={handleDeleteProduct}>
+				<p>
+					Bạn có chắc chắn muốn xóa sản phẩm <b>{productDelete?.name}</b> không?
+				</p>
 			</Popup>
 		</div>
 	);

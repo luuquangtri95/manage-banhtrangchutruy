@@ -19,6 +19,7 @@
     "actions": "Hành động",
 
     "create_new_product": "Tạo sản phẩm mới",
-    "search_product":"Tìm kiếm sản phẩm"
+    "search_product":"Tìm kiếm sản phẩm",
+    "edit_product": "Chỉnh sửa sản phẩm"
 
 }
