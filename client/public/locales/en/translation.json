@@ -1,0 +1,20 @@
+{
+    "create_order": "Create Order",
+    "manage_orders": "Manage Orders",
+    "manage_products": "Manage Products",
+    "manage_categories": "Manage Categories",
+    "analytics": "Analytics",
+    "wholesale_price": "Wholesale Price",
+    "members": "Members",
+    "manage_partners": "Manage Partners",
+    "contact_support": "Contact Support",
+    "logout": "Logout",
+
+    "order_list": "Order List",
+    "product_name": "Product Name",
+    "price":"Price",
+    "quantity":"Quantity",
+    "status":"Status",
+    "created_date": "Created Date",
+    "actions": "Actions"
+}
