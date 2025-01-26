@@ -190,7 +190,7 @@ function ProductsPage() {
 	};
 
 	const renderSkeleton = () =>
-		Array.from({ length: 3 }).map((_, rowIndex) => (
+		Array.from({ length: pagination.limit }).map((_, rowIndex) => (
 			<tr
 				key={rowIndex}
 				className="animate-pulse">
@@ -223,6 +223,11 @@ function ProductsPage() {
 							onClick={() => handleEdit(product)}>
 							<Icon type="icon-edit" />
 						</button>
+
+						<button className="border p-2 rounded-md">
+							<Icon type="icon-clone" />
+						</button>
+
 						<button
 							className="border p-2 rounded-md"
 							onClick={() => handleConfirmDelete(product)}>
