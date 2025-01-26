@@ -16,5 +16,8 @@
     "quantity":"Quantity",
     "status":"Status",
     "created_date": "Created Date",
-    "actions": "Actions"
+    "actions": "Actions",
+    
+    "create_new_product":"Create New Product",
+    "search_product":"Search product"
 }

@@ -39,23 +39,37 @@ const INIT_FORMDATA = {
 
 const DEFAULT_PAGINATION = {
 	page: 1,
-	limit: 3,
+	limit: 5,
 	total_page: 10,
 	total_item: 10,
 };
 
 function ProductsPage() {
-	const [isOpen, setIsOpen] = useState(false);
+	const [popupData, setPopupData] = useState(null);
 	const [products, setProducts] = useState([]);
 	const [formData, setFormData] = useState(INIT_FORMDATA);
 	const [loading, setLoading] = useState(false);
-	const [filters, setFilters] = useState({ page: 1, limit: 3, searchTerm: "" });
+	const [filters, setFilters] = useState({ page: 1, limit: 5, searchTerm: "" });
 	const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
 	const { t } = useTranslation();
 
 	useEffect(() => {
 		fetchProducts();
 	}, [filters]);
+
+	useEffect(() => {
+		if (popupData) {
+			setFormData((prev) => {
+				const updatedFormData = { ...prev };
+				Object.keys(updatedFormData).forEach((key) => {
+					if (popupData[key] !== undefined) {
+						updatedFormData[key].value = popupData[key];
+					}
+				});
+				return updatedFormData;
+			});
+		}
+	}, [popupData]);
 
 	const fetchProducts = async () => {
 		try {
@@ -65,15 +79,24 @@ function ProductsPage() {
 			setProducts(res.metadata.result);
 			setPagination(res.metadata.pagination);
 		} catch (error) {
+			console.log("fetchProducts error", error);
 			toast.error("Failed to fetch products");
 		} finally {
 			setLoading(false);
 		}
 	};
 
-	const handlePopupToggle = () => {
-		setIsOpen((prev) => !prev);
-		setFormData(INIT_FORMDATA);
+	const handleClosePopup = () => {
+		setFormData((prev) => {
+			const initData = { ...prev };
+
+			Object.keys(initData).forEach((key) => {
+				initData[key].error = "";
+			});
+
+			return initData;
+		});
+		setPopupData(null);
 	};
 
 	const handleFormChange = (name, value) => {
@@ -83,49 +106,13 @@ function ProductsPage() {
 		}));
 	};
 
-	const handleCreateProduct = async () => {
-		let hasError = false;
-
-		const newFormData = { ...formData };
-		for (const key in newFormData) {
-			const field = newFormData[key];
-			if ("validate" in field) {
-				const error = field?.validate(field.value);
-				if (error) {
-					hasError = true;
-					newFormData[key].error = error;
-				}
-			}
-		}
-
-		setFormData(newFormData);
-
-		// Nếu có lỗi, không gửi dữ liệu
-		if (hasError) return;
-
-		const formattedData = Object.keys(formData).reduce((acc, key) => {
-			acc[key] = formData[key].value;
-			return acc;
-		}, {});
-
-		try {
-			await ProductApi.create(formattedData);
-			toast.success("Product created successfully");
-			fetchProducts();
-		} catch (error) {
-			toast.error("Failed to create product");
-		} finally {
-			setFormData(INIT_FORMDATA);
-			setIsOpen(false);
-		}
-	};
-
 	const handleDeleteProduct = async (id) => {
 		try {
 			await ProductApi.delete(id);
 			toast.success("Product deleted successfully");
 			fetchProducts();
 		} catch (error) {
+			console.log("handleDeleteProduct error", error);
 			toast.error("Failed to delete product");
 		}
 	};
@@ -136,6 +123,57 @@ function ProductsPage() {
 
 	const handleFilterChange = (newFilter) => {
 		setFilters((prev) => ({ ...prev, ...newFilter, page: 1 }));
+	};
+
+	const handleCreate = () => {
+		setPopupData({ name: "", price: "", quantity: 100 });
+	};
+
+	const handleEdit = (item) => {
+		setPopupData(item);
+	};
+
+	const handlePopupSubmit = async () => {
+		let hasError = false;
+
+		const newFormData = { ...formData };
+		Object.keys(newFormData).forEach((key) => {
+			const field = newFormData[key];
+			if (field.validate) {
+				const error = field.validate(field.value);
+				if (error) {
+					hasError = true;
+					newFormData[key].error = error;
+				}
+			}
+		});
+
+		setFormData(newFormData);
+
+		if (hasError) return;
+
+		const formattedData = Object.keys(formData).reduce((acc, key) => {
+			acc[key] = formData[key].value;
+			return acc;
+		}, {});
+
+		try {
+			if (popupData && popupData.id) {
+				await ProductApi.update({ ...formattedData, id: popupData.id });
+				toast.success("Product updated successfully");
+			} else {
+				await ProductApi.create(formattedData);
+				toast.success("Product created successfully");
+			}
+			fetchProducts();
+		} catch (error) {
+			console.log("handlePopupSubmit error", error);
+			toast.error("Failed to submit product");
+		} finally {
+			setPopupData(null);
+			setFormData(INIT_FORMDATA);
+			fetchProducts();
+		}
 	};
 
 	const renderSkeleton = () =>
@@ -167,7 +205,9 @@ function ProductsPage() {
 				</td>
 				<td className="p-4 py-5">
 					<div className="flex items-center gap-2">
-						<button className="border p-2 rounded-md">
+						<button
+							className="border p-2 rounded-md"
+							onClick={() => handleEdit(product)}>
 							<Icon type="icon-edit" />
 						</button>
 						<button
@@ -186,9 +226,9 @@ function ProductsPage() {
 				<div className="w-full flex justify-between items-center mb-3 mt-1">
 					<button
 						className="flex gap-2 border rounded-md p-2 hover:bg-[#ffe9cf] transition-all"
-						onClick={handlePopupToggle}>
+						onClick={handleCreate}>
 						<Icon type="icon-create" />
-						<p>Tạo sản phẩm mới</p>
+						<p>{t("create_new_product")}</p>
 					</button>
 				</div>
 
@@ -241,10 +281,10 @@ function ProductsPage() {
 			</div>
 
 			<Popup
-				isOpen={isOpen}
-				title="Form tạo sản phẩm"
-				onClose={handlePopupToggle}
-				onSubmit={handleCreateProduct}>
+				isOpen={popupData}
+				title={popupData?.id ? "Chỉnh sửa sản phẩm" : "Tạo sản phẩm"}
+				onClose={handleClosePopup}
+				onSubmit={handlePopupSubmit}>
 				{Object.keys(formData).map((key) => (
 					<FormField
 						key={key}
