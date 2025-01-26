@@ -4,14 +4,20 @@ import Logo from "../../assets/logo.jpg";
 import Icon from "../../components/Icon/Icon";
 import { AuthContext } from "../../context/AuthContext";
 import authorizedAxiosInstance from "../../utils/authorizedAxios";
+import { useTranslation } from "react-i18next";
 
 function Dashboard() {
 	const [isCollapse, setIsCollapse] = useState(false);
 	const [renderContent, setRenderContent] = useState(true);
 	const { onLogout } = useContext(AuthContext);
+	const { t, i18n } = useTranslation();
 
 	const handleCollapse = () => {
 		setIsCollapse(!isCollapse);
+	};
+
+	const handleChangeLang = (lang) => {
+		i18n.changeLanguage(lang);
 	};
 
 	useEffect(() => {
@@ -49,22 +55,28 @@ function Dashboard() {
 						/>
 					</div>
 
-					<div className="avatar w-[35px] h-[35px] rounded-[50%] bg-[#eee] flex justify-center items-center">
-						<svg
-							width="20px"
-							height="20px"
-							viewBox="0 0 16 16"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg">
-							<path
-								d="M8 7C9.65685 7 11 5.65685 11 4C11 2.34315 9.65685 1 8 1C6.34315 1 5 2.34315 5 4C5 5.65685 6.34315 7 8 7Z"
-								fill="#000000"
-							/>
-							<path
-								d="M14 12C14 10.3431 12.6569 9 11 9H5C3.34315 9 2 10.3431 2 12V15H14V12Z"
-								fill="#000000"
-							/>
-						</svg>
+					<div className="flex gap-2 items-center">
+						<div className="flex gap-2">
+							<button onClick={() => handleChangeLang("en")}>🇬🇧</button>
+							<button onClick={() => handleChangeLang("vi")}>🇻🇳</button>
+						</div>
+						<div className="avatar w-[35px] h-[35px] rounded-[50%] bg-[#eee] flex justify-center items-center">
+							<svg
+								width="20px"
+								height="20px"
+								viewBox="0 0 16 16"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg">
+								<path
+									d="M8 7C9.65685 7 11 5.65685 11 4C11 2.34315 9.65685 1 8 1C6.34315 1 5 2.34315 5 4C5 5.65685 6.34315 7 8 7Z"
+									fill="#000000"
+								/>
+								<path
+									d="M14 12C14 10.3431 12.6569 9 11 9H5C3.34315 9 2 10.3431 2 12V15H14V12Z"
+									fill="#000000"
+								/>
+							</svg>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -197,7 +209,7 @@ function Dashboard() {
 											}`
 										}>
 										<Icon type="icon-create" />
-										<p>Tạo đơn hàng</p>
+										<p>{t("create_order")}</p>
 									</NavLink>
 
 									<NavLink
@@ -209,7 +221,7 @@ function Dashboard() {
 											}`
 										}>
 										<Icon type="icon-manager-order" />
-										<p>Quản lý đơn hàng</p>
+										<p>{t("manage_orders")}</p>
 									</NavLink>
 
 									<NavLink
@@ -221,7 +233,7 @@ function Dashboard() {
 											}`
 										}>
 										<Icon type="icon-products" />
-										<p>Quản lý sản phẩm</p>
+										<p>{t("manage_products")}</p>
 									</NavLink>
 
 									<NavLink
@@ -233,7 +245,7 @@ function Dashboard() {
 											}`
 										}>
 										<Icon type="icon-category" />
-										<p>Quản lý danh mục</p>
+										<p>{t("manage_categories")}</p>
 									</NavLink>
 
 									<NavLink
@@ -244,7 +256,7 @@ function Dashboard() {
 											}`
 										}>
 										<Icon type="icon-analytic" />
-										<p>Thống kê</p>
+										<p>{t("analytics")}</p>
 									</NavLink>
 
 									<NavLink
@@ -255,7 +267,7 @@ function Dashboard() {
 											}`
 										}>
 										<Icon type="icon-price" />
-										<p>Giá sỉ</p>
+										<p>{t("wholesale_price")}</p>
 									</NavLink>
 
 									<NavLink
@@ -266,7 +278,7 @@ function Dashboard() {
 											}`
 										}>
 										<Icon type="icon-user-group" />
-										<p>Thành viên</p>
+										<p>{t("members")}</p>
 									</NavLink>
 
 									<NavLink
@@ -277,7 +289,7 @@ function Dashboard() {
 											}`
 										}>
 										<Icon type="icon-partner" />
-										<p>Quản lý đối tác</p>
+										<p>{t("manage_partners")}</p>
 									</NavLink>
 
 									<NavLink
@@ -288,7 +300,7 @@ function Dashboard() {
 											}`
 										}>
 										<Icon type="icon-support" />
-										<p>Liên hệ hỗ trợ</p>
+										<p>{t("contact_support")}</p>
 									</NavLink>
 								</ul>
 							)}
@@ -299,7 +311,7 @@ function Dashboard() {
 								className="p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md"
 								onClick={onLogout}>
 								<Icon type="icon-logout" />
-								Logout
+								{t("logout")}
 							</button>
 						</div>
 					</div>

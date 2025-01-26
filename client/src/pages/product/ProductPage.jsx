@@ -6,6 +6,7 @@ import Icon from "../../components/Icon/Icon";
 import Popup from "../../components/Popup";
 import { formatDateWithIntl } from "../../helpers/convertDate";
 import ProductFilterForm from "./components/ProductFilterForm/ProductFilterForm";
+import { useTranslation } from "react-i18next";
 
 const INIT_FORMDATA = {
 	name: {
@@ -49,6 +50,7 @@ function ProductsPage() {
 	const [loading, setLoading] = useState(false);
 	const [filters, setFilters] = useState({ page: 1, limit: 3, searchTerm: "" });
 	const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
+	const { t, i18n } = useTranslation();
 
 	useEffect(() => {
 		fetchProducts();
