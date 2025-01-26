@@ -10,6 +10,17 @@ const create = async (req) => {
 	}
 };
 
+const update = async (req) => {
+	try {
+		const payload = req.body;
+		const { productId } = req.params;
+
+		return await ProductRepository.update(payload, productId);
+	} catch (error) {
+		throw error;
+	}
+};
+
 const findAll = async (req) => {
 	try {
 		const _page = req.query.page ? parseInt(req.query.page) : 1;
@@ -58,5 +69,6 @@ export const ProductService = {
 	create,
 	findAll,
 	findById,
+	update,
 	delete: _delete,
 };

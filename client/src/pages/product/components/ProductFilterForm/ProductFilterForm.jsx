@@ -1,8 +1,10 @@
 import { useRef, useState } from "react";
 import FormField from "../../../../components/FormField";
+import { useTranslation } from "react-i18next";
 
 function ProductFilterForm({ onSubmit }) {
 	const [searchTerm, setSearchTerm] = useState("");
+	const { t } = useTranslation();
 
 	const typingTimoutRef = useRef(null);
 
@@ -28,7 +30,7 @@ function ProductFilterForm({ onSubmit }) {
 	return (
 		<FormField
 			value={searchTerm}
-			placeholder="Tim kiếm sản phẩm"
+			placeholder={t("search_product")}
 			onChange={handleSearchTermChange}
 		/>
 	);

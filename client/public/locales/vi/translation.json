@@ -16,6 +16,9 @@
     "quantity":"Số lượng",
     "status":"Trạng thái",
     "created_date": "Ngày tạo",
-    "actions": "Hành động"
+    "actions": "Hành động",
+
+    "create_new_product": "Tạo sản phẩm mới",
+    "search_product":"Tìm kiếm sản phẩm"
 
 }
