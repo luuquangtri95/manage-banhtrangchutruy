@@ -142,6 +142,26 @@ function ProductsPage() {
 		setPopupData(item);
 	};
 
+	const handleClone = async (oldItem) => {
+		try {
+			const _newItem = {
+				name: oldItem.name + " clone",
+				quantity: oldItem.quantity,
+				price: oldItem.price,
+			};
+
+			const res = await ProductApi.create(_newItem);
+
+			if (res.metadata.id) {
+				toast.success(`Clone ${res.metadata.name} success !`);
+			}
+		} catch (error) {
+			console.log("error", error);
+		} finally {
+			fetchProducts();
+		}
+	};
+
 	const handlePopupSubmit = async () => {
 		let hasError = false;
 
@@ -193,12 +213,12 @@ function ProductsPage() {
 		Array.from({ length: pagination.limit }).map((_, rowIndex) => (
 			<tr
 				key={rowIndex}
-				className="animate-pulse">
+				className="animate-pulse h-[81px]">
 				{Array.from({ length: 6 }).map((_, colIndex) => (
 					<td
 						key={colIndex}
 						className="p-4 py-5">
-						<div className="h-4 bg-gray-200 rounded"></div>
+						<div className="h-6 bg-gray-200 rounded"></div>
 					</td>
 				))}
 			</tr>
@@ -224,7 +244,9 @@ function ProductsPage() {
 							<Icon type="icon-edit" />
 						</button>
 
-						<button className="border p-2 rounded-md">
+						<button
+							className="border p-2 rounded-md"
+							onClick={() => handleClone(product)}>
 							<Icon type="icon-clone" />
 						</button>
 
