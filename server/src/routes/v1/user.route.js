@@ -12,4 +12,7 @@ Router.route("/logout").delete(userControllers.logout);
 // API Refresh Token - Cấp lại Access Token mới.
 Router.route("/refresh_token").put(userControllers.refreshToken);
 
+//
+Router.route("/register").post(userControllers.register);
+
 export const UserRoute = Router;

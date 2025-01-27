@@ -31,15 +31,15 @@ export const OrderModel = sequelizeConnectionString.define(
 			type: DataTypes.JSON,
 			defaultValue: {},
 		},
-		// user_id: {
-		// 	type: DataTypes.UUID,
-		// 	references: {
-		// 		model: UserModel,
-		// 		key: "id",
-		// 	},
-		// 	onDelete: "CASCADE",
-		// 	onUpdate: "CASCADE",
-		// },
+		user_id: {
+			type: DataTypes.UUID,
+			references: {
+				model: UserModel,
+				key: "id",
+			},
+			onDelete: "CASCADE",
+			onUpdate: "CASCADE",
+		},
 		status: {
 			type: DataTypes.ENUM("pending", "active", "draft", "success"),
 			defaultValue: "pending",

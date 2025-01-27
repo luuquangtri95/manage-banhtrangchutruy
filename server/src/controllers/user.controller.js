@@ -3,25 +3,32 @@ import { MOCK_DATABASE } from "~/mock/database";
 import { JwtProvider } from "~/providers/JwtProvider";
 import { env } from "~/config/enviroment";
 import ms from "ms";
+import { UserModel } from "~/models/user.model";
+import bcrypt from "bcrypt";
 
 const { ACCESS_TOKEN_SECRET_SIGNATURE, REFRESH_TOKEN_SECRET_SIGNATURE } = env;
 
 const login = async (req, res) => {
 	try {
-		if (
-			req.body.email !== MOCK_DATABASE.USER.EMAIL ||
-			req.body.password !== MOCK_DATABASE.USER.PASSWORD
-		) {
-			res.status(StatusCodes.UNAUTHORIZED).json({
-				message: "Your email or password is correct !",
-			});
+		const { email, password } = req.body;
 
-			return;
+		const user = await UserModel.findOne({ where: { email } });
+
+		if (!user) {
+			res.status(StatusCodes.NOT_FOUND).json({ message: "Email does not exist" });
+		}
+
+		const isPasswordValid = await bcrypt.compare(password, user.password);
+
+		if (!isPasswordValid) {
+			return res
+				.status(StatusCodes.UNAUTHORIZED)
+				.json({ message: "Email or password is incorrect" });
 		}
 
 		const _userInfo = {
-			id: MOCK_DATABASE.USER.ID,
-			email: req.body.email,
+			id: user.id,
+			email: email,
 		};
 
 		// generate token (access and refresh) for client
@@ -111,8 +118,21 @@ const refreshToken = async (req, res) => {
 	}
 };
 
+const register = async (req, res) => {
+	try {
+		const { username, password, email } = req.body;
+
+		const metadata = await UserModel.create({ email, username, password });
+
+		res.status(StatusCodes.OK).json({ message: "Register API success !", metadata });
+	} catch (error) {
+		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+	}
+};
+
 export const userControllers = {
 	login,
 	logout,
+	register,
 	refreshToken,
 };
