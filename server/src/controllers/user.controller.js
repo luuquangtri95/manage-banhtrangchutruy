@@ -1,10 +1,9 @@
-import { StatusCodes } from "http-status-codes";
-import { MOCK_DATABASE } from "~/mock/database";
-import { JwtProvider } from "~/providers/JwtProvider";
-import { env } from "~/config/enviroment";
-import ms from "ms";
-import { UserModel } from "~/models/user.model";
 import bcrypt from "bcrypt";
+import { StatusCodes } from "http-status-codes";
+import ms from "ms";
+import { env } from "~/config/enviroment";
+import { UserModel } from "~/models/user.model";
+import { JwtProvider } from "~/providers/JwtProvider";
 
 const { ACCESS_TOKEN_SECRET_SIGNATURE, REFRESH_TOKEN_SECRET_SIGNATURE } = env;
 
@@ -12,18 +11,26 @@ const login = async (req, res) => {
 	try {
 		const { email, password } = req.body;
 
+		if (!email || !password) {
+			return res.status(StatusCodes.BAD_REQUEST).json({
+				message: "Email and password are required",
+			});
+		}
+
 		const user = await UserModel.findOne({ where: { email } });
 
 		if (!user) {
 			res.status(StatusCodes.NOT_FOUND).json({ message: "Email does not exist" });
+			return;
 		}
 
 		const isPasswordValid = await bcrypt.compare(password, user.password);
 
 		if (!isPasswordValid) {
-			return res
-				.status(StatusCodes.UNAUTHORIZED)
-				.json({ message: "Email or password is incorrect" });
+			res.status(StatusCodes.UNAUTHORIZED).json({
+				message: "Email or password is incorrect",
+			});
+			return;
 		}
 
 		const _userInfo = {
@@ -87,6 +94,14 @@ const refreshToken = async (req, res) => {
 	try {
 		const refreshTokenFromCookie = req.cookies?.refreshToken;
 
+		if (!refreshTokenFromCookie) {
+			res.status(StatusCodes.UNAUTHORIZED).json({
+				message: "Refresh token not found",
+			});
+
+			return;
+		}
+
 		const refreshTokenDecoded = await JwtProvider.verifyToken(
 			refreshTokenFromCookie,
 			env.REFRESH_TOKEN_SECRET_SIGNATURE
@@ -100,7 +115,7 @@ const refreshToken = async (req, res) => {
 		const accessToken = await JwtProvider.generateToken(
 			userInfo,
 			ACCESS_TOKEN_SECRET_SIGNATURE,
-			5
+			"1h"
 		);
 
 		res.cookie("accessToken", accessToken, {
