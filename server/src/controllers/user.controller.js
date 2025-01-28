@@ -1,7 +1,9 @@
 import bcrypt from "bcrypt";
 import { StatusCodes } from "http-status-codes";
 import ms from "ms";
+import sequelizeConnectionString from "~/config/database";
 import { env } from "~/config/enviroment";
+import { RoleModel } from "~/models/role.model";
 import { UserModel } from "~/models/user.model";
 import { JwtProvider } from "~/providers/JwtProvider";
 
@@ -135,11 +137,29 @@ const refreshToken = async (req, res) => {
 
 const register = async (req, res) => {
 	try {
-		const { username, password, email } = req.body;
+		const { username, email, password } = req.body;
 
-		const metadata = await UserModel.create({ email, username, password });
+		const userCount = await UserModel.count();
 
-		res.status(StatusCodes.OK).json({ message: "Register API success !", metadata });
+		const roleName = userCount === 0 ? "admin" : "user";
+		const role = await RoleModel.findOne({ where: { name: roleName } });
+
+		if (!role) {
+			return res.status(400).json({ message: `Role '${roleName}' not found.` });
+		}
+
+		const newUser = await sequelizeConnectionString.transaction(async (transaction) => {
+			const user = await UserModel.create({ username, email, password }, { transaction });
+
+			await user.addRole(role, { transaction });
+
+			return user;
+		});
+
+		res.status(201).json({
+			message: `User registered successfully with role '${roleName}'.`,
+			metadata: newUser,
+		});
 	} catch (error) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
 	}
