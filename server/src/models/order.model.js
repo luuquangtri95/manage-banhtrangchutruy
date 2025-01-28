@@ -33,6 +33,7 @@ export const OrderModel = sequelizeConnectionString.define(
 		},
 		user_id: {
 			type: DataTypes.UUID,
+			allowNull: false,
 			references: {
 				model: UserModel,
 				key: "id",

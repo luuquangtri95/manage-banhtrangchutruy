@@ -13,10 +13,11 @@ const findById = async (id) => {
 
 const findAll = async (payload) => {
 	try {
-		const { page, limit, searchTerm, sort, order, status, startDate, endDate } = payload;
+		const { user_id, page, limit, searchTerm, sort, order, status, startDate, endDate } =
+			payload;
 
 		const _offset = (page - 1) * limit;
-		let where = {};
+		let where = { user_id };
 
 		if (searchTerm) {
 			// where.title = {
