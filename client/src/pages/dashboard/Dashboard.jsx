@@ -11,6 +11,7 @@ function Dashboard() {
 	const [renderContent, setRenderContent] = useState(true);
 	const { onLogout } = useContext(AuthContext);
 	const { t, i18n } = useTranslation();
+	const [userInfo, setUserInfo] = useState(null);
 
 	const handleCollapse = () => {
 		setIsCollapse(!isCollapse);
@@ -24,7 +25,7 @@ function Dashboard() {
 		const fetchData = async () => {
 			const res = await authorizedAxiosInstance.get(`/dashboards/access`);
 
-			console.log(res);
+			setUserInfo(res);
 		};
 		fetchData();
 	}, []);
@@ -258,16 +259,18 @@ function Dashboard() {
 										<p>{t("manage_categories")}</p>
 									</NavLink>
 
-									<NavLink
-										to="/dashboard/analytics"
-										className={({ isActive }) =>
-											`p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
-												isActive ? "bg-[#ffe9cf]" : ""
-											}`
-										}>
-										<Icon type="icon-analytic" />
-										<p>{t("analytics")}</p>
-									</NavLink>
+									{userInfo?.role === "admin" && (
+										<NavLink
+											to="/dashboard/analytics"
+											className={({ isActive }) =>
+												`p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
+													isActive ? "bg-[#ffe9cf]" : ""
+												}`
+											}>
+											<Icon type="icon-analytic" />
+											<p>{t("analytics")}</p>
+										</NavLink>
+									)}
 
 									<NavLink
 										to="/dashboard/wholesale-price"
@@ -280,27 +283,31 @@ function Dashboard() {
 										<p>{t("wholesale_price")}</p>
 									</NavLink>
 
-									<NavLink
-										to="/dashboard/users"
-										className={({ isActive }) =>
-											`p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
-												isActive ? "bg-[#ffe9cf]" : ""
-											}`
-										}>
-										<Icon type="icon-user-group" />
-										<p>{t("members")}</p>
-									</NavLink>
+									{userInfo?.role === "admin" && (
+										<NavLink
+											to="/dashboard/users"
+											className={({ isActive }) =>
+												`p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
+													isActive ? "bg-[#ffe9cf]" : ""
+												}`
+											}>
+											<Icon type="icon-user-group" />
+											<p>{t("members")}</p>
+										</NavLink>
+									)}
 
-									<NavLink
-										to="/123"
-										className={({ isActive }) =>
-											`p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
-												isActive ? "bg-[#ffe9cf]" : ""
-											}`
-										}>
-										<Icon type="icon-partner" />
-										<p>{t("manage_partners")}</p>
-									</NavLink>
+									{userInfo?.role === "admin" && (
+										<NavLink
+											to="/123"
+											className={({ isActive }) =>
+												`p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
+													isActive ? "bg-[#ffe9cf]" : ""
+												}`
+											}>
+											<Icon type="icon-partner" />
+											<p>{t("manage_partners")}</p>
+										</NavLink>
+									)}
 
 									<NavLink
 										to="/123"
