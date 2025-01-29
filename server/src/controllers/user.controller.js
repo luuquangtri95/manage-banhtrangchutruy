@@ -19,7 +19,17 @@ const login = async (req, res) => {
 			});
 		}
 
-		const user = await UserModel.findOne({ where: { email } });
+		const user = await UserModel.findOne({
+			where: { email },
+			raw: true,
+			nest: true,
+			include: [
+				{
+					model: RoleModel,
+					through: { attributes: [] },
+				},
+			],
+		});
 
 		if (!user) {
 			res.status(StatusCodes.NOT_FOUND).json({ message: "Email does not exist" });
@@ -38,7 +48,10 @@ const login = async (req, res) => {
 		const _userInfo = {
 			id: user.id,
 			email: email,
+			role: user.roles.name,
 		};
+
+		console.log("_userInfo", _userInfo);
 
 		// generate token (access and refresh) for client
 		const accessToken = await JwtProvider.generateToken(
@@ -158,7 +171,7 @@ const register = async (req, res) => {
 
 		res.status(201).json({
 			message: `User registered successfully with role '${roleName}'.`,
-			metadata: newUser,
+			metadata: { email: newUser.email },
 		});
 	} catch (error) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
