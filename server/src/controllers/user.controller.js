@@ -57,7 +57,8 @@ const login = async (req, res) => {
 		const accessToken = await JwtProvider.generateToken(
 			_userInfo,
 			ACCESS_TOKEN_SECRET_SIGNATURE,
-			"1h"
+			// "1h"
+			5
 		);
 
 		const refreshToken = await JwtProvider.generateToken(
@@ -125,6 +126,7 @@ const refreshToken = async (req, res) => {
 		const userInfo = {
 			id: refreshTokenDecoded.id,
 			email: refreshTokenDecoded.email,
+			role: refreshTokenDecoded.role,
 		};
 
 		const accessToken = await JwtProvider.generateToken(
