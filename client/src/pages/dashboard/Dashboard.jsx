@@ -188,6 +188,16 @@ function Dashboard() {
 									</NavLink>
 
 									<NavLink
+										to="/dashboard/partners"
+										className={({ isActive }) =>
+											`p-3 rounded-md ${
+												isActive ? "bg-[#ffe9cf]" : "bg-none"
+											}`
+										}>
+										<Icon type="icon-permission" />
+									</NavLink>
+
+									<NavLink
 										to="/123"
 										className={({ isActive }) =>
 											`p-3 rounded-md ${
@@ -290,6 +300,17 @@ function Dashboard() {
 										}>
 										<Icon type="icon-partner" />
 										<p>{t("manage_partners")}</p>
+									</NavLink>
+
+									<NavLink
+										to="/123"
+										className={({ isActive }) =>
+											`p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
+												isActive ? "bg-[#ffe9cf]" : ""
+											}`
+										}>
+										<Icon type="icon-permission" />
+										<p>{t("grant_permission")}</p>
 									</NavLink>
 
 									<NavLink

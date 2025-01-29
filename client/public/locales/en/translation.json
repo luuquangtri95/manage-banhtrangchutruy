@@ -20,5 +20,6 @@
     
     "create_new_product":"Create New Product",
     "search_product":"Search Product",
-    "edit_product": "Edit Product"
+    "edit_product": "Edit Product",
+    "grant_permission": "Grant Permission"
 }

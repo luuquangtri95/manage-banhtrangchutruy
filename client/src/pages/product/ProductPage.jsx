@@ -194,7 +194,6 @@ function ProductsPage() {
 				await ProductApi.create(formattedData);
 				toast.success("Product created successfully");
 			}
-			fetchProducts();
 		} catch (error) {
 			console.log("handlePopupSubmit error", error);
 			toast.error("Failed to submit product");
@@ -210,7 +209,7 @@ function ProductsPage() {
 	};
 
 	const renderSkeleton = () =>
-		Array.from({ length: pagination.limit }).map((_, rowIndex) => (
+		Array.from({ length: products.length }).map((_, rowIndex) => (
 			<tr
 				key={rowIndex}
 				className="animate-pulse h-[81px]">
@@ -225,9 +224,9 @@ function ProductsPage() {
 		));
 
 	const renderProducts = () =>
-		products.map((product, index) => (
+		products.map((product) => (
 			<tr
-				key={index}
+				key={product.id}
 				className="hover:bg-slate-50 border-b border-slate-200">
 				<td className="p-4 py-5 font-semibold text-sm text-slate-800">{product.name}</td>
 				<td className="p-4 py-5 text-sm text-slate-500">{formatPrice(product.price)}</td>
