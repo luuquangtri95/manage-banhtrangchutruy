@@ -10,7 +10,7 @@ export const OrderModel = sequelizeConnectionString.define(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    // title: { type: DataTypes.STRING, allowNull: false },
+    title: { type: DataTypes.STRING, allowNull: false },
     fullname: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -31,15 +31,16 @@ export const OrderModel = sequelizeConnectionString.define(
       type: DataTypes.JSON,
       defaultValue: {},
     },
-    // user_id: {
-    // 	type: DataTypes.UUID,
-    // 	references: {
-    // 		model: UserModel,
-    // 		key: "id",
-    // 	},
-    // 	onDelete: "CASCADE",
-    // 	onUpdate: "CASCADE",
-    // },
+    user_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: UserModel,
+        key: "id",
+      },
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
+    },
     status: {
       type: DataTypes.ENUM("pending", "active", "draft", "success"),
       defaultValue: "pending",

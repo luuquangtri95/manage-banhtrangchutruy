@@ -18,14 +18,8 @@
   "created_date": "Created Date",
   "actions": "Actions",
 
-  "fullname": "Name",
-  "address": "Address",
-  "phone": "Phone",
-  "product": "Product",
-  "delivery_date": "Delivery Date",
-  "select_product": "Select Product",
-  "no_product": "Please choose product",
-
   "create_new_product": "Create New Product",
-  "search_product": "Search product"
+  "search_product": "Search Product",
+  "edit_product": "Edit Product",
+  "grant_permission": "Grant Permission"
 }

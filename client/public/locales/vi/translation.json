@@ -10,13 +10,10 @@
   "contact_support": "Liên hệ hỗ trợ",
   "logout": "Đăng xuất",
 
-  "order_list": "Danh sách đặt hàng",
-  "product_name": "Tên sản phẩm",
-  "price": "Giá",
-  "quantity": "Số lượng",
-  "status": "Trạng thái",
-  "created_date": "Ngày tạo",
-  "actions": "Hành động",
+  "create_new_product": "Tạo sản phẩm mới",
+  "search_product": "Tìm kiếm sản phẩm",
+  "edit_product": "Chỉnh sửa sản phẩm",
+  "grant_permission": "Quản lý quyền hạn",
 
   "fullname": "Tên",
   "address": "Địa chỉ",

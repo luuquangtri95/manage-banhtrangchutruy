@@ -31,6 +31,8 @@ export const AuthProvider = ({ children }) => {
 		navigate("/login");
 	};
 
+	console.log("userInfo", userInfo);
+
 	return (
 		<AuthContext.Provider value={{ onLogin: handleLogin, userInfo, onLogout: handleLogout }}>
 			{children}

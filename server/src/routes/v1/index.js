@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { DashboardRoute } from "./dashboard.route";
 import { UserRoute } from "./user.route";
 import { AuthMiddleware } from "~/middlewares/auth.middleware";
+import { RoleRoute } from "./role.route";
 
 const Router = express.Router();
 
@@ -13,6 +14,7 @@ Router.get("/status", (req, res) => {
 
 //#region [UNPROTECTED ROUTE]
 Router.use("/users", UserRoute);
+Router.use("/roles", RoleRoute);
 //#endregion
 
 //#region [PROTECTED ROUTE]

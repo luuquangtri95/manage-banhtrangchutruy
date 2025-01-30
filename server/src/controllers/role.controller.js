@@ -1,11 +1,11 @@
 import { StatusCodes } from "http-status-codes";
-import { RoleModel } from "~/models";
+import { RoleModel } from "~/models/role.model";
 
 const create = async (req, res) => {
 	try {
-		const { roleName } = req.body;
+		const { name } = req.body;
 
-		await RoleModel.create({ name: roleName, description: roleName });
+		await RoleModel.create({ name, description: name });
 
 		res.status(StatusCodes.OK).json({ message: "create role success" });
 	} catch (error) {

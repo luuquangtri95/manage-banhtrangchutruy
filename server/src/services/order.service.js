@@ -10,6 +10,7 @@ const findById = async (orderId) => {
 
 const findAll = async (req) => {
   try {
+    const user_id = req.jwtDecoded.id;
     const _page = req.query.page ? parseInt(req.query.page) : 1;
     const _limit = req.query.limit ? parseInt(req.query.limit) : 10;
     const _searchTerm = req.query.searchTerm || "";
@@ -19,10 +20,11 @@ const findAll = async (req) => {
     const _startDate = req.query.startDate || "";
     const _endDate = req.query.endDate || "";
     /// ... many queries here
-    // console.log("_startDate", _startDate);
-    // console.log("_endDate", _endDate);
+    console.log("_startDate", _startDate);
+    console.log("_endDate", _endDate);
 
     let payload = {
+      user_id,
       page: _page,
       limit: _limit,
       searchTerm: _searchTerm,
@@ -35,7 +37,6 @@ const findAll = async (req) => {
     if (_status) {
       payload.status = _status;
     }
-    console.log("payload", payload);
 
     return await OrderRepository.findAll({ ...payload });
   } catch (error) {
@@ -46,8 +47,12 @@ const findAll = async (req) => {
 const create = async (req) => {
   try {
     const payload = req.body;
+    const userInfo = req.jwtDecoded;
 
-    return await OrderRepository.createWithTransaction(payload);
+    return await OrderRepository.createWithTransaction({
+      ...payload,
+      user_id: userInfo.id,
+    });
   } catch (error) {
     throw error;
   }

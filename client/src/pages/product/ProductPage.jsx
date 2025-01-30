@@ -46,6 +46,7 @@ const DEFAULT_PAGINATION = {
 
 function ProductsPage() {
 	const [popupData, setPopupData] = useState(null);
+	const [productDelete, setProductDelete] = useState(null);
 	const [products, setProducts] = useState([]);
 	const [formData, setFormData] = useState(INIT_FORMDATA);
 	const [loading, setLoading] = useState(false);
@@ -106,15 +107,23 @@ function ProductsPage() {
 		}));
 	};
 
-	const handleDeleteProduct = async (id) => {
+	const handleDeleteProduct = async () => {
+		if (!productDelete) return;
+
 		try {
-			await ProductApi.delete(id);
-			toast.success("Product deleted successfully");
+			await ProductApi.delete(productDelete.id);
+			toast.success(`Product "${productDelete.name}" deleted successfully`);
 			fetchProducts();
 		} catch (error) {
-			console.log("handleDeleteProduct error", error);
 			toast.error("Failed to delete product");
+			console.log("handleDeleteProduct error", error);
+		} finally {
+			setProductDelete(null);
 		}
+	};
+
+	const handleCancelDelete = () => {
+		setProductDelete(null);
 	};
 
 	const handlePageChange = (newPage) => {
@@ -131,6 +140,26 @@ function ProductsPage() {
 
 	const handleEdit = (item) => {
 		setPopupData(item);
+	};
+
+	const handleClone = async (oldItem) => {
+		try {
+			const _newItem = {
+				name: oldItem.name + " clone",
+				quantity: oldItem.quantity,
+				price: oldItem.price,
+			};
+
+			const res = await ProductApi.create(_newItem);
+
+			if (res.metadata.id) {
+				toast.success(`Clone ${res.metadata.name} success !`);
+			}
+		} catch (error) {
+			console.log("error", error);
+		} finally {
+			fetchProducts();
+		}
 	};
 
 	const handlePopupSubmit = async () => {
@@ -165,7 +194,6 @@ function ProductsPage() {
 				await ProductApi.create(formattedData);
 				toast.success("Product created successfully");
 			}
-			fetchProducts();
 		} catch (error) {
 			console.log("handlePopupSubmit error", error);
 			toast.error("Failed to submit product");
@@ -176,25 +204,29 @@ function ProductsPage() {
 		}
 	};
 
+	const handleConfirmDelete = (product) => {
+		setProductDelete(product); // Đặt sản phẩm cần xóa
+	};
+
 	const renderSkeleton = () =>
-		Array.from({ length: 3 }).map((_, rowIndex) => (
+		Array.from({ length: products.length }).map((_, rowIndex) => (
 			<tr
 				key={rowIndex}
-				className="animate-pulse">
+				className="animate-pulse h-[81px]">
 				{Array.from({ length: 6 }).map((_, colIndex) => (
 					<td
 						key={colIndex}
 						className="p-4 py-5">
-						<div className="h-4 bg-gray-200 rounded"></div>
+						<div className="h-6 bg-gray-200 rounded"></div>
 					</td>
 				))}
 			</tr>
 		));
 
 	const renderProducts = () =>
-		products.map((product, index) => (
+		products.map((product) => (
 			<tr
-				key={index}
+				key={product.id}
 				className="hover:bg-slate-50 border-b border-slate-200">
 				<td className="p-4 py-5 font-semibold text-sm text-slate-800">{product.name}</td>
 				<td className="p-4 py-5 text-sm text-slate-500">{formatPrice(product.price)}</td>
@@ -210,9 +242,16 @@ function ProductsPage() {
 							onClick={() => handleEdit(product)}>
 							<Icon type="icon-edit" />
 						</button>
+
 						<button
 							className="border p-2 rounded-md"
-							onClick={() => handleDeleteProduct(product.id)}>
+							onClick={() => handleClone(product)}>
+							<Icon type="icon-clone" />
+						</button>
+
+						<button
+							className="border p-2 rounded-md"
+							onClick={() => handleConfirmDelete(product)}>
 							<Icon type="icon-delete" />
 						</button>
 					</div>
@@ -282,7 +321,7 @@ function ProductsPage() {
 
 			<Popup
 				isOpen={popupData}
-				title={popupData?.id ? "Chỉnh sửa sản phẩm" : "Tạo sản phẩm"}
+				title={popupData?.id ? t("edit_product") : t("create_new_product")}
 				onClose={handleClosePopup}
 				onSubmit={handlePopupSubmit}>
 				{Object.keys(formData).map((key) => (
@@ -295,6 +334,16 @@ function ProductsPage() {
 						error={formData[key].error}
 					/>
 				))}
+			</Popup>
+
+			<Popup
+				isOpen={!!productDelete}
+				title="Confirm Delete"
+				onClose={handleCancelDelete}
+				onSubmit={handleDeleteProduct}>
+				<p>
+					Bạn có chắc chắn muốn xóa sản phẩm <b>{productDelete?.name}</b> không?
+				</p>
 			</Popup>
 		</div>
 	);
