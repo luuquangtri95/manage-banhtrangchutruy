@@ -6,8 +6,8 @@ const OrderApi = {
     return await authorizedAxiosInstance.post(url, data);
   },
   findAll: async (params) => {
-    // console.log("params", params);
-    const url = "dashboards/orders";
+    console.log("params", params);
+    const url = "/dashboards/orders";
     // const fullUrl = `${url}?${new URLSearchParams(params).toString()}`;
     // console.log("fullUrl", fullUrl);
     return await authorizedAxiosInstance.get(url, { params });

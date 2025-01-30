@@ -19,8 +19,8 @@ const findAll = async (req) => {
     const _startDate = req.query.startDate || "";
     const _endDate = req.query.endDate || "";
     /// ... many queries here
-    console.log("_startDate", _startDate);
-    console.log("_endDate", _endDate);
+    // console.log("_startDate", _startDate);
+    // console.log("_endDate", _endDate);
 
     let payload = {
       page: _page,
