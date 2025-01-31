@@ -5,6 +5,7 @@ import sequelizeConnectionString from "~/config/database";
 import { env } from "~/config/enviroment";
 import { RoleModel } from "~/models/role.model";
 import { UserModel } from "~/models/user.model";
+import { PermissionModel } from "~/models/permission.model";
 import { JwtProvider } from "~/providers/JwtProvider";
 
 const { ACCESS_TOKEN_SECRET_SIGNATURE, REFRESH_TOKEN_SECRET_SIGNATURE } = env;
@@ -57,8 +58,7 @@ const login = async (req, res) => {
 		const accessToken = await JwtProvider.generateToken(
 			_userInfo,
 			ACCESS_TOKEN_SECRET_SIGNATURE,
-			// "1h"
-			5
+			"1h"
 		);
 
 		const refreshToken = await JwtProvider.generateToken(
@@ -167,6 +167,16 @@ const register = async (req, res) => {
 			const user = await UserModel.create({ username, email, password }, { transaction });
 
 			await user.addRole(role, { transaction });
+
+			if (roleName === "admin") {
+				const fullPermission = await PermissionModel.findOne({ where: { name: "*" } });
+
+				if (!fullPermission) {
+					throw new Error("Permission '*' not found.");
+				}
+
+				await role.addPermission(fullPermission, { transaction });
+			}
 
 			return user;
 		});

@@ -4,7 +4,7 @@ const create = async () => {
 		throw error;
 	}
 };
-const findAll = async () => {
+const findAll = async (req) => {
 	try {
 	} catch (error) {
 		throw error;

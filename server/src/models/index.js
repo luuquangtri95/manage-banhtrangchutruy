@@ -27,9 +27,16 @@ const models = [
 // Khai báo quan hệ giữa các model
 const setupAssociations = () => {
 	//#region [role - permission]
-	RoleModel.hasMany(RolePermissionLinkModel, { foreignKey: "role_id", onDelete: "CASCADE" });
-	PermissionModel.hasMany(RolePermissionLinkModel, {
+	RoleModel.belongsToMany(PermissionModel, {
+		through: RolePermissionLinkModel,
+		foreignKey: "role_id",
+		otherKey: "permission_id",
+		onDelete: "CASCADE",
+	});
+	PermissionModel.belongsToMany(RoleModel, {
+		through: RolePermissionLinkModel,
 		foreignKey: "permission_id",
+		otherKey: "role_id",
 		onDelete: "CASCADE",
 	});
 	//#endregion

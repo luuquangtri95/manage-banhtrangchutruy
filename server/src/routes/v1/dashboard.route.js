@@ -2,17 +2,27 @@ import express from "express";
 import { DashboardControllers } from "~/controllers/dashboard.controller";
 import { OrderController } from "~/controllers/order.controller";
 import { ProductController } from "~/controllers/product.controller";
+import { AuthMiddleware } from "~/middlewares/auth.middleware";
 
 const Router = express.Router();
 
 Router.route("/access").get(DashboardControllers.access);
 
 //#region [PRODUCTS]
-Router.route("/products/create").post(ProductController.create);
+Router.route("/products/create").post(
+	AuthMiddleware.checkPermission(["CREATE_PRODUCT"]),
+	ProductController.create
+);
 Router.route("/products").get(ProductController.findAll);
 Router.route("/products/:productId").get(ProductController.findById);
-Router.route("/products/:productId").put(ProductController.update);
-Router.route("/products/:productId").delete(ProductController.delete);
+Router.route("/products/:productId").put(
+	AuthMiddleware.checkPermission(["UPDATE_PRODUCT"]),
+	ProductController.update
+);
+Router.route("/products/:productId").delete(
+	AuthMiddleware.checkPermission(["DELETE_PRODUCT"]),
+	ProductController.delete
+);
 //#endregion
 
 //#region [ORDERS]
