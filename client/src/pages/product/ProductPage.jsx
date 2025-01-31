@@ -39,7 +39,7 @@ const INIT_FORMDATA = {
 
 const DEFAULT_PAGINATION = {
 	page: 1,
-	limit: 5,
+	limit: 10,
 	total_page: 10,
 	total_item: 10,
 };
@@ -50,7 +50,7 @@ function ProductsPage() {
 	const [products, setProducts] = useState([]);
 	const [formData, setFormData] = useState(INIT_FORMDATA);
 	const [loading, setLoading] = useState(false);
-	const [filters, setFilters] = useState({ page: 1, limit: 5, searchTerm: "" });
+	const [filters, setFilters] = useState({ page: 1, limit: 10, searchTerm: "" });
 	const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
 	const { t } = useTranslation();
 
@@ -115,7 +115,6 @@ function ProductsPage() {
 			toast.success(`Product "${productDelete.name}" deleted successfully`);
 			fetchProducts();
 		} catch (error) {
-			toast.error("Failed to delete product");
 			console.log("handleDeleteProduct error", error);
 		} finally {
 			setProductDelete(null);
@@ -191,12 +190,14 @@ function ProductsPage() {
 				await ProductApi.update({ ...formattedData, id: popupData.id });
 				toast.success("Product updated successfully");
 			} else {
-				await ProductApi.create(formattedData);
-				toast.success("Product created successfully");
+				const res = await ProductApi.create(formattedData);
+				console.log(res);
+
+				// toast.success("Product created successfully");
 			}
 		} catch (error) {
 			console.log("handlePopupSubmit error", error);
-			toast.error("Failed to submit product");
+			// toast.error("Failed to submit product");
 		} finally {
 			setPopupData(null);
 			setFormData(INIT_FORMDATA);
