@@ -148,15 +148,17 @@ function Dashboard() {
 										<Icon type="icon-category" />
 									</NavLink>
 
-									<NavLink
-										to="/dashboard/analytic"
-										className={({ isActive }) =>
-											`p-3 rounded-md ${
-												isActive ? "bg-[#ffe9cf]" : "bg-none"
-											}`
-										}>
-										<Icon type="icon-analytic" />
-									</NavLink>
+									{userInfo.role === "admin" && (
+										<NavLink
+											to="/dashboard/analytic"
+											className={({ isActive }) =>
+												`p-3 rounded-md ${
+													isActive ? "bg-[#ffe9cf]" : "bg-none"
+												}`
+											}>
+											<Icon type="icon-analytic" />
+										</NavLink>
+									)}
 
 									<NavLink
 										to="/dashboard/wholesale-price"
@@ -168,35 +170,41 @@ function Dashboard() {
 										<Icon type="icon-price" />
 									</NavLink>
 
-									<NavLink
-										to="/dashboard/users"
-										className={({ isActive }) =>
-											`p-3 rounded-md ${
-												isActive ? "bg-[#ffe9cf]" : "bg-none"
-											}`
-										}>
-										<Icon type="icon-user-group" />
-									</NavLink>
+									{userInfo.role === "admin" && (
+										<NavLink
+											to="/dashboard/users"
+											className={({ isActive }) =>
+												`p-3 rounded-md ${
+													isActive ? "bg-[#ffe9cf]" : "bg-none"
+												}`
+											}>
+											<Icon type="icon-user-group" />
+										</NavLink>
+									)}
 
-									<NavLink
-										to="/dashboard/partners"
-										className={({ isActive }) =>
-											`p-3 rounded-md ${
-												isActive ? "bg-[#ffe9cf]" : "bg-none"
-											}`
-										}>
-										<Icon type="icon-partner" />
-									</NavLink>
+									{userInfo.role === "admin" && (
+										<NavLink
+											to="/dashboard/partners"
+											className={({ isActive }) =>
+												`p-3 rounded-md ${
+													isActive ? "bg-[#ffe9cf]" : "bg-none"
+												}`
+											}>
+											<Icon type="icon-partner" />
+										</NavLink>
+									)}
 
-									<NavLink
-										to="/dashboard/partners"
-										className={({ isActive }) =>
-											`p-3 rounded-md ${
-												isActive ? "bg-[#ffe9cf]" : "bg-none"
-											}`
-										}>
-										<Icon type="icon-permission" />
-									</NavLink>
+									{userInfo.role === "admin" && (
+										<NavLink
+											to="/dashboard/partners"
+											className={({ isActive }) =>
+												`p-3 rounded-md ${
+													isActive ? "bg-[#ffe9cf]" : "bg-none"
+												}`
+											}>
+											<Icon type="icon-permission" />
+										</NavLink>
+									)}
 
 									<NavLink
 										to="/123"
@@ -309,16 +317,18 @@ function Dashboard() {
 										</NavLink>
 									)}
 
-									<NavLink
-										to="/123"
-										className={({ isActive }) =>
-											`p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
-												isActive ? "bg-[#ffe9cf]" : ""
-											}`
-										}>
-										<Icon type="icon-permission" />
-										<p>{t("grant_permission")}</p>
-									</NavLink>
+									{userInfo?.role === "admin" && (
+										<NavLink
+											to="/123"
+											className={({ isActive }) =>
+												`p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
+													isActive ? "bg-[#ffe9cf]" : ""
+												}`
+											}>
+											<Icon type="icon-permission" />
+											<p>{t("grant_permission")}</p>
+										</NavLink>
+									)}
 
 									<NavLink
 										to="/123"

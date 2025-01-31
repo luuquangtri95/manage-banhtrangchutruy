@@ -22,6 +22,10 @@ export const ProductModel = sequelizeConnectionString.define(
 		description: {
 			type: DataTypes.TEXT,
 		},
+		status: {
+			type: DataTypes.ENUM("active", "out_of_stock", "deleted"),
+			defaultValue: "active",
+		},
 	},
 	{
 		modelName: "Product",

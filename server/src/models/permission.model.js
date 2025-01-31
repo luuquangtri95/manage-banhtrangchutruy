@@ -11,15 +11,27 @@ export const PermissionModel = sequelizeConnectionString.define(
 		},
 		name: {
 			type: DataTypes.ENUM(
-				"*",
-				"add_product",
-				"edit_product",
-				"delete_product",
-				"view_reports",
-				"create_category"
+				"*", // Admin có toàn quyền
+				"CREATE_PRODUCT",
+				"READ_PRODUCT",
+				"UPDATE_PRODUCT",
+				"DELETE_PRODUCT",
+				"CREATE_CATEGORY",
+				"READ_CATEGORY",
+				"UPDATE_CATEGORY",
+				"DELETE_CATEGORY",
+				"CREATE_ORDER",
+				"READ_ORDER",
+				"UPDATE_ORDER",
+				"DELETE_ORDER",
+				"CREATE_USER",
+				"READ_USER",
+				"UPDATE_USER",
+				"DELETE_USER",
+				"MANAGE_USERS",
+				"VIEW_REPORTS"
 			),
 			allowNull: false,
-			defaultValue: "*",
 		},
 		description: {
 			type: DataTypes.TEXT,

@@ -9,6 +9,7 @@ import { APIs_V2 } from "~/routes/v2";
 import { env } from "~/config/enviroment";
 import morgan from "morgan";
 import "~/models";
+import "~/seed/seedDatabase";
 
 const START_SERVER = () => {
 	// Init Express App
