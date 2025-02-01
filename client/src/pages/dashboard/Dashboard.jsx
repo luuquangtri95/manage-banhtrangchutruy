@@ -12,7 +12,7 @@ const MENU_ITEMS = [
 	{ path: "/dashboard/products", icon: "icon-products", label: "manage_products" },
 	{ path: "/dashboard/categories", icon: "icon-category", label: "manage_categories" },
 	{ path: "/dashboard/wholesale-price", icon: "icon-price", label: "wholesale_price" },
-	{ path: "/dashboard/support", icon: "icon-support", label: "contact_support" },
+	// { path: "/dashboard/support", icon: "icon-support", label: "contact_support" },
 ];
 
 const ADMIN_MENU_ITEMS = [
@@ -86,7 +86,7 @@ function Dashboard() {
 					<div className={`${isCollapse ? "flex justify-center" : ""} `}>
 						<button
 							onClick={handleCollapse}
-							className="mb-3">
+							className={`mb-3 ${isCollapse ? "px-[20px]" : ""}`}>
 							<Icon type={isCollapse ? "arrow-right" : "hambuger-menu"} />
 						</button>
 					</div>

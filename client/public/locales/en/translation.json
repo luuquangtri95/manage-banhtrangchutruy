@@ -23,5 +23,6 @@
     "edit_product": "Edit Product",
     "grant_permission": "Grant Permission",
 
-    "create_new_permission": "Create New Permission"
+    "create_new_permission": "Create New Permission",
+    "email_is_required": "Email Is Required"
 }

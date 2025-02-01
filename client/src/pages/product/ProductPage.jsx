@@ -39,7 +39,7 @@ const INIT_FORMDATA = {
 
 const DEFAULT_PAGINATION = {
 	page: 1,
-	limit: 10,
+	limit: 8,
 	total_page: 10,
 	total_item: 10,
 };
@@ -50,7 +50,7 @@ function ProductsPage() {
 	const [products, setProducts] = useState([]);
 	const [formData, setFormData] = useState(INIT_FORMDATA);
 	const [loading, setLoading] = useState(false);
-	const [filters, setFilters] = useState({ page: 1, limit: 10, searchTerm: "" });
+	const [filters, setFilters] = useState({ page: 1, limit: 8, searchTerm: "" });
 	const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
 	const { t } = useTranslation();
 

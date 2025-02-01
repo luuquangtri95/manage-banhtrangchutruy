@@ -23,6 +23,7 @@
     "edit_product": "Chỉnh sửa sản phẩm",
     "grant_permission": "Quản lý quyền hạn",
 
-    "create_new_permission": "Tạo quyền mới"
+    "create_new_permission": "Tạo quyền mới",
+    "email_is_required": "Email là bắt buộc"
 
 }
