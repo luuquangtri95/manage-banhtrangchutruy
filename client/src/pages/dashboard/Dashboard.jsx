@@ -196,7 +196,7 @@ function Dashboard() {
 
 									{userInfo.role === "admin" && (
 										<NavLink
-											to="/dashboard/partners"
+											to="/dashboard/manage-permission"
 											className={({ isActive }) =>
 												`p-3 rounded-md ${
 													isActive ? "bg-[#ffe9cf]" : "bg-none"
@@ -319,7 +319,7 @@ function Dashboard() {
 
 									{userInfo?.role === "admin" && (
 										<NavLink
-											to="/123"
+											to="/dashboard/manage-permission"
 											className={({ isActive }) =>
 												`p-3 flex items-center gap-2 mb-1 hover:bg-[#ffe9cf] transition-all rounded-md ${
 													isActive ? "bg-[#ffe9cf]" : ""

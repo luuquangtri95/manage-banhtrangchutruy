@@ -21,5 +21,7 @@
     "create_new_product":"Create New Product",
     "search_product":"Search Product",
     "edit_product": "Edit Product",
-    "grant_permission": "Grant Permission"
+    "grant_permission": "Grant Permission",
+
+    "create_new_permission": "Create New Permission"
 }

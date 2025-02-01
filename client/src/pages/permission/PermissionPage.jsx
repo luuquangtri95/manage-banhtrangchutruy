@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
+import PermissionApi from "../../api/permissionApi";
 import { toast } from "react-toastify";
-import ProductApi from "../../api/productApi";
-import FormField from "../../components/FormField";
-import Icon from "../../components/Icon/Icon";
+import { useTranslation } from "react-i18next";
 import Popup from "../../components/Popup";
 import { formatDateWithIntl } from "../../helpers/convertDate";
-import ProductFilterForm from "./components/ProductFilterForm/ProductFilterForm";
-import { useTranslation } from "react-i18next";
-import { formatPrice } from "../../helpers/formatPrice";
+import Icon from "../../components/Icon/Icon";
+import FormField from "../../components/FormField";
 
 const INIT_FORMDATA = {
 	name: {
@@ -41,46 +39,32 @@ const DEFAULT_PAGINATION = {
 	page: 1,
 	limit: 10,
 	total_page: 10,
-	total_item: 10,
+	total_item: 8,
 };
 
-function ProductsPage() {
+function PermissionPage(props) {
 	const [popupData, setPopupData] = useState(null);
-	const [productDelete, setProductDelete] = useState(null);
-	const [products, setProducts] = useState([]);
+	const [permissionDelete, setPermissionDelete] = useState(null);
+	const [permisions, setPermissions] = useState([]);
 	const [formData, setFormData] = useState(INIT_FORMDATA);
 	const [loading, setLoading] = useState(false);
-	const [filters, setFilters] = useState({ page: 1, limit: 10, searchTerm: "" });
+	const [filters, setFilters] = useState({ page: 1, limit: 8, searchTerm: "" });
 	const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
 	const { t } = useTranslation();
 
 	useEffect(() => {
-		fetchProducts();
+		fetchPermissions();
 	}, [filters]);
 
-	useEffect(() => {
-		if (popupData) {
-			setFormData((prev) => {
-				const updatedFormData = { ...prev };
-				Object.keys(updatedFormData).forEach((key) => {
-					if (popupData[key] !== undefined) {
-						updatedFormData[key].value = popupData[key];
-					}
-				});
-				return updatedFormData;
-			});
-		}
-	}, [popupData]);
-
-	const fetchProducts = async () => {
+	const fetchPermissions = async () => {
 		try {
 			setLoading(true);
-			const res = await ProductApi.findAll(filters);
+			const res = await PermissionApi.findAll(filters);
 
-			setProducts(res.metadata.result);
+			setPermissions(res.metadata.result);
 			setPagination(res.metadata.pagination);
 		} catch (error) {
-			console.log("fetchProducts error", error);
+			console.log("fetchPermissions error", error);
 			toast.error("Failed to fetch products");
 		} finally {
 			setLoading(false);
@@ -107,22 +91,22 @@ function ProductsPage() {
 		}));
 	};
 
-	const handleDeleteProduct = async () => {
-		if (!productDelete) return;
+	const handleDeletePermission = async () => {
+		if (!permissionDelete) return;
 
 		try {
-			await ProductApi.delete(productDelete.id);
-			toast.success(`Product "${productDelete.name}" deleted successfully`);
-			fetchProducts();
+			await PermissionApi.delete(permissionDelete.id);
+			toast.success(`Permission "${permissionDelete.name}" deleted successfully`);
+			fetchPermissions();
 		} catch (error) {
 			console.log("handleDeleteProduct error", error);
 		} finally {
-			setProductDelete(null);
+			setPermissionDelete(null);
 		}
 	};
 
 	const handleCancelDelete = () => {
-		setProductDelete(null);
+		setPermissionDelete(null);
 	};
 
 	const handlePageChange = (newPage) => {
@@ -145,11 +129,9 @@ function ProductsPage() {
 		try {
 			const _newItem = {
 				name: oldItem.name + " clone",
-				quantity: oldItem.quantity,
-				price: oldItem.price,
 			};
 
-			const res = await ProductApi.create(_newItem);
+			const res = await PermissionApi.create(_newItem);
 
 			if (res.metadata.id) {
 				toast.success(`Clone ${res.metadata.name} success !`);
@@ -157,7 +139,7 @@ function ProductsPage() {
 		} catch (error) {
 			console.log("error", error);
 		} finally {
-			fetchProducts();
+			fetchPermissions();
 		}
 	};
 
@@ -187,10 +169,10 @@ function ProductsPage() {
 
 		try {
 			if (popupData && popupData.id) {
-				await ProductApi.update({ ...formattedData, id: popupData.id });
+				await PermissionApi.update({ ...formattedData, id: popupData.id });
 				toast.success("Product updated successfully");
 			} else {
-				const res = await ProductApi.create(formattedData);
+				const res = await PermissionApi.create(formattedData);
 				console.log(res);
 
 				// toast.success("Product created successfully");
@@ -201,16 +183,16 @@ function ProductsPage() {
 		} finally {
 			setPopupData(null);
 			setFormData(INIT_FORMDATA);
-			fetchProducts();
+			fetchPermissions();
 		}
 	};
 
-	const handleConfirmDelete = (product) => {
-		setProductDelete(product); // Đặt sản phẩm cần xóa
+	const handleConfirmDelete = (permission) => {
+		setPermissionDelete(permission);
 	};
 
 	const renderSkeleton = () =>
-		Array.from({ length: products.length }).map((_, rowIndex) => (
+		Array.from({ length: permisions.length }).map((_, rowIndex) => (
 			<tr
 				key={rowIndex}
 				className="animate-pulse h-[81px]">
@@ -224,35 +206,35 @@ function ProductsPage() {
 			</tr>
 		));
 
-	const renderProducts = () =>
-		products.map((product) => (
+	const renderPermissions = () =>
+		permisions.map((permission) => (
 			<tr
-				key={product.id}
+				key={permission.id}
 				className="hover:bg-slate-50 border-b border-slate-200">
-				<td className="p-4 py-5 font-semibold text-sm text-slate-800">{product.name}</td>
-				<td className="p-4 py-5 text-sm text-slate-500">{formatPrice(product.price)}</td>
-				<td className="p-4 py-5 text-sm text-slate-500">{product.quantity}</td>
-				<td className="p-4 py-5 text-sm text-slate-500">{product.status}</td>
+				<td className="p-4 py-5 font-semibold text-sm text-slate-800">{permission.name}</td>
 				<td className="p-4 py-5 text-sm text-slate-500">
-					{formatDateWithIntl(product.createdAt)}
+					{permission.description || "..."}
+				</td>
+				<td className="p-4 py-5 text-sm text-slate-500">
+					{formatDateWithIntl(permission.createdAt)}
 				</td>
 				<td className="p-4 py-5">
 					<div className="flex items-center gap-2">
 						<button
 							className="border p-2 rounded-md"
-							onClick={() => handleEdit(product)}>
+							onClick={() => handleEdit(permission)}>
 							<Icon type="icon-edit" />
 						</button>
 
 						<button
 							className="border p-2 rounded-md"
-							onClick={() => handleClone(product)}>
+							onClick={() => handleClone(permission)}>
 							<Icon type="icon-clone" />
 						</button>
 
 						<button
 							className="border p-2 rounded-md"
-							onClick={() => handleConfirmDelete(product)}>
+							onClick={() => handleConfirmDelete(permission)}>
 							<Icon type="icon-delete" />
 						</button>
 					</div>
@@ -268,12 +250,12 @@ function ProductsPage() {
 						className="flex gap-2 border rounded-md p-2 hover:bg-[#ffe9cf] transition-all"
 						onClick={handleCreate}>
 						<Icon type="icon-create" />
-						<p>{t("create_new_product")}</p>
+						<p>{t("create_new_permission")}</p>
 					</button>
 				</div>
 
 				<div className="w-[300px] max-w-sm  relative">
-					<ProductFilterForm onSubmit={handleFilterChange} />
+					{/* <ProductFilterForm onSubmit={handleFilterChange} /> */}
 				</div>
 			</div>
 
@@ -281,24 +263,21 @@ function ProductsPage() {
 				<table className="w-full table-fixed text-left">
 					<thead>
 						<tr>
-							{[
-								"product_name",
-								"price",
-								"quantity",
-								"status",
-								"created_date",
-								"actions",
-							].map((header, idx) => (
-								<th
-									key={idx}
-									className="p-4 border-b border-slate-200 bg-[#ffe9cf]"
-									style={{ width: `${100 / 6}%` }}>
-									<p className="text-sm font-normal leading-none">{t(header)}</p>
-								</th>
-							))}
+							{["Permission Name", "Description", "created_date", "actions"].map(
+								(header, idx) => (
+									<th
+										key={idx}
+										className="p-4 border-b border-slate-200 bg-[#ffe9cf]"
+										style={{ width: `${100 / 6}%` }}>
+										<p className="text-sm font-normal leading-none">
+											{t(header)}
+										</p>
+									</th>
+								)
+							)}
 						</tr>
 					</thead>
-					<tbody>{loading ? renderSkeleton() : renderProducts()}</tbody>
+					<tbody>{loading ? renderSkeleton() : renderPermissions()}</tbody>
 				</table>
 
 				<div className="flex justify-between items-center px-4 py-3">
@@ -338,16 +317,16 @@ function ProductsPage() {
 			</Popup>
 
 			<Popup
-				isOpen={!!productDelete}
+				isOpen={!!permissionDelete}
 				title="Confirm Delete"
 				onClose={handleCancelDelete}
-				onSubmit={handleDeleteProduct}>
+				onSubmit={handleDeletePermission}>
 				<p>
-					Bạn có chắc chắn muốn xóa sản phẩm <b>{productDelete?.name}</b> không?
+					Bạn có chắc chắn muốn xóa quyền <b>{permissionDelete?.name}</b> không?
 				</p>
 			</Popup>
 		</div>
 	);
 }
 
-export default ProductsPage;
+export default PermissionPage;
