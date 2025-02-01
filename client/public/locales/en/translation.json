@@ -17,6 +17,7 @@
     "status":"Status",
     "created_date": "Created Date",
     "actions": "Actions",
+    "category":"Category",
     
     "create_new_product":"Create New Product",
     "search_product":"Search Product",

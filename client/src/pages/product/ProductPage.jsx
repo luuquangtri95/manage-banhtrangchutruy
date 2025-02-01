@@ -233,6 +233,7 @@ function ProductsPage() {
 				<td className="p-4 py-5 text-sm text-slate-500">{formatPrice(product.price)}</td>
 				<td className="p-4 py-5 text-sm text-slate-500">{product.quantity}</td>
 				<td className="p-4 py-5 text-sm text-slate-500">{product.status}</td>
+				<td className="p-4 py-5 text-sm text-slate-500">...</td>
 				<td className="p-4 py-5 text-sm text-slate-500">
 					{formatDateWithIntl(product.createdAt)}
 				</td>
@@ -286,6 +287,7 @@ function ProductsPage() {
 								"price",
 								"quantity",
 								"status",
+								"category",
 								"created_date",
 								"actions",
 							].map((header, idx) => (
