@@ -1,21 +1,10 @@
-import { ProductRepository } from "~/repositories/product.repository";
+import { UserRepository } from "~/repositories/user.repository";
 
 const create = async (req) => {
 	try {
 		const payload = req.body;
 
-		return await ProductRepository.create(payload);
-	} catch (error) {
-		throw error;
-	}
-};
-
-const update = async (req) => {
-	try {
-		const payload = req.body;
-		const { productId } = req.params;
-
-		return await ProductRepository.update(payload, productId);
+		return await UserRepository.create(payload);
 	} catch (error) {
 		throw error;
 	}
@@ -28,7 +17,6 @@ const findAll = async (req) => {
 		const _searchTerm = req.query.searchTerm || "";
 		const _sort = req.query.sort || "desc";
 		const _order = req.query.order || "createdAt";
-		/// ... many queries here
 
 		let payload = {
 			page: _page,
@@ -38,18 +26,28 @@ const findAll = async (req) => {
 			order: _order,
 		};
 
-		return await ProductRepository.findAll({ ...payload });
+		return await UserRepository.findAll({ ...payload });
 	} catch (error) {
 		throw error;
 	}
 };
 
 const findById = async (req) => {
-	console.log("req", req);
 	try {
-		const productId = req.params.productId;
-		console.log("productId", productId);
-		return await ProductRepository.findById(productId);
+		const { permissionId } = req.params;
+
+		return await UserRepository.findById(permissionId);
+	} catch (error) {
+		throw error;
+	}
+};
+
+const update = async (req) => {
+	try {
+		const payload = req.body;
+		const { permissionId } = req.params;
+
+		return await UserRepository.update(payload, permissionId);
 	} catch (error) {
 		throw error;
 	}
@@ -57,15 +55,15 @@ const findById = async (req) => {
 
 const _delete = async (req) => {
 	try {
-		const productId = req.params.productId;
+		const { permissionId } = req.params;
 
-		return await ProductRepository.delete(productId);
+		return await UserRepository.delete(permissionId);
 	} catch (error) {
 		throw error;
 	}
 };
 
-export const ProductService = {
+export const UserService = {
 	create,
 	findAll,
 	findById,

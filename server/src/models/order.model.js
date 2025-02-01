@@ -45,6 +45,11 @@ export const OrderModel = sequelizeConnectionString.define(
 			type: DataTypes.ENUM("pending", "active", "draft", "success"),
 			defaultValue: "pending",
 		},
+		total_price: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			defaultValue: 0,
+		},
 	},
 	{
 		modelName: "Order",

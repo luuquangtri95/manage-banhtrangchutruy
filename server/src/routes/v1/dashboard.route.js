@@ -3,6 +3,7 @@ import { DashboardControllers } from "~/controllers/dashboard.controller";
 import { OrderController } from "~/controllers/order.controller";
 import { PermissionController } from "~/controllers/permission.controller";
 import { ProductController } from "~/controllers/product.controller";
+import { userControllers } from "~/controllers/user.controller";
 import { AuthMiddleware } from "~/middlewares/auth.middleware";
 
 const Router = express.Router();
@@ -40,6 +41,15 @@ Router.route("/permissions").get(PermissionController.findAll);
 Router.route("/permissions/:permissionId").get(PermissionController.findById);
 Router.route("/permissions/:permissionId").put(PermissionController.update);
 Router.route("/permissions/:permissionId").delete(PermissionController.delete);
+//#endregion
+
+//#region [USERS]
+Router.route("/users/register").post(userControllers.register);
+Router.route("/users/create").post(userControllers.create);
+Router.route("/users").get(userControllers.findAll);
+Router.route("/users/:userId").get(userControllers.findById);
+Router.route("/users/:userId").put(userControllers.update);
+Router.route("/users/:userId").delete(userControllers.delete);
 //#endregion
 
 //#region [CATEGORIES]

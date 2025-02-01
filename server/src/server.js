@@ -26,7 +26,7 @@ const START_SERVER = () => {
 	// Use Cookie
 	app.use(cookieParser());
 
-	// Allow CORS: for more info, check here: https://youtu.be/iYgAWJ2Djkw
+	// Allow CORS: for more info
 	app.use(cors(corsOptions));
 
 	// Enable req.body json data
@@ -35,8 +35,6 @@ const START_SERVER = () => {
 	// Use Route APIs V1
 	app.use("/v1", APIs_V1);
 	app.use("/v2", APIs_V2);
-
-	// Should be store to env in the actual product: check here: https://youtu.be/Vgr3MWb7aOw
 
 	const { LOCAL_DEV_APP_PORT, LOCAL_DEV_APP_HOST, AUTHOR } = env;
 	app.listen(LOCAL_DEV_APP_PORT, LOCAL_DEV_APP_HOST, () => {
