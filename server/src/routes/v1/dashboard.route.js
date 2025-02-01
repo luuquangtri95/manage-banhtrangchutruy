@@ -1,6 +1,7 @@
 import express from "express";
 import { DashboardControllers } from "~/controllers/dashboard.controller";
 import { OrderController } from "~/controllers/order.controller";
+import { PermissionController } from "~/controllers/permission.controller";
 import { ProductController } from "~/controllers/product.controller";
 import { AuthMiddleware } from "~/middlewares/auth.middleware";
 
@@ -31,6 +32,14 @@ Router.route("/orders").get(OrderController.findAll);
 Router.route("/orders/:orderId").get(OrderController.findById);
 Router.route("/orders/:orderId").put(OrderController.update);
 Router.route("/orders/:orderId").delete(OrderController.delete);
+//#endregion
+
+//#region [PERMISSIONS]
+Router.route("/permissions/create").post(PermissionController.create);
+Router.route("/permissions").get(PermissionController.findAll);
+Router.route("/permissions/:permissionId").get(PermissionController.findById);
+Router.route("/permissions/:permissionId").put(PermissionController.update);
+Router.route("/permissions/:permissionId").delete(PermissionController.delete);
 //#endregion
 
 //#region [CATEGORIES]
