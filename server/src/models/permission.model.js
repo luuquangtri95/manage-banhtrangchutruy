@@ -34,11 +34,11 @@ export const PermissionModel = sequelizeConnectionString.define(
 				"UPDATE_USER",
 				"DELETE_USER",
 
-				"VIEW_PARNER",
-				"CREATE_PARNER",
-				"READ_PARNER",
-				"UPDATE_PARNER",
-				"DELETE_PARNER",
+				"VIEW_PARTNER",
+				"CREATE_PARTNER",
+				"READ_PARTNER",
+				"UPDATE_PARTNER",
+				"DELETE_PARTNER",
 
 				"VIEW_WHOLESALEP_PRICE",
 				"CREATE_WHOLESALEP_PRICE",
