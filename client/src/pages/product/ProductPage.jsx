@@ -238,7 +238,7 @@ function ProductsPage() {
 					{formatDateWithIntl(product.createdAt)}
 				</td>
 				<td className="p-4 py-5">
-					<div className="flex items-center gap-2">
+					<div className="flex items-center gap-2 flex-wrap">
 						<button
 							className="border p-2 rounded-md"
 							onClick={() => handleEdit(product)}>
@@ -341,7 +341,7 @@ function ProductsPage() {
 
 			<Popup
 				isOpen={!!productDelete}
-				title={t("confirm_delete")}
+				title={t("common.confirm_delete")}
 				onClose={handleCancelDelete}
 				onSubmit={handleDeleteProduct}>
 				<p>

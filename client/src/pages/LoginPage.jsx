@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import Logo from "../assets/logo.jpg";
+import Logo from "../assets/logo_chutruy_food.jpeg";
 import FormField from "../components/FormField";
 import { AuthContext } from "../context/AuthContext";
 

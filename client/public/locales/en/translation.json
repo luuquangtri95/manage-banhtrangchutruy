@@ -43,6 +43,7 @@
         "actions": "Actions",
         "status":"Status",
         "created_date": "Created Date",
+        "search": "Search",
 
         "confirm_delete":"Confirm Delete",
 
