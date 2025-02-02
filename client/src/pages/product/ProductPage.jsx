@@ -71,10 +71,11 @@ function ProductsPage() {
 		if (popupData) {
 			setCategories((prev) => ({
 				...prev,
-				value: popupData.categories.map((_cate) => ({
-					label: _cate.name,
-					value: _cate.id,
-				})),
+				value:
+					popupData?.categories?.map((_cate) => ({
+						label: _cate.name,
+						value: _cate.id,
+					})) || [],
 			}));
 			setFormData((prev) => {
 				const updatedFormData = { ...prev };
@@ -225,7 +226,7 @@ function ProductsPage() {
 			return acc;
 		}, {});
 
-		if (categories.value.length) {
+		if (categories?.value?.length) {
 			formattedData.categories = categories.value.map((_v) => ({
 				name: _v.label,
 				id: _v.value,
@@ -238,9 +239,8 @@ function ProductsPage() {
 				toast.success("Product updated successfully");
 			} else {
 				const res = await ProductApi.create(formattedData);
-				console.log(res);
 
-				// toast.success("Product created successfully");
+				toast.success(res.message);
 			}
 		} catch (error) {
 			console.log("handlePopupSubmit error", error);
@@ -250,6 +250,7 @@ function ProductsPage() {
 			setFormData(INIT_FORMDATA);
 			setCategories(INIT_CATEGORIES);
 			fetchProducts();
+			fetchCategories();
 		}
 	};
 
@@ -258,11 +259,20 @@ function ProductsPage() {
 	};
 
 	const handleCategoryChange = (newOption) => {
-		setCategories((prev) => ({
-			...prev,
-			value: [...newOption],
-		}));
+		if (newOption) {
+			setCategories((prev) => ({
+				...prev,
+				value: [...newOption],
+			}));
+		} else {
+			setCategories((prev) => ({
+				...prev,
+				value: [],
+			}));
+		}
 	};
+
+	console.log("categories", categories);
 
 	const renderSkeleton = () =>
 		Array.from({ length: products.length }).map((_, rowIndex) => (
