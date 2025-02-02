@@ -240,7 +240,7 @@ function UsersPage() {
 						className="flex gap-2 border rounded-md p-2 hover:bg-[#ffe9cf] transition-all"
 						onClick={handleCreate}>
 						<Icon type="icon-create" />
-						<p>{"Create New User"}</p>
+						<p>{t("common.create_new_user")}</p>
 					</button>
 				</div>
 
@@ -253,18 +253,20 @@ function UsersPage() {
 				<table className="w-full table-fixed text-left">
 					<thead>
 						<tr>
-							{["Username", "Email", "status", "created_date", "actions"].map(
-								(header, idx) => (
-									<th
-										key={idx}
-										className="p-4 border-b border-slate-200 bg-[#ffe9cf]"
-										style={{ width: `${100 / 6}%` }}>
-										<p className="text-sm font-normal leading-none">
-											{t(header)}
-										</p>
-									</th>
-								)
-							)}
+							{[
+								"user_page.table.username",
+								"Email",
+								"common.status",
+								"common.created_date",
+								"common.actions",
+							].map((header, idx) => (
+								<th
+									key={idx}
+									className="p-4 border-b border-slate-200 bg-[#ffe9cf]"
+									style={{ width: `${100 / 6}%` }}>
+									<p className="text-sm font-normal leading-none">{t(header)}</p>
+								</th>
+							))}
 						</tr>
 					</thead>
 					<tbody>{loading ? renderSkeleton() : renderProducts()}</tbody>

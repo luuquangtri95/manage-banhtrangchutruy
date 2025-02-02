@@ -15,8 +15,8 @@ const INIT_FORMDATA = {
 		type: "text",
 		error: "",
 		validate: (value) => {
-			if (!value.trim()) return "Tên sản phẩm bắt buộc";
-			if (value.length < 5) return "Tên phải lớn hơn 6 ký tự";
+			if (!value.trim()) return "validate.name_required";
+			if (value.length < 5) return "validate.name_min_length";
 		},
 	},
 	price: {
@@ -24,7 +24,7 @@ const INIT_FORMDATA = {
 		type: "number",
 		error: "",
 		validate: (value) => {
-			if (value < 1000) return "giá tiền phải lớn hơn 1000";
+			if (value < 1000) return "validate.price_min";
 		},
 	},
 	quantity: {
@@ -32,7 +32,7 @@ const INIT_FORMDATA = {
 		type: "number",
 		error: "",
 		validate: (value) => {
-			if (value === 0 || value < 10) return "Số lượng phải lớn hơn 10";
+			if (value === 0 || value < 10) return "validate.quantity_min";
 		},
 	},
 };
@@ -269,7 +269,7 @@ function ProductsPage() {
 						className="flex gap-2 border rounded-md p-2 hover:bg-[#ffe9cf] transition-all"
 						onClick={handleCreate}>
 						<Icon type="icon-create" />
-						<p>{t("create_new_product")}</p>
+						<p>{t("common.create_new_product")}</p>
 					</button>
 				</div>
 
@@ -283,13 +283,13 @@ function ProductsPage() {
 					<thead>
 						<tr>
 							{[
-								"product_name",
-								"price",
-								"quantity",
-								"status",
-								"category",
-								"created_date",
-								"actions",
+								"product_page.table.product_name",
+								"product_page.table.price",
+								"product_page.table.quantity",
+								"common.status",
+								"product_page.table.category",
+								"common.created_date",
+								"common.actions",
 							].map((header, idx) => (
 								<th
 									key={idx}
@@ -324,24 +324,24 @@ function ProductsPage() {
 
 			<Popup
 				isOpen={popupData}
-				title={popupData?.id ? t("edit_product") : t("create_new_product")}
+				title={popupData?.id ? t("common.edit_product") : t("common.create_new_product")}
 				onClose={handleClosePopup}
 				onSubmit={handlePopupSubmit}>
 				{Object.keys(formData).map((key) => (
 					<FormField
 						key={key}
-						label={key.charAt(0).toUpperCase() + key.slice(1)}
+						label={t(`product_page.popup.${key}`)}
 						type={formData[key].type}
 						value={formData[key].value}
 						onChange={(e) => handleFormChange(key, e.target.value)}
-						error={formData[key].error}
+						error={t(formData[key].error)}
 					/>
 				))}
 			</Popup>
 
 			<Popup
 				isOpen={!!productDelete}
-				title="Confirm Delete"
+				title={t("confirm_delete")}
 				onClose={handleCancelDelete}
 				onSubmit={handleDeleteProduct}>
 				<p>

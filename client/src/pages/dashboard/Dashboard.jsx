@@ -8,18 +8,22 @@ import { useTranslation } from "react-i18next";
 
 const MENU_ITEMS = [
 	// { path: "/dashboard/orders/create", icon: "icon-create", label: "create_order" },
-	{ path: "/dashboard/orders", icon: "icon-manager-order", label: "manage_orders" },
-	{ path: "/dashboard/products", icon: "icon-products", label: "manage_products" },
-	{ path: "/dashboard/categories", icon: "icon-category", label: "manage_categories" },
-	{ path: "/dashboard/wholesale-price", icon: "icon-price", label: "wholesale_price" },
+	{ path: "/dashboard/orders", icon: "icon-manager-order", label: "menu.manage_orders" },
+	{ path: "/dashboard/products", icon: "icon-products", label: "menu.manage_products" },
+	{ path: "/dashboard/categories", icon: "icon-category", label: "menu.manage_categories" },
+	{ path: "/dashboard/wholesale-price", icon: "icon-price", label: "menu.wholesale_price" },
 	// { path: "/dashboard/support", icon: "icon-support", label: "contact_support" },
 ];
 
 const ADMIN_MENU_ITEMS = [
-	{ path: "/dashboard/analytics", icon: "icon-analytic", label: "analytics" },
-	{ path: "/dashboard/users", icon: "icon-user-group", label: "members" },
-	{ path: "/dashboard/partners", icon: "icon-partner", label: "manage_partners" },
-	{ path: "/dashboard/manage-permission", icon: "icon-permission", label: "grant_permission" },
+	{ path: "/dashboard/analytics", icon: "icon-analytic", label: "menu.analytics" },
+	{ path: "/dashboard/users", icon: "icon-user-group", label: "menu.members" },
+	{ path: "/dashboard/partners", icon: "icon-partner", label: "menu.manage_partners" },
+	{
+		path: "/dashboard/manage-permission",
+		icon: "icon-permission",
+		label: "menu.grant_permission",
+	},
 ];
 
 function Dashboard() {
@@ -132,7 +136,7 @@ function Dashboard() {
 						className="p-3 flex items-center gap-2 mt-auto hover:bg-[#ffe9cf] transition-all rounded-md"
 						onClick={onLogout}>
 						<Icon type="icon-logout" />
-						{t("logout")}
+						{t("menu.logout")}
 					</button>
 				</div>
 
