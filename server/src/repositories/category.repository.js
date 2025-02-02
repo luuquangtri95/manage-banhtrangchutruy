@@ -1,4 +1,5 @@
 import { CategoryModel } from "~/models/category.model";
+import { ProductModel } from "~/models/product.model";
 
 const create = async (payload) => {
 	try {
@@ -27,7 +28,15 @@ const findAll = async (payload) => {
 			limit: limit,
 			offset: _offset,
 			order: [[order, sort]],
-			raw: true,
+			// raw: true,
+			include: [
+				{
+					model: ProductModel,
+					through: {
+						attributes: [],
+					},
+				},
+			],
 		});
 
 		const _metadata = {
