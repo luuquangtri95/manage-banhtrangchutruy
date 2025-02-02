@@ -8,10 +8,12 @@ const create = async (payload) => {
 
 		const product = await ProductModel.create(rest);
 
-		for (let i = 0; i < categories.length; i++) {
-			const category = await CategoryModel.findByPk(categories[i].id);
+		if (categories) {
+			for (let i = 0; i < categories.length; i++) {
+				const category = await CategoryModel.findByPk(categories[i].id);
 
-			category.addProduct(product);
+				category.addProduct(product);
+			}
 		}
 
 		return;
@@ -34,10 +36,12 @@ const update = async (payload, id) => {
 		// xoá tất cả quan hệ cũ để add quan hệ mới
 		await updatedProduct.setCategories([]);
 
-		for (let i = 0; i < categories.length; i++) {
-			const category = await CategoryModel.findByPk(categories[i].id);
-			if (category) {
-				await updatedProduct.addCategory(category);
+		if (categories) {
+			for (let i = 0; i < categories.length; i++) {
+				const category = await CategoryModel.findByPk(categories[i].id);
+				if (category) {
+					await updatedProduct.addCategory(category);
+				}
 			}
 		}
 
