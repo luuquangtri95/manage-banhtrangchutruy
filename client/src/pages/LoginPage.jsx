@@ -27,7 +27,8 @@ function LoginPage(props) {
 
 	const { onLogin } = useContext(AuthContext);
 
-	const handleLogin = () => {
+	const handleLogin = (e) => {
+		e.preventDefault();
 		let hasError = false;
 
 		const newUserInfo = { ...userInfo };
@@ -90,41 +91,43 @@ function LoginPage(props) {
 						</div>
 
 						<div>
-							<div className="form-control">
-								<FormField
-									label="Email"
-									name="email"
-									type="email"
-									value={userInfo.email.value}
-									onChange={(e) => handleChange("email", e)}
-									error={userInfo.email.error}
-								/>
-							</div>
+							<form onSubmit={handleLogin}>
+								<div className="form-control">
+									<FormField
+										label="Email"
+										name="email"
+										type="email"
+										value={userInfo.email.value}
+										onChange={(e) => handleChange("email", e)}
+										error={userInfo.email.error}
+									/>
+								</div>
 
-							<div className="form-control">
-								<FormField
-									label="Mật khẩu"
-									name="password"
-									type="password"
-									value={userInfo.password.value}
-									onChange={(e) => handleChange("password", e)}
-									error={userInfo.password.error}
-								/>
-							</div>
+								<div className="form-control">
+									<FormField
+										label="Mật khẩu"
+										name="password"
+										type="password"
+										value={userInfo.password.value}
+										onChange={(e) => handleChange("password", e)}
+										error={userInfo.password.error}
+									/>
+								</div>
 
-							<div className="flex gap-2">
-								<button
-									onClick={handleLogin}
-									className="text-[14px] p-[8px] bg-[#ffe9cf] rounded-md mt-3 flex justify-center w-full ">
-									Đăng nhập
-								</button>
+								<div className="flex gap-2">
+									<button
+										onClick={handleLogin}
+										className="bg-gradient-to-r from-slate-900 to-slate-700 text-[#ffffff] text-[14px] p-[8px] bg-[#ffe9cf] rounded-md mt-3 flex justify-center w-full ">
+										Đăng nhập
+									</button>
 
-								<button
-									disabled
-									className="text-[14px] p-[8px] bg-[#eee] rounded-md mt-3 flex justify-center w-full">
-									Đăng ký
-								</button>
-							</div>
+									<button
+										disabled
+										className="text-[14px] p-[8px] bg-[#eee] rounded-md mt-3 flex justify-center w-full">
+										Đăng ký
+									</button>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>
