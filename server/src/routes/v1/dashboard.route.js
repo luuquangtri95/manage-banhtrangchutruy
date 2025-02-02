@@ -54,15 +54,24 @@ Router.route("/users/:userId").delete(userControllers.delete);
 //#endregion
 
 //#region [CATEGORIES]
-Router.route("/categories/create").post(AuthMiddleware.isAuthorized, CategoryController.create);
+Router.route("/categories/create").post(
+	AuthMiddleware.isAuthorized,
+	AuthMiddleware.checkPermission(["CREATE_CATEGORY"]),
+	CategoryController.create
+);
 Router.route("/categories").get(AuthMiddleware.isAuthorized, CategoryController.findAll);
 Router.route("/categories/:categoryId").get(
 	AuthMiddleware.isAuthorized,
 	CategoryController.findById
 );
-Router.route("/categories/:categoryId").put(AuthMiddleware.isAuthorized, CategoryController.update);
+Router.route("/categories/:categoryId").put(
+	AuthMiddleware.isAuthorized,
+	AuthMiddleware.checkPermission(["UPDATE_CATEGORY"]),
+	CategoryController.update
+);
 Router.route("/categories/:categoryId").delete(
 	AuthMiddleware.isAuthorized,
+	AuthMiddleware.checkPermission(["DELETE_CATEGORY"]),
 	CategoryController.delete
 );
 //#endregion

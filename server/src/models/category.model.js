@@ -9,7 +9,7 @@ export const CategoryModel = sequelizeConnectionString.define(
 			defaultValue: DataTypes.UUIDV4,
 			primaryKey: true,
 		},
-		title: {
+		name: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
