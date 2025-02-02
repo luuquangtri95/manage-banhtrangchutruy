@@ -221,6 +221,7 @@ function CategoryPage() {
 				className="hover:bg-slate-50 border-b border-slate-200">
 				<td className="p-4 py-5 font-semibold text-sm text-slate-800">{category.name}</td>
 				<td className="p-4 py-5 text-sm text-slate-500">{category.description || "..."}</td>
+				<td className="p-4 py-5 text-sm text-slate-500">{category.products.length || 0}</td>
 				<td className="p-4 py-5 text-sm text-slate-500">
 					{formatDateWithIntl(category.createdAt)}
 				</td>
@@ -272,6 +273,7 @@ function CategoryPage() {
 							{[
 								"category_page.table.name",
 								"category_page.table.description",
+								"Số lượng sản phẩm liên kết",
 								"common.created_date",
 								"common.actions",
 							].map((header, idx) => (
@@ -329,7 +331,8 @@ function CategoryPage() {
 				onClose={handleCancelDelete}
 				onSubmit={handleDeleteProduct}>
 				<p>
-					Bạn có chắc chắn muốn xóa sản phẩm <b>{categoryDelete?.name}</b> không?
+					Bạn có chắc chắn muốn xóa danh mục sản phẩm <b>{categoryDelete?.name}</b> và{" "}
+					<b>{categoryDelete?.products?.length} sản phẩm</b> đang liên kết không?
 				</p>
 			</Popup>
 		</div>
