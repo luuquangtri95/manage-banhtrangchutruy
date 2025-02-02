@@ -1,4 +1,5 @@
 import express from "express";
+import { CategoryController } from "~/controllers/category.controller";
 import { DashboardControllers } from "~/controllers/dashboard.controller";
 import { OrderController } from "~/controllers/order.controller";
 import { PermissionController } from "~/controllers/permission.controller";
@@ -53,10 +54,16 @@ Router.route("/users/:userId").delete(userControllers.delete);
 //#endregion
 
 //#region [CATEGORIES]
-// Router.route("/categories/create").post(AuthMiddleware.isAuthorized, OrderController.create);
-// Router.route("/categories").get(AuthMiddleware.isAuthorized, OrderController.findAll);
-// Router.route("/categories/:categoryId").get(AuthMiddleware.isAuthorized, OrderController.findById);
-// Router.route("/categories/:categoryId").put(AuthMiddleware.isAuthorized, OrderController.update);
-// Router.route("/categories/:categoryId").delete(AuthMiddleware.isAuthorized, OrderController.delete);
+Router.route("/categories/create").post(AuthMiddleware.isAuthorized, CategoryController.create);
+Router.route("/categories").get(AuthMiddleware.isAuthorized, CategoryController.findAll);
+Router.route("/categories/:categoryId").get(
+	AuthMiddleware.isAuthorized,
+	CategoryController.findById
+);
+Router.route("/categories/:categoryId").put(AuthMiddleware.isAuthorized, CategoryController.update);
+Router.route("/categories/:categoryId").delete(
+	AuthMiddleware.isAuthorized,
+	CategoryController.delete
+);
 //#endregion
 export const DashboardRoute = Router;

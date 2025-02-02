@@ -45,10 +45,9 @@ const findAll = async (req) => {
 };
 
 const findById = async (req) => {
-	console.log("req", req);
 	try {
 		const productId = req.params.productId;
-		console.log("productId", productId);
+
 		return await ProductRepository.findById(productId);
 	} catch (error) {
 		throw error;
