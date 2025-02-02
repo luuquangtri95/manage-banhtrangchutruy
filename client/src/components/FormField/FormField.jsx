@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useId, useState } from "react";
 
 const FormField = ({
 	label,
@@ -13,8 +13,10 @@ const FormField = ({
 	icon: Icon,
 	id,
 	name,
+	options = [], // Dành cho select, radio
+	className = "",
 }) => {
-	// Trạng thái focus để xử lý hiệu ứng
+	const fieldId = useId(); // Tạo ID tự động nếu không có
 	const [isFocused, setIsFocused] = useState(false);
 
 	// Xử lý sự kiện focus
@@ -29,32 +31,91 @@ const FormField = ({
 		if (onBlur) onBlur(e);
 	};
 
-	return (
-		<div className="w-full mb-4">
-			{/* Label */}
-			{label && (
-				<label
-					htmlFor={id}
-					className="block text-sm font-medium text-gray-700 mb-1">
-					{label}
-				</label>
-			)}
+	// Xác định class cho phần bọc input
+	const wrapperClass = `flex items-center border rounded-lg px-3 py-3 transition-all ${
+		error
+			? "border-red-500 focus-within:border-red-500"
+			: isFocused
+			? "border-blue-500"
+			: "border-gray-300"
+	} ${disabled ? "bg-gray-100 cursor-not-allowed" : "bg-white"} ${className}`;
 
-			{/* Input Wrapper */}
-			<div
-				className={`flex items-center border rounded-lg px-3 py-2 transition-all ${
-					error
-						? "border-red-500 focus-within:border-red-500"
-						: isFocused
-						? "border-blue-500"
-						: "border-gray-300"
-				} ${disabled ? "bg-gray-100 cursor-not-allowed" : "bg-white"}`}>
-				{/* Icon (if provided) */}
-				{Icon && <Icon className="w-5 h-5 text-gray-500 mr-3" />}
+	// Xử lý render theo type
+	let inputField;
+	switch (type) {
+		case "select":
+			inputField = (
+				<select
+					id={id || fieldId}
+					name={name}
+					value={value}
+					onChange={onChange}
+					disabled={disabled}
+					className="w-full bg-transparent focus:outline-none text-gray-700 placeholder-gray-400">
+					{options.map((option) => (
+						<option
+							key={option.value}
+							value={option.value}>
+							{option.label}
+						</option>
+					))}
+				</select>
+			);
+			break;
 
-				{/* Input */}
+		case "textarea":
+			inputField = (
+				<textarea
+					id={id || fieldId}
+					name={name}
+					value={value}
+					placeholder={placeholder}
+					onChange={onChange}
+					onFocus={handleFocus}
+					onBlur={handleBlur}
+					disabled={disabled}
+					className="w-full bg-transparent focus:outline-none text-gray-700 placeholder-gray-400 resize-none h-24"
+				/>
+			);
+			break;
+
+		case "checkbox":
+			inputField = (
 				<input
-					id={id}
+					id={id || fieldId}
+					name={name}
+					type="checkbox"
+					checked={value}
+					onChange={(e) => onChange(e.target.checked)}
+					disabled={disabled}
+					className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+				/>
+			);
+			break;
+
+		case "radio":
+			inputField = options.map((option) => (
+				<label
+					key={option.value}
+					className="inline-flex items-center space-x-2">
+					<input
+						type="radio"
+						name={name}
+						value={option.value}
+						checked={value === option.value}
+						onChange={onChange}
+						disabled={disabled}
+						className="w-5 h-5 text-blue-600 border-gray-300 focus:ring-blue-500"
+					/>
+					<span>{option.label}</span>
+				</label>
+			));
+			break;
+
+		default:
+			inputField = (
+				<input
+					id={id || fieldId}
 					name={name}
 					type={type}
 					value={value}
@@ -63,13 +124,34 @@ const FormField = ({
 					onFocus={handleFocus}
 					onBlur={handleBlur}
 					disabled={disabled}
-					className={`w-full bg-transparent focus:outline-none text-gray-700 placeholder-gray-400 ${
-						disabled ? "cursor-not-allowed" : ""
-					}`}
+					className="w-full bg-transparent focus:outline-none text-gray-700 placeholder-gray-400"
 				/>
-			</div>
+			);
+	}
 
-			{/* Error Message */}
+	return (
+		<div className="w-full mb-4">
+			{/* Label */}
+			{label && (
+				<label
+					htmlFor={id || fieldId}
+					className="block text-sm font-medium text-gray-700 mb-1">
+					{label}
+				</label>
+			)}
+
+			{/* Input Wrapper */}
+			{type === "checkbox" || type === "radio" ? (
+				<div className="flex items-center space-x-2">{inputField}</div>
+			) : (
+				<div className={wrapperClass}>
+					{/* Icon (nếu có) */}
+					{Icon && <Icon className="w-5 h-5 text-gray-500 mr-3" />}
+					{inputField}
+				</div>
+			)}
+
+			{/* Hiển thị lỗi nếu có */}
 			{error && <p className="mt-1 text-sm text-red-500">{error}</p>}
 		</div>
 	);

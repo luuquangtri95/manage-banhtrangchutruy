@@ -29,7 +29,8 @@
         "popup":{
             "name": "Product Name",
             "price":"Price",
-            "quantity":"Quantity"
+            "quantity":"Quantity",
+            "category":"Category"
         }
     },
 

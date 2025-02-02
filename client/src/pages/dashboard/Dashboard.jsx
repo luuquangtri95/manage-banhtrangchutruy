@@ -133,7 +133,7 @@ function Dashboard() {
 				{/* Content */}
 				<div className="flex-1 bg-[#fafafa] relative">
 					{/* Top Bar */}
-					<div className="top-bar h-[50px] bg-[#ffe9cf] p-2">
+					<div className="top-bar h-[60px] bg-[#ffe9cf] p-2">
 						<div className="flex justify-between items-center h-full">
 							<img
 								src={Logo}

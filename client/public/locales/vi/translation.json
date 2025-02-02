@@ -29,7 +29,8 @@
         "popup":{
             "name": "Tên sản phẩm",
             "price":"Giá",
-            "quantity":"Số lượng"
+            "quantity":"Số lượng",
+            "category": "Danh mục"
         }
     },
 
