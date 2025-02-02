@@ -33,6 +33,17 @@
         }
     },
 
+    "category_page":{
+        "table":{
+            "name": "Tên danh mục",
+            "description":"Mô tả"
+        },
+        "popup":{
+            "name": "Tên danh mục",
+            "description":"Mô tả"
+        }
+    },
+
     "user_page":{
         "table":{
             "username":"Tên tài khoản"
@@ -45,6 +56,7 @@
         "status":"Trạng thái",
         "created_date": "Ngày tạo",
         "search": "Tìm kiếm",
+        "description":"Mô tả",
 
         "confirm_delete":"Bạn có chắc chắn muốn xóa",
         
@@ -61,7 +73,9 @@
 
     "validate": {
         "name_required": "Tên là bắt buộc",
+        "title_required": "Tiêu đề là bắt buộc",
         "name_min_length": "Tên phải có ít nhất 6 ký tự",
+        "title_min_length": "Tiêu đề phải có ít nhất 6 ký tự",
         "price_required": "Giá là bắt buộc",
         "price_min": "Giá phải lớn hơn hoặc bằng 1000",
         "quantity_required": "Số lượng là bắt buộc",

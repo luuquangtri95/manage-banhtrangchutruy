@@ -201,7 +201,7 @@ function UsersPage() {
 			</tr>
 		));
 
-	const renderProducts = () =>
+	const renderUsers = () =>
 		users.map((user) => (
 			<tr
 				key={user.id}
@@ -269,7 +269,7 @@ function UsersPage() {
 							))}
 						</tr>
 					</thead>
-					<tbody>{loading ? renderSkeleton() : renderProducts()}</tbody>
+					<tbody>{loading ? renderSkeleton() : renderUsers()}</tbody>
 				</table>
 
 				<div className="flex justify-between items-center px-4 py-3">

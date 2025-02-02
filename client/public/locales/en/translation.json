@@ -33,6 +33,17 @@
         }
     },
 
+    "category_page":{
+        "table":{
+            "name": "Category Name",
+            "description":"Description"
+        },
+        "popup":{
+            "name": "Category Name",
+            "description":"Description"
+        }
+    },
+
     "user_page":{
         "table":{
             "username":"User Name"
@@ -44,6 +55,7 @@
         "status":"Status",
         "created_date": "Created Date",
         "search": "Search",
+        "description":"Description",
 
         "confirm_delete":"Confirm Delete",
 
