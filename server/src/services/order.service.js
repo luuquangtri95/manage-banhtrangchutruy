@@ -20,8 +20,8 @@ const findAll = async (req) => {
     const _startDate = req.query.startDate || "";
     const _endDate = req.query.endDate || "";
     /// ... many queries here
-    console.log("_startDate", _startDate);
-    console.log("_endDate", _endDate);
+    // console.log("_startDate", _startDate);
+    // console.log("_endDate", _endDate);
 
     let payload = {
       user_id,
@@ -37,6 +37,7 @@ const findAll = async (req) => {
     if (_status) {
       payload.status = _status;
     }
+    console.log("den day chua");
 
     return await OrderRepository.findAll({ ...payload });
   } catch (error) {

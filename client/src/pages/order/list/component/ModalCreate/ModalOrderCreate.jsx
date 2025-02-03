@@ -18,7 +18,7 @@ function ModalOrderCreate(props) {
     phone: "023424144",
     delivery_date: "2/2/2025",
     data_json: {
-      item: [{ id: null, name: "", quantity: 1 }],
+      item: [{ name: "", quantity: 1 }],
     },
     status: "pending",
   };

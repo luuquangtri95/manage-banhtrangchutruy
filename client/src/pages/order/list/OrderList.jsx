@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import ModalOrderCreate from "./component/ModalCreate/ModalOrderCreate";
 
 function OrderList(props) {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { t } = useTranslation();
   const [orderList, setOrderList] = useState([]);
   const [pagination, setPagination] = useState({});
@@ -31,11 +31,15 @@ function OrderList(props) {
       page: pagination.page,
       searchTerm: searchTerm,
     };
-    const res = await OrderApi.findAll(params);
-    console.log("res", res);
-    setOrderList(res.metadata.result);
-    setPagination(res.metadata.pagination);
-    return res;
+    try {
+      const res = await OrderApi.findAll(params);
+      console.log("res list", res);
+      setOrderList(res.metadata.result);
+      setPagination(res.metadata.pagination);
+      return res;
+    } catch (error) {
+      console.log("fetchProducts error", error);
+    }
   };
 
   //Button next
@@ -63,9 +67,6 @@ function OrderList(props) {
     //Số trái phải của page chọn
     const left = Math.max(2, currentPage - 1);
     const right = Math.min(totalPage - 1, currentPage + 1);
-
-    // console.log("left", left);
-    // console.log("right", right);
 
     // Luôn hiển thị trang 1
     indexPage.push(1);

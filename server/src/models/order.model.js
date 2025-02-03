@@ -10,7 +10,7 @@ export const OrderModel = sequelizeConnectionString.define(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    title: { type: DataTypes.STRING, allowNull: false },
+    // title: { type: DataTypes.STRING, allowNull: false },
     fullname: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -33,7 +33,7 @@ export const OrderModel = sequelizeConnectionString.define(
     },
     user_id: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: UserModel,
         key: "id",
