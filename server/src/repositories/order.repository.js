@@ -2,6 +2,8 @@ import { Op, Sequelize } from "sequelize";
 import { OrderModel } from "~/models/order.model";
 import { ProductModel } from "~/models/product.model";
 import sequelizeConnectionString from "../config/database";
+import { UserModel } from "~/models/user.model";
+import { RoleModel } from "~/models/role.model";
 
 const findById = async (id) => {
 	try {
@@ -16,8 +18,22 @@ const findAll = async (payload) => {
 		const { user_id, page, limit, searchTerm, sort, order, status, startDate, endDate } =
 			payload;
 
+		const entryUser = await UserModel.findOne({
+			where: { id: user_id },
+			include: [
+				{
+					model: RoleModel,
+					through: { attributes: [] },
+				},
+			],
+		});
+
 		const _offset = (page - 1) * limit;
-		let where = { user_id };
+		let where = {};
+
+		if (entryUser.roles[0].name !== "admin") {
+			where = { user_id };
+		}
 
 		if (searchTerm) {
 			// where.title = {
