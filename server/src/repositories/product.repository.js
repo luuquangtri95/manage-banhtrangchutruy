@@ -1,9 +1,22 @@
 import { Op } from "sequelize";
+import { CategoryModel } from "~/models/category.model";
 import { ProductModel } from "~/models/product.model";
 
 const create = async (payload) => {
 	try {
-		return await ProductModel.create(payload);
+		const { categories, ...rest } = payload;
+
+		const product = await ProductModel.create(rest);
+
+		if (categories) {
+			for (let i = 0; i < categories.length; i++) {
+				const category = await CategoryModel.findByPk(categories[i].id);
+
+				category.addProduct(product);
+			}
+		}
+
+		return;
 	} catch (error) {
 		throw error;
 	}
@@ -11,7 +24,28 @@ const create = async (payload) => {
 
 const update = async (payload, id) => {
 	try {
-		return await ProductModel.update({ ...payload }, { where: { id } });
+		const { categories, ...rest } = payload;
+
+		const [count, product] = await ProductModel.update(
+			{ ...rest },
+			{ where: { id }, returning: true }
+		);
+
+		const updatedProduct = product[0];
+
+		// xoá tất cả quan hệ cũ để add quan hệ mới
+		await updatedProduct.setCategories([]);
+
+		if (categories) {
+			for (let i = 0; i < categories.length; i++) {
+				const category = await CategoryModel.findByPk(categories[i].id);
+				if (category) {
+					await updatedProduct.addCategory(category);
+				}
+			}
+		}
+
+		return updatedProduct;
 	} catch (error) {
 		throw error;
 	}
@@ -36,7 +70,8 @@ const findAll = async (payload) => {
 			limit: limit,
 			offset: _offset,
 			order: [[order, sort]],
-			raw: true,
+			// raw: true,
+			include: [{ model: CategoryModel, through: { attributes: [] } }],
 		});
 
 		const _metadata = {

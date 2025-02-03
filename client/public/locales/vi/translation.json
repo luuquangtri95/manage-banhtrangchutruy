@@ -1,28 +1,88 @@
 {
-  "create_order": "Tạo đơn hàng",
-  "manage_orders": "Quản lý đơn hàng",
-  "manage_products": "Quản lý sản phẩm",
-  "manage_categories": "Quản lý danh mục",
-  "analytics": "Thống kê",
-  "wholesale_price": "Giá sỉ",
-  "members": "Thành viên",
-  "manage_partners": "Quản lý đối tác",
-  "contact_support": "Liên hệ hỗ trợ",
-  "logout": "Đăng xuất",
+  "menu": {
+    "create_order": "Tạo đơn hàng",
+    "manage_orders": "Quản lý đơn hàng",
+    "manage_products": "Quản lý sản phẩm",
+    "manage_categories": "Quản lý danh mục",
+    "analytics": "Thống kê",
+    "wholesale_price": "Giá sỉ",
+    "members": "Thành viên",
+    "manage_partners": "Quản lý đối tác",
+    "contact_support": "Liên hệ hỗ trợ",
+    "grant_permission": "Quản lý quyền hạn",
+    "logout": "Đăng xuất"
+  },
 
-  "create_new_product": "Tạo sản phẩm mới",
-  "search_product": "Tìm kiếm sản phẩm",
-  "edit_product": "Chỉnh sửa sản phẩm",
-  "grant_permission": "Quản lý quyền hạn",
+  "order_page": {
+    "table": {}
+  },
 
-  "fullname": "Tên",
-  "address": "Địa chỉ",
-  "phone": "Số điện thoại",
-  "product": "Sản phẩm",
-  "delivery_date": "Ngày giao hàng",
-  "select_product": "Chọn sản phẩm",
-  "no_product": "Vui lòng chọn sản phẩm",
+  "product_page": {
+    "table": {
+      "product_name": "Tên sản phẩm",
+      "price": "Giá",
+      "quantity": "Số lượng",
+      "category": "Danh mục"
+    },
+    "popup": {
+      "name": "Tên sản phẩm",
+      "price": "Giá",
+      "quantity": "Số lượng",
+      "category": "Danh mục"
+    }
+  },
 
-  "create_new_product": "Tạo sản phẩm mới",
-  "search_product": "Tìm kiếm sản phẩm"
+  "category_page": {
+    "table": {
+      "name": "Tên danh mục",
+      "description": "Mô tả"
+    },
+    "popup": {
+      "name": "Tên danh mục",
+      "description": "Mô tả"
+    }
+  },
+
+  "user_page": {
+    "table": {
+      "username": "Tên tài khoản"
+    }
+  },
+
+  "common": {
+    "actions": "Hành động",
+    "status": "Trạng thái",
+    "created_date": "Ngày tạo",
+    "search": "Tìm kiếm",
+    "description": "Mô tả",
+
+    "confirm_delete": "Bạn có chắc chắn muốn xóa",
+
+    "create_new_product": "Tạo sản phẩm mới",
+    "create_new_category": "Tạo danh mục mới",
+    "create_new_user": "Tạo thành viên mới",
+    "create_new_permission": "Tạo quyền mới",
+
+    "edit_product": "Chỉnh sửa sản phẩm",
+    "edit_category": "Chỉnh sửa danh mục",
+    "edit_user": "Chỉnh sửa thành viên",
+    "edit_permission": "Chỉnh sửa quyền hạn"
+  },
+
+  "validate": {
+    "name_required": "Tên là bắt buộc",
+    "title_required": "Tiêu đề là bắt buộc",
+    "name_min_length": "Tên phải có ít nhất 6 ký tự",
+    "title_min_length": "Tiêu đề phải có ít nhất 6 ký tự",
+    "price_required": "Giá là bắt buộc",
+    "price_min": "Giá phải lớn hơn hoặc bằng 1000",
+    "quantity_required": "Số lượng là bắt buộc",
+    "quantity_min": "Số lượng phải ít nhất 10",
+    "email_required": "Email là bắt buộc",
+    "email_invalid": "Email không hợp lệ",
+    "password_required": "Mật khẩu là bắt buộc",
+    "password_min_length": "Mật khẩu phải có ít nhất 6 ký tự",
+    "confirm_password_required": "Xác nhận mật khẩu là bắt buộc",
+    "confirm_password_mismatch": "Mật khẩu xác nhận không khớp"
+  }
 }

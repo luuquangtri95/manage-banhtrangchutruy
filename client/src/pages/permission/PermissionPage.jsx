@@ -1,49 +1,36 @@
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import PermissionApi from "../../api/permissionApi";
 import { toast } from "react-toastify";
-import UserApi from "../../api/userApi";
-import FormField from "../../components/FormField";
-import Icon from "../../components/Icon/Icon";
+import { useTranslation } from "react-i18next";
 import Popup from "../../components/Popup";
 import { formatDateWithIntl } from "../../helpers/convertDate";
+import Icon from "../../components/Icon/Icon";
+import FormField from "../../components/FormField";
 
 const INIT_FORMDATA = {
-	username: {
+	name: {
 		value: "",
 		type: "text",
 		error: "",
 		validate: (value) => {
-			if (!value.trim()) return "Tên tài khoản bắt buộc";
+			if (!value.trim()) return "Tên sản phẩm bắt buộc";
 			if (value.length < 5) return "Tên phải lớn hơn 6 ký tự";
 		},
 	},
-	email: {
+	price: {
 		value: "",
-		type: "email",
+		type: "number",
 		error: "",
 		validate: (value) => {
-			if (!value.trim()) return "Email is required.";
-			if (!/\S+@\S+\.\S+/.test(value)) return "Invalid email format.";
-			return "";
+			if (value < 1000) return "giá tiền phải lớn hơn 1000";
 		},
 	},
-	password: {
-		value: "",
-		type: "password",
+	quantity: {
+		value: 100,
+		type: "number",
 		error: "",
 		validate: (value) => {
-			if (!value.trim()) return "Xác nhận mật khẩu không được để trống.";
-			if (value.length < 5) return "Password phải từ 6 ký tự";
-		},
-	},
-	confirmPassword: {
-		value: "",
-		type: "password",
-		error: "",
-		validate: (value, formData) => {
-			if (!value.trim()) return "Xác nhận mật khẩu không được để trống.";
-			if (value !== formData.password.value) return "Mật khẩu xác nhận không khớp.";
-			return "";
+			if (value === 0 || value < 10) return "Số lượng phải lớn hơn 10";
 		},
 	},
 };
@@ -52,33 +39,33 @@ const DEFAULT_PAGINATION = {
 	page: 1,
 	limit: 10,
 	total_page: 10,
-	total_item: 10,
+	total_item: 8,
 };
 
-function UsersPage() {
+function PermissionPage(props) {
 	const [popupData, setPopupData] = useState(null);
-	const [userDelete, setUserDelete] = useState(null);
-	const [users, setUsers] = useState([]);
+	const [permissionDelete, setPermissionDelete] = useState(null);
+	const [permisions, setPermissions] = useState([]);
 	const [formData, setFormData] = useState(INIT_FORMDATA);
 	const [loading, setLoading] = useState(false);
-	const [filters, setFilters] = useState({ page: 1, limit: 10, searchTerm: "" });
+	const [filters, setFilters] = useState({ page: 1, limit: 8, searchTerm: "" });
 	const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
 	const { t } = useTranslation();
 
 	useEffect(() => {
-		fetchUsers();
+		fetchPermissions();
 	}, [filters]);
 
-	const fetchUsers = async () => {
+	const fetchPermissions = async () => {
 		try {
 			setLoading(true);
-			const res = await UserApi.findAll(filters);
+			const res = await PermissionApi.findAll(filters);
 
-			setUsers(res.metadata.result);
+			setPermissions(res.metadata.result);
 			setPagination(res.metadata.pagination);
 		} catch (error) {
-			console.log("fetchUsers error", error);
-			toast.error("Failed to fetch users");
+			console.log("fetchPermissions error", error);
+			toast.error("Failed to fetch products");
 		} finally {
 			setLoading(false);
 		}
@@ -104,22 +91,22 @@ function UsersPage() {
 		}));
 	};
 
-	const handleDeleteProduct = async () => {
-		if (!userDelete) return;
+	const handleDeletePermission = async () => {
+		if (!permissionDelete) return;
 
 		try {
-			await UserApi.delete(userDelete.id);
-			toast.success(`Product "${userDelete.name}" deleted successfully`);
-			fetchUsers();
+			await PermissionApi.delete(permissionDelete.id);
+			toast.success(`Permission "${permissionDelete.name}" deleted successfully`);
+			fetchPermissions();
 		} catch (error) {
 			console.log("handleDeleteProduct error", error);
 		} finally {
-			setUserDelete(null);
+			setPermissionDelete(null);
 		}
 	};
 
 	const handleCancelDelete = () => {
-		setUserDelete(null);
+		setPermissionDelete(null);
 	};
 
 	const handlePageChange = (newPage) => {
@@ -136,6 +123,24 @@ function UsersPage() {
 
 	const handleEdit = (item) => {
 		setPopupData(item);
+	};
+
+	const handleClone = async (oldItem) => {
+		try {
+			const _newItem = {
+				name: oldItem.name + " clone",
+			};
+
+			const res = await PermissionApi.create(_newItem);
+
+			if (res.metadata.id) {
+				toast.success(`Clone ${res.metadata.name} success !`);
+			}
+		} catch (error) {
+			console.log("error", error);
+		} finally {
+			fetchPermissions();
+		}
 	};
 
 	const handlePopupSubmit = async () => {
@@ -164,10 +169,10 @@ function UsersPage() {
 
 		try {
 			if (popupData && popupData.id) {
-				await UserApi.update({ ...formattedData, id: popupData.id });
+				await PermissionApi.update({ ...formattedData, id: popupData.id });
 				toast.success("Product updated successfully");
 			} else {
-				const res = await UserApi.create(formattedData);
+				const res = await PermissionApi.create(formattedData);
 				console.log(res);
 
 				// toast.success("Product created successfully");
@@ -178,16 +183,16 @@ function UsersPage() {
 		} finally {
 			setPopupData(null);
 			setFormData(INIT_FORMDATA);
-			fetchUsers();
+			fetchPermissions();
 		}
 	};
 
-	const handleConfirmDelete = (currentUser) => {
-		setUserDelete(currentUser);
+	const handleConfirmDelete = (permission) => {
+		setPermissionDelete(permission);
 	};
 
 	const renderSkeleton = () =>
-		Array.from({ length: users.length }).map((_, rowIndex) => (
+		Array.from({ length: permisions.length }).map((_, rowIndex) => (
 			<tr
 				key={rowIndex}
 				className="animate-pulse h-[81px]">
@@ -201,30 +206,35 @@ function UsersPage() {
 			</tr>
 		));
 
-	const renderUsers = () =>
-		users.map((user) => (
+	const renderPermissions = () =>
+		permisions.map((permission) => (
 			<tr
-				key={user.id}
+				key={permission.id}
 				className="hover:bg-slate-50 border-b border-slate-200">
-				<td className="p-4 py-5 font-semibold text-sm text-slate-800">{user.username}</td>
-				<td className="p-4 py-5 text-sm text-slate-500">{user.email}</td>
+				<td className="p-4 py-5 font-semibold text-sm text-slate-800">{permission.name}</td>
 				<td className="p-4 py-5 text-sm text-slate-500">
-					{user.isActive ? "Active" : "Disable"}
+					{permission.description || "..."}
 				</td>
 				<td className="p-4 py-5 text-sm text-slate-500">
-					{formatDateWithIntl(user.createdAt)}
+					{formatDateWithIntl(permission.createdAt)}
 				</td>
 				<td className="p-4 py-5">
 					<div className="flex items-center gap-2">
 						<button
 							className="border p-2 rounded-md"
-							onClick={() => handleEdit(user)}>
+							onClick={() => handleEdit(permission)}>
 							<Icon type="icon-edit" />
 						</button>
 
 						<button
 							className="border p-2 rounded-md"
-							onClick={() => handleConfirmDelete(user)}>
+							onClick={() => handleClone(permission)}>
+							<Icon type="icon-clone" />
+						</button>
+
+						<button
+							className="border p-2 rounded-md"
+							onClick={() => handleConfirmDelete(permission)}>
 							<Icon type="icon-delete" />
 						</button>
 					</div>
@@ -240,7 +250,7 @@ function UsersPage() {
 						className="flex gap-2 border rounded-md p-2 hover:bg-[#ffe9cf] transition-all"
 						onClick={handleCreate}>
 						<Icon type="icon-create" />
-						<p>{t("common.create_new_user")}</p>
+						<p>{t("create_new_permission")}</p>
 					</button>
 				</div>
 
@@ -253,23 +263,21 @@ function UsersPage() {
 				<table className="w-full table-fixed text-left">
 					<thead>
 						<tr>
-							{[
-								"user_page.table.username",
-								"Email",
-								"common.status",
-								"common.created_date",
-								"common.actions",
-							].map((header, idx) => (
-								<th
-									key={idx}
-									className="p-4 border-b border-slate-200 bg-[#ffe9cf]"
-									style={{ width: `${100 / 6}%` }}>
-									<p className="text-sm font-normal leading-none">{t(header)}</p>
-								</th>
-							))}
+							{["Permission Name", "Description", "created_date", "actions"].map(
+								(header, idx) => (
+									<th
+										key={idx}
+										className="p-4 border-b border-slate-200 bg-[#ffe9cf]"
+										style={{ width: `${100 / 6}%` }}>
+										<p className="text-sm font-normal leading-none">
+											{t(header)}
+										</p>
+									</th>
+								)
+							)}
 						</tr>
 					</thead>
-					<tbody>{loading ? renderSkeleton() : renderUsers()}</tbody>
+					<tbody>{loading ? renderSkeleton() : renderPermissions()}</tbody>
 				</table>
 
 				<div className="flex justify-between items-center px-4 py-3">
@@ -293,7 +301,7 @@ function UsersPage() {
 
 			<Popup
 				isOpen={popupData}
-				title={popupData?.id ? "Edit User" : "Create New User"}
+				title={popupData?.id ? t("edit_product") : t("create_new_product")}
 				onClose={handleClosePopup}
 				onSubmit={handlePopupSubmit}>
 				{Object.keys(formData).map((key) => (
@@ -309,16 +317,16 @@ function UsersPage() {
 			</Popup>
 
 			<Popup
-				isOpen={!!userDelete}
+				isOpen={!!permissionDelete}
 				title="Confirm Delete"
 				onClose={handleCancelDelete}
-				onSubmit={handleDeleteProduct}>
+				onSubmit={handleDeletePermission}>
 				<p>
-					Bạn có chắc chắn muốn xóa sản phẩm <b>{userDelete?.name}</b> không?
+					Bạn có chắc chắn muốn xóa quyền <b>{permissionDelete?.name}</b> không?
 				</p>
 			</Popup>
 		</div>
 	);
 }
 
-export default UsersPage;
+export default PermissionPage;

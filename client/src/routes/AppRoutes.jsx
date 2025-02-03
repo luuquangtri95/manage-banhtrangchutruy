@@ -10,6 +10,8 @@ import ProductsPage from "../pages/product";
 import UsersPage from "../pages/users";
 import WholesalePrice from "../pages/wholesale-price";
 import ProtectedRoutes from "../routes/ProtectedRoutes";
+import PermissionPage from "../pages/permission";
+import PartnerPage from "../pages/partner";
 import UnauthorizedRoutes from "../routes/UnauthorizedRoutes";
 
 const AppRoutes = () => {
@@ -28,17 +30,8 @@ const AppRoutes = () => {
 					element={<Dashboard />}>
 					<Route
 						path="orders"
-						element={<OrdersPage />}>
-						<Route
-							path=""
-							element={<OrderList />}
-						/>
-
-						<Route
-							path="create"
-							element={<OrderCreate />}
-						/>
-					</Route>
+						element={<OrderList />}
+					/>
 					<Route
 						path="products"
 						element={<ProductsPage />}
@@ -54,6 +47,14 @@ const AppRoutes = () => {
 					<Route
 						path="wholesale-price"
 						element={<WholesalePrice />}
+					/>
+					<Route
+						path="manage-permission"
+						element={<PermissionPage />}
+					/>
+					<Route
+						path="partners"
+						element={<PartnerPage />}
 					/>
 					<Route
 						path="users"

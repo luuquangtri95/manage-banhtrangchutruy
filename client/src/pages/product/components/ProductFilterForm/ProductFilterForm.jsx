@@ -30,7 +30,7 @@ function ProductFilterForm({ onSubmit }) {
 	return (
 		<FormField
 			value={searchTerm}
-			placeholder={t("search_product")}
+			placeholder={t("common.search")}
 			onChange={handleSearchTermChange}
 		/>
 	);

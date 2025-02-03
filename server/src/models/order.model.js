@@ -10,7 +10,7 @@ export const OrderModel = sequelizeConnectionString.define(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    // title: { type: DataTypes.STRING, allowNull: false },
+    title: { type: DataTypes.STRING, allowNull: false },
     fullname: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -33,7 +33,7 @@ export const OrderModel = sequelizeConnectionString.define(
     },
     user_id: {
       type: DataTypes.UUID,
-      allowNull: true,
+      allowNull: false,
       references: {
         model: UserModel,
         key: "id",
@@ -44,6 +44,11 @@ export const OrderModel = sequelizeConnectionString.define(
     status: {
       type: DataTypes.ENUM("pending", "active", "draft", "success"),
       defaultValue: "pending",
+    },
+    total_price: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
     },
   },
   {

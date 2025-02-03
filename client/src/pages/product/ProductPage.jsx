@@ -8,6 +8,8 @@ import { formatDateWithIntl } from "../../helpers/convertDate";
 import ProductFilterForm from "./components/ProductFilterForm/ProductFilterForm";
 import { useTranslation } from "react-i18next";
 import { formatPrice } from "../../helpers/formatPrice";
+import CategoryApi from "../../api/categoryApi";
+import Select from "react-tailwindcss-select";
 
 const INIT_FORMDATA = {
   name: {
@@ -15,8 +17,8 @@ const INIT_FORMDATA = {
     type: "text",
     error: "",
     validate: (value) => {
-      if (!value.trim()) return "Tên sản phẩm bắt buộc";
-      if (value.length < 5) return "Tên phải lớn hơn 6 ký tự";
+      if (!value.trim()) return "validate.name_required";
+      if (value.length < 5) return "validate.name_min_length";
     },
   },
   price: {
@@ -24,7 +26,7 @@ const INIT_FORMDATA = {
     type: "number",
     error: "",
     validate: (value) => {
-      if (value < 1000) return "giá tiền phải lớn hơn 1000";
+      if (value < 1000) return "validate.price_min";
     },
   },
   quantity: {
@@ -32,14 +34,19 @@ const INIT_FORMDATA = {
     type: "number",
     error: "",
     validate: (value) => {
-      if (value === 0 || value < 10) return "Số lượng phải lớn hơn 10";
+      if (value === 0 || value < 10) return "validate.quantity_min";
     },
   },
 };
 
+const INIT_CATEGORIES = {
+  value: [],
+  options: [],
+};
+
 const DEFAULT_PAGINATION = {
   page: 1,
-  limit: 5,
+  limit: 8,
   total_page: 10,
   total_item: 10,
 };
@@ -49,21 +56,34 @@ function ProductsPage() {
   const [productDelete, setProductDelete] = useState(null);
   const [products, setProducts] = useState([]);
   const [formData, setFormData] = useState(INIT_FORMDATA);
+  const [categories, setCategories] = useState(INIT_CATEGORIES);
   const [loading, setLoading] = useState(false);
-  const [filters, setFilters] = useState({ page: 1, limit: 5, searchTerm: "" });
+  const [filters, setFilters] = useState({ page: 1, limit: 8, searchTerm: "" });
   const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
   const { t } = useTranslation();
 
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
   }, [filters]);
 
   useEffect(() => {
     if (popupData) {
+      setCategories((prev) => ({
+        ...prev,
+        value:
+          popupData?.categories?.map((_cate) => ({
+            label: _cate.name,
+            value: _cate.id,
+          })) || [],
+      }));
       setFormData((prev) => {
         const updatedFormData = { ...prev };
+
+        console.log("updatedFormData", updatedFormData);
+
         Object.keys(updatedFormData).forEach((key) => {
-          if (popupData[key] !== undefined) {
+          if (popupData[key] !== undefined && key !== "category") {
             updatedFormData[key].value = popupData[key];
           }
         });
@@ -79,6 +99,27 @@ function ProductsPage() {
 
       setProducts(res.metadata.result);
       setPagination(res.metadata.pagination);
+    } catch (error) {
+      console.log("fetchProducts error", error);
+      toast.error("Failed to fetch products");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      setLoading(true);
+      const res = await CategoryApi.findAll(filters);
+
+      const _catagories = res.metadata.result.map((_cat) => {
+        return {
+          label: _cat.name,
+          value: _cat.id,
+        };
+      });
+
+      setCategories((prev) => ({ ...prev, options: _catagories }));
     } catch (error) {
       console.log("fetchProducts error", error);
       toast.error("Failed to fetch products");
@@ -115,7 +156,6 @@ function ProductsPage() {
       toast.success(`Product "${productDelete.name}" deleted successfully`);
       fetchProducts();
     } catch (error) {
-      toast.error("Failed to delete product");
       console.log("handleDeleteProduct error", error);
     } finally {
       setProductDelete(null);
@@ -186,27 +226,53 @@ function ProductsPage() {
       return acc;
     }, {});
 
+    if (categories?.value?.length) {
+      formattedData.categories = categories.value.map((_v) => ({
+        name: _v.label,
+        id: _v.value,
+      }));
+    }
+
     try {
       if (popupData && popupData.id) {
         await ProductApi.update({ ...formattedData, id: popupData.id });
         toast.success("Product updated successfully");
       } else {
-        await ProductApi.create(formattedData);
-        toast.success("Product created successfully");
+        const res = await ProductApi.create(formattedData);
+
+        toast.success(res.message);
       }
     } catch (error) {
       console.log("handlePopupSubmit error", error);
-      toast.error("Failed to submit product");
+      // toast.error("Failed to submit product");
     } finally {
       setPopupData(null);
       setFormData(INIT_FORMDATA);
+      setCategories(INIT_CATEGORIES);
       fetchProducts();
+      fetchCategories();
     }
   };
 
   const handleConfirmDelete = (product) => {
     setProductDelete(product); // Đặt sản phẩm cần xóa
   };
+
+  const handleCategoryChange = (newOption) => {
+    if (newOption) {
+      setCategories((prev) => ({
+        ...prev,
+        value: [...newOption],
+      }));
+    } else {
+      setCategories((prev) => ({
+        ...prev,
+        value: [],
+      }));
+    }
+  };
+
+  console.log("categories", categories);
 
   const renderSkeleton = () =>
     Array.from({ length: products.length }).map((_, rowIndex) => (
@@ -232,12 +298,17 @@ function ProductsPage() {
           {formatPrice(product.price)}
         </td>
         <td className="p-4 py-5 text-sm text-slate-500">{product.quantity}</td>
-        <td className="p-4 py-5 text-sm text-slate-500">Active</td>
+        <td className="p-4 py-5 text-sm text-slate-500">{product.status}</td>
+        <td className="p-4 py-5 text-sm text-slate-500">
+          {product.categories.map((_cate) => (
+            <div key={_cate.id}>{_cate.name}</div>
+          ))}
+        </td>
         <td className="p-4 py-5 text-sm text-slate-500">
           {formatDateWithIntl(product.createdAt)}
         </td>
         <td className="p-4 py-5">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <button
               className="border p-2 rounded-md"
               onClick={() => handleEdit(product)}
@@ -272,7 +343,7 @@ function ProductsPage() {
             onClick={handleCreate}
           >
             <Icon type="icon-create" />
-            <p>{t("create_new_product")}</p>
+            <p>{t("common.create_new_product")}</p>
           </button>
         </div>
 
@@ -286,12 +357,13 @@ function ProductsPage() {
           <thead>
             <tr>
               {[
-                "product_name",
-                "price",
-                "quantity",
-                "status",
-                "created_date",
-                "actions",
+                "product_page.table.product_name",
+                "product_page.table.price",
+                "product_page.table.quantity",
+                "common.status",
+                "product_page.table.category",
+                "common.created_date",
+                "common.actions",
               ].map((header, idx) => (
                 <th
                   key={idx}
@@ -330,25 +402,52 @@ function ProductsPage() {
 
       <Popup
         isOpen={popupData}
-        title={popupData?.id ? t("edit_product") : t("create_new_product")}
+        title={
+          popupData?.id
+            ? t("common.edit_product")
+            : t("common.create_new_product")
+        }
         onClose={handleClosePopup}
         onSubmit={handlePopupSubmit}
       >
-        {Object.keys(formData).map((key) => (
-          <FormField
-            key={key}
-            label={key.charAt(0).toUpperCase() + key.slice(1)}
-            type={formData[key].type}
-            value={formData[key].value}
-            onChange={(e) => handleFormChange(key, e.target.value)}
-            error={formData[key].error}
-          />
-        ))}
+        {Object.keys(formData).map((key) => {
+          const field = formData[key];
+
+          return (
+            <FormField
+              key={key}
+              label={t(`product_page.popup.${key}`)}
+              type={field.type}
+              value={field.value}
+              onChange={(e) =>
+                handleFormChange(
+                  key,
+                  field.type === "checkbox" ? e.target.checked : e.target.value
+                )
+              }
+              error={t(field.error)}
+              options={field.options || []}
+            />
+          );
+        })}
+
+        <label
+          htmlFor="#"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          {t("common.category")}
+        </label>
+        <Select
+          isMultiple
+          value={categories.value}
+          onChange={(value) => handleCategoryChange(value)}
+          options={categories.options}
+        />
       </Popup>
 
       <Popup
         isOpen={!!productDelete}
-        title="Confirm Delete"
+        title={t("common.confirm_delete")}
         onClose={handleCancelDelete}
         onSubmit={handleDeleteProduct}
       >

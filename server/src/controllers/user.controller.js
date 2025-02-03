@@ -3,9 +3,11 @@ import { StatusCodes } from "http-status-codes";
 import ms from "ms";
 import sequelizeConnectionString from "~/config/database";
 import { env } from "~/config/enviroment";
+import { PermissionModel } from "~/models/permission.model";
 import { RoleModel } from "~/models/role.model";
 import { UserModel } from "~/models/user.model";
 import { JwtProvider } from "~/providers/JwtProvider";
+import { UserService } from "~/services/user.service";
 
 const { ACCESS_TOKEN_SECRET_SIGNATURE, REFRESH_TOKEN_SECRET_SIGNATURE } = env;
 
@@ -57,8 +59,7 @@ const login = async (req, res) => {
 		const accessToken = await JwtProvider.generateToken(
 			_userInfo,
 			ACCESS_TOKEN_SECRET_SIGNATURE,
-			// "1h"
-			5
+			"1h"
 		);
 
 		const refreshToken = await JwtProvider.generateToken(
@@ -168,6 +169,16 @@ const register = async (req, res) => {
 
 			await user.addRole(role, { transaction });
 
+			if (roleName === "admin") {
+				const fullPermission = await PermissionModel.findOne({ where: { name: "*" } });
+
+				if (!fullPermission) {
+					throw new Error("Permission '*' not found.");
+				}
+
+				await role.addPermission(fullPermission, { transaction });
+			}
+
 			return user;
 		});
 
@@ -180,9 +191,67 @@ const register = async (req, res) => {
 	}
 };
 
+const create = async (req, res) => {
+	try {
+		const metadata = await UserService.create(req);
+
+		res.status(StatusCodes.OK).json({
+			metadata,
+			message: "create user success !",
+		});
+	} catch (error) {
+		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+	}
+};
+
+const update = async (req, res) => {
+	try {
+		const metadata = await UserService.update(req);
+
+		res.status(StatusCodes.OK).json({ message: "update user success !", metadata });
+	} catch (error) {
+		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+	}
+};
+
+const findAll = async (req, res) => {
+	try {
+		const metadata = await UserService.findAll(req);
+
+		res.status(StatusCodes.OK).json({ metadata });
+	} catch (error) {
+		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+	}
+};
+
+const findById = async (req, res) => {
+	try {
+		const metadata = await UserService.findById(req);
+
+		res.status(StatusCodes.OK).json({ metadata });
+	} catch (error) {
+		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+	}
+};
+
+const _delete = async (req, res) => {
+	try {
+		const metadata = await UserService.delete(req);
+
+		res.status(StatusCodes.OK).json({ message: "delete user success !" });
+	} catch (error) {
+		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+	}
+};
+
 export const userControllers = {
 	login,
 	logout,
 	register,
 	refreshToken,
+	create,
+	update,
+	findAll,
+	findById,
+	delete: _delete,
 };

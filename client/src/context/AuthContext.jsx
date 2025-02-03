@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
 
 		// redirect page dashboard
 
-		navigate(`/dashboard/orders/create`);
+		navigate(`/dashboard/orders`);
 	};
 
 	const handleLogout = async () => {
@@ -30,8 +30,6 @@ export const AuthProvider = ({ children }) => {
 
 		navigate("/login");
 	};
-
-	console.log("userInfo", userInfo);
 
 	return (
 		<AuthContext.Provider value={{ onLogin: handleLogin, userInfo, onLogout: handleLogout }}>

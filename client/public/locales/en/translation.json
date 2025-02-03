@@ -1,25 +1,86 @@
 {
-  "create_order": "Create Order",
-  "manage_orders": "Manage Orders",
-  "manage_products": "Manage Products",
-  "manage_categories": "Manage Categories",
-  "analytics": "Analytics",
-  "wholesale_price": "Wholesale Price",
-  "members": "Members",
-  "manage_partners": "Manage Partners",
-  "contact_support": "Contact Support",
-  "logout": "Logout",
+  "menu": {
+    "create_order": "Create Order",
+    "manage_orders": "Manage Orders",
+    "manage_products": "Manage Products",
+    "manage_categories": "Manage Categories",
+    "analytics": "Analytics",
+    "wholesale_price": "Wholesale Price",
+    "members": "Members",
+    "manage_partners": "Manage Partners",
+    "contact_support": "Contact Support",
+    "grant_permission": "Grant Permission",
+    "logout": "Logout"
+  },
 
-  "order_list": "Order List",
-  "product_name": "Product Name",
-  "price": "Price",
-  "quantity": "Quantity",
-  "status": "Status",
-  "created_date": "Created Date",
-  "actions": "Actions",
+  "order_page": {
+    "table": {}
+  },
 
-  "create_new_product": "Create New Product",
-  "search_product": "Search Product",
-  "edit_product": "Edit Product",
-  "grant_permission": "Grant Permission"
+  "product_page": {
+    "table": {
+      "product_name": "Product Name",
+      "price": "Price",
+      "quantity": "Quantity",
+      "category": "Category"
+    },
+    "popup": {
+      "name": "Product Name",
+      "price": "Price",
+      "quantity": "Quantity",
+      "category": "Category"
+    }
+  },
+
+  "category_page": {
+    "table": {
+      "name": "Category Name",
+      "description": "Description"
+    },
+    "popup": {
+      "name": "Category Name",
+      "description": "Description"
+    }
+  },
+
+  "user_page": {
+    "table": {
+      "username": "User Name"
+    }
+  },
+
+  "common": {
+    "actions": "Actions",
+    "status": "Status",
+    "created_date": "Created Date",
+    "search": "Search",
+    "description": "Description",
+
+    "confirm_delete": "Confirm Delete",
+
+    "create_new_product": "Create New Product",
+    "create_new_category": "Create New Category",
+    "create_new_user": "Create New User",
+    "create_new_permission": "Create New Permission",
+
+    "edit_product": "Edit Product",
+    "edit_category": "Edit Category",
+    "edit_user": "Edit User",
+    "edit_permission": "Edit Permission"
+  },
+
+  "validate": {
+    "name_required": "Name is required",
+    "name_min_length": "Name must be at least 6 characters",
+    "price_required": "Price is required",
+    "price_min": "Price must be at least 1000",
+    "quantity_required": "Quantity is required",
+    "quantity_min": "Quantity must be at least 10",
+    "email_required": "Email is required",
+    "email_invalid": "Invalid email format",
+    "password_required": "Password is required",
+    "password_min_length": "Password must be at least 6 characters",
+    "confirm_password_required": "Confirm Password is required",
+    "confirm_password_mismatch": "Passwords do not match"
+  }
 }

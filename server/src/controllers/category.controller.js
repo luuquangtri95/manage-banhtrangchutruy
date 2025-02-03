@@ -1,13 +1,13 @@
 import { StatusCodes } from "http-status-codes";
-import { PermissionService } from "~/services/permission.service";
+import { CategoryService } from "~/services/category.service";
 
 const create = async (req, res) => {
 	try {
-		const metadata = await PermissionService.create(req);
+		const metadata = await CategoryService.create(req);
 
 		res.status(StatusCodes.OK).json({
 			metadata,
-			message: "create permission success !",
+			message: "create category success !",
 		});
 	} catch (error) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
@@ -16,9 +16,9 @@ const create = async (req, res) => {
 
 const findAll = async (req, res) => {
 	try {
-		const metadata = await PermissionService.findAll(req);
+		const metadata = await CategoryService.findAll(req);
 
-		return res.status(StatusCodes.OK).json({ metadata });
+		res.status(StatusCodes.OK).json({ metadata });
 	} catch (error) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
 	}
@@ -26,7 +26,7 @@ const findAll = async (req, res) => {
 
 const findById = async (req, res) => {
 	try {
-		const metadata = await PermissionService.findById(req);
+		const metadata = await CategoryService.findById(req);
 
 		res.status(StatusCodes.OK).json({ metadata });
 	} catch (error) {
@@ -36,9 +36,9 @@ const findById = async (req, res) => {
 
 const update = async (req, res) => {
 	try {
-		const metadata = await PermissionService.update(req);
+		const metadata = await CategoryService.update(req);
 
-		res.status(StatusCodes.OK).json({ message: "update product success !", metadata });
+		res.status(StatusCodes.OK).json({ message: "update category success !", metadata });
 	} catch (error) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
 	}
@@ -46,12 +46,18 @@ const update = async (req, res) => {
 
 const _delete = async (req, res) => {
 	try {
-		const metadata = await PermissionService.delete(req);
+		const metadata = await CategoryService.delete(req);
 
-		res.status(StatusCodes.OK).json({ message: "delete product success !" });
+		res.status(StatusCodes.OK).json({ message: "delete category success !" });
 	} catch (error) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
 	}
 };
 
-export const PermissionController = { create, findAll, findById, update, delete: _delete };
+export const CategoryController = {
+	create,
+	findAll,
+	findById,
+	update,
+	delete: _delete,
+};

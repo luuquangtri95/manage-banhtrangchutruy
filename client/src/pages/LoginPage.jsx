@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import Logo from "../assets/logo.jpg";
+import Logo from "../assets/logo_chutruy_food.jpeg";
 import FormField from "../components/FormField";
 import { AuthContext } from "../context/AuthContext";
 
@@ -27,7 +27,8 @@ function LoginPage(props) {
 
 	const { onLogin } = useContext(AuthContext);
 
-	const handleLogin = () => {
+	const handleLogin = (e) => {
+		e.preventDefault();
 		let hasError = false;
 
 		const newUserInfo = { ...userInfo };
@@ -64,7 +65,7 @@ function LoginPage(props) {
 
 	return (
 		<div className="flex flex-col lg:flex-row xl:flex-row lg:relative">
-			<div className="w-full h-[15vh] bg-[#ffe9cf] relative mt-[60px] lg:h-[100vh] lg:w-[50%] lg:mt-0">
+			<div className="w-full h-[15vh] bg-gradient-to-r from-slate-900 to-slate-700 relative mt-[60px] lg:h-[100vh] lg:w-[50%] lg:mt-0">
 				<div className="absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] ">
 					<img
 						src={Logo}
@@ -74,7 +75,7 @@ function LoginPage(props) {
 					/>
 				</div>
 			</div>
-			<div className="flex-1">
+			<div className="flex-1 ">
 				<div className="h-[100%] lg:h-[100vh] lg:relative">
 					<div className="absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] w-full p-4 mt-4 xs:w-[300px] sm:w-[450px] sm:mt-4 md:w-[450px] ">
 						<div>
@@ -90,41 +91,43 @@ function LoginPage(props) {
 						</div>
 
 						<div>
-							<div className="form-control">
-								<FormField
-									label="Email"
-									name="email"
-									type="email"
-									value={userInfo.email.value}
-									onChange={(e) => handleChange("email", e)}
-									error={userInfo.email.error}
-								/>
-							</div>
+							<form onSubmit={handleLogin}>
+								<div className="form-control">
+									<FormField
+										label="Email"
+										name="email"
+										type="email"
+										value={userInfo.email.value}
+										onChange={(e) => handleChange("email", e)}
+										error={userInfo.email.error}
+									/>
+								</div>
 
-							<div className="form-control">
-								<FormField
-									label="Mật khẩu"
-									name="password"
-									type="password"
-									value={userInfo.password.value}
-									onChange={(e) => handleChange("password", e)}
-									error={userInfo.password.error}
-								/>
-							</div>
+								<div className="form-control">
+									<FormField
+										label="Mật khẩu"
+										name="password"
+										type="password"
+										value={userInfo.password.value}
+										onChange={(e) => handleChange("password", e)}
+										error={userInfo.password.error}
+									/>
+								</div>
 
-							<div className="flex gap-2">
-								<button
-									onClick={handleLogin}
-									className="text-[14px] p-[8px] bg-[#ffe9cf] rounded-md mt-3 flex justify-center w-full ">
-									Đăng nhập
-								</button>
+								<div className="flex gap-2">
+									<button
+										onClick={handleLogin}
+										className="bg-gradient-to-r from-slate-900 to-slate-700 text-[#ffffff] text-[14px] p-[8px] bg-[#ffe9cf] rounded-md mt-3 flex justify-center w-full ">
+										Đăng nhập
+									</button>
 
-								<button
-									disabled
-									className="text-[14px] p-[8px] bg-[#eee] rounded-md mt-3 flex justify-center w-full">
-									Đăng ký
-								</button>
-							</div>
+									<button
+										disabled
+										className="text-[14px] p-[8px] bg-[#eee] rounded-md mt-3 flex justify-center w-full">
+										Đăng ký
+									</button>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>
