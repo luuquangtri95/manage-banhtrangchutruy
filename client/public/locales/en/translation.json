@@ -58,6 +58,11 @@
         "search": "Search",
         "description":"Description",
         "link_product_quantity": "Link Product Quantity",
+        "cancel": "Cancel",
+        "close": "Close",
+        "category":"Category",
+        "update_infomation": "Update Infomation",
+        "logout": "Logout",
 
         "confirm_delete":"Confirm Delete",
 

@@ -75,7 +75,7 @@ function LoginPage(props) {
 					/>
 				</div>
 			</div>
-			<div className="flex-1 ">
+			<div className="flex-1">
 				<div className="h-[100%] lg:h-[100vh] lg:relative">
 					<div className="absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] w-full p-4 mt-4 xs:w-[300px] sm:w-[450px] sm:mt-4 md:w-[450px] ">
 						<div>

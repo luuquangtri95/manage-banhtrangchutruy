@@ -59,6 +59,11 @@
         "search": "Tìm kiếm",
         "description":"Mô tả",
         "link_product_quantity": "Số lượng sản phẩm liên kết",
+        "cancel": "Huỷ bỏ",
+        "close": "Đóng",
+        "category":"Danh mục",
+        "update_infomation": "Cập nhật thông tin",
+        "logout": "Đăng xuất",
 
         "confirm_delete":"Bạn có chắc chắn muốn xóa",
         

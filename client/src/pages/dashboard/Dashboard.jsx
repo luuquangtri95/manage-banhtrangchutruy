@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { NavLink, Outlet } from "react-router";
 import Logo from "../../assets/logo.jpg";
 import Icon from "../../components/Icon/Icon";
@@ -32,6 +32,9 @@ function Dashboard() {
 	const { onLogout } = useContext(AuthContext);
 	const { t, i18n } = useTranslation();
 	const [userInfo, setUserInfo] = useState(null);
+	const [isShowPopover, setIsShowPopover] = useState(false);
+
+	const currentElmRef = useRef(null);
 
 	const handleCollapse = () => setIsCollapse(!isCollapse);
 	const handleChangeLang = (lang) => i18n.changeLanguage(lang);
@@ -56,6 +59,21 @@ function Dashboard() {
 			return () => clearTimeout(timer);
 		}
 	}, [isCollapse]);
+
+	useEffect(() => {
+		const handleClosePopupOutside = (event) => {
+			const { target } = event;
+			if (!currentElmRef.current.contains(target)) {
+				setIsShowPopover(false);
+			}
+		};
+
+		window.addEventListener("click", handleClosePopupOutside);
+
+		return () => {
+			window.removeEventListener("click", handleClosePopupOutside);
+		};
+	}, []);
 
 	return (
 		<div className="h-[100vh] flex flex-col">
@@ -122,12 +140,12 @@ function Dashboard() {
 					</div>
 
 					{/* Logout Button */}
-					<button
+					{/* <button
 						className="p-3 flex items-center gap-2 mt-auto hover:bg-[#ffe9cf] transition-all rounded-md"
 						onClick={onLogout}>
 						<Icon type="icon-logout" />
 						{t("menu.logout")}
-					</button>
+					</button> */}
 				</div>
 
 				{/* Content */}
@@ -135,19 +153,51 @@ function Dashboard() {
 					{/* Top Bar */}
 					<div className="top-bar h-[60px] bg-[#ffe9cf] p-2">
 						<div className="flex justify-between items-center h-full">
-							<img
-								src={Logo}
-								alt="Logo"
-								className="rounded-full"
-								width={50}
-							/>
+							<div onClick={() => setIsShowPopover(!isShowPopover)}>
+								<img
+									src={Logo}
+									alt="Logo"
+									className="rounded-full"
+									width={50}
+								/>
+							</div>
 							<div className="flex gap-2 items-center">
 								<div className="flex gap-2">
 									<button onClick={() => handleChangeLang("en")}>🇬🇧</button>
 									<button onClick={() => handleChangeLang("vi")}>🇻🇳</button>
 								</div>
-								<div className="avatar w-[35px] h-[35px] rounded-full bg-[#eee] flex justify-center items-center">
-									<Icon type="icon-user" />
+								<div className="avatar relative border border-[#ccc] w-[35px] h-[35px] rounded-full bg-[#eee] flex justify-center items-center">
+									<div
+										ref={currentElmRef}
+										onClick={() => setIsShowPopover(!isShowPopover)}
+										className="cursor-pointer">
+										<Icon type="icon-user" />
+									</div>
+									{isShowPopover && (
+										<div className="absolute bg-[#eee] shadow-xl w-[180px] h-auto z-10 top-[40px] right-0 rounded-md">
+											<ul className="p-3">
+												<li className="cursor-pointer">
+													<div className="flex gap-1 mb-2">
+														<Icon type="icon-change-info" />
+														<p className="text-[14px]">
+															{t("common.update_infomation")}
+														</p>
+													</div>
+												</li>
+
+												<li className="cursor-pointer">
+													<div
+														className="flex gap-1"
+														onClick={onLogout}>
+														<Icon type="icon-logout" />
+														<p className="text-[14px]">
+															{t("common.logout")}
+														</p>
+													</div>
+												</li>
+											</ul>
+										</div>
+									)}
 								</div>
 							</div>
 						</div>

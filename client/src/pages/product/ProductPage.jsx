@@ -272,8 +272,6 @@ function ProductsPage() {
 		}
 	};
 
-	console.log("categories", categories);
-
 	const renderSkeleton = () =>
 		Array.from({ length: products.length }).map((_, rowIndex) => (
 			<tr
@@ -299,9 +297,11 @@ function ProductsPage() {
 				<td className="p-4 py-5 text-sm text-slate-500">{product.quantity}</td>
 				<td className="p-4 py-5 text-sm text-slate-500">{product.status}</td>
 				<td className="p-4 py-5 text-sm text-slate-500">
-					{product.categories.map((_cate) => (
-						<div key={_cate.id}>{_cate.name}</div>
-					))}
+					<ul className="list-disc">
+						{product.categories.map((_cate) => (
+							<li key={_cate.id}>{_cate.name}</li>
+						))}
+					</ul>
 				</td>
 				<td className="p-4 py-5 text-sm text-slate-500">
 					{formatDateWithIntl(product.createdAt)}
