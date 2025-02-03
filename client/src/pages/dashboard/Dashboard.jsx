@@ -5,6 +5,7 @@ import Icon from "../../components/Icon/Icon";
 import { AuthContext } from "../../context/AuthContext";
 import authorizedAxiosInstance from "../../utils/authorizedAxios";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router";
 
 const MENU_ITEMS = [
 	// { path: "/dashboard/orders/create", icon: "icon-create", label: "create_order" },
@@ -35,6 +36,7 @@ function Dashboard() {
 	const [isShowPopover, setIsShowPopover] = useState(false);
 
 	const currentElmRef = useRef(null);
+	const navigate = useNavigate();
 
 	const handleCollapse = () => setIsCollapse(!isCollapse);
 	const handleChangeLang = (lang) => i18n.changeLanguage(lang);
@@ -177,7 +179,11 @@ function Dashboard() {
 										<div className="absolute bg-[#eee] shadow-xl w-[180px] h-auto z-10 top-[40px] right-0 rounded-md">
 											<ul className="p-3">
 												<li className="cursor-pointer">
-													<div className="flex gap-1 mb-2">
+													<div
+														className="flex gap-1 mb-2"
+														onClick={() =>
+															navigate("/dashboard/profile")
+														}>
 														<Icon type="icon-change-info" />
 														<p className="text-[14px]">
 															{t("common.update_infomation")}

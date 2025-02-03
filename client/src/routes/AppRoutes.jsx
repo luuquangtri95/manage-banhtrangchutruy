@@ -3,16 +3,15 @@ import AnalyticPage from "../pages/analytic";
 import CategoryPage from "../pages/category/CategoryPage";
 import Dashboard from "../pages/dashboard";
 import LoginPage from "../pages/LoginPage";
-import OrdersPage from "../pages/order";
-import OrderCreate from "../pages/order/create/OrderCreate";
 import OrderList from "../pages/order/list";
+import PartnerPage from "../pages/partner";
+import PermissionPage from "../pages/permission";
 import ProductsPage from "../pages/product";
 import UsersPage from "../pages/users";
 import WholesalePrice from "../pages/wholesale-price";
 import ProtectedRoutes from "../routes/ProtectedRoutes";
-import PermissionPage from "../pages/permission";
-import PartnerPage from "../pages/partner";
 import UnauthorizedRoutes from "../routes/UnauthorizedRoutes";
+import ProfilePage from "../pages/profile";
 
 const AppRoutes = () => {
 	return (
@@ -28,6 +27,10 @@ const AppRoutes = () => {
 				<Route
 					path="/dashboard"
 					element={<Dashboard />}>
+					<Route
+						path="profile"
+						element={<ProfilePage />}
+					/>
 					<Route
 						path="orders"
 						element={<OrderList />}
