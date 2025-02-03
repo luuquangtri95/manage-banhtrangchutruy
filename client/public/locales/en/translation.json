@@ -57,6 +57,7 @@
         "created_date": "Created Date",
         "search": "Search",
         "description":"Description",
+        "link_product_quantity": "Link Product Quantity",
 
         "confirm_delete":"Confirm Delete",
 

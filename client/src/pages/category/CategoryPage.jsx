@@ -273,7 +273,7 @@ function CategoryPage() {
 							{[
 								"category_page.table.name",
 								"category_page.table.description",
-								"Số lượng sản phẩm liên kết",
+								"common.link_product_quantity",
 								"common.created_date",
 								"common.actions",
 							].map((header, idx) => (

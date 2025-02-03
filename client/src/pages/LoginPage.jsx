@@ -80,12 +80,13 @@ function LoginPage(props) {
 					<div className="absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] w-full p-4 mt-4 xs:w-[300px] sm:w-[450px] sm:mt-4 md:w-[450px] ">
 						<div>
 							<h3 className="text-[14px] font-bold text-center lg:text-[24px] lg:text-left">
-								Chào mừng bạn đến với bánh tráng chú Truý !
+								<span className="bg-gradient-to-b from-orange-300 to-slate-500 bg-clip-text text-transparent">
+									Chào mừng bạn đến với chú Truý Food !
+								</span>
 							</h3>
-							<p className="text-[11px] text-center lg:text-left">
-								"Đăng nhập vào đi nè, chúng mình cùng nhau bán hàng cùng nhau phát
-								triển bạn nhé, nếu chưa có tài khoản tạo ngay bên dưới nhé bạn yêu
-								😉"
+							<p className="text-[11px] lg:text-[14px] text-center lg:text-left">
+								"Chất lượng hàng đầu nha mấy shop ơi 🤣 !!! Em nói không với hàng
+								kém chất lượng ạ"
 							</p>
 							<br />
 						</div>

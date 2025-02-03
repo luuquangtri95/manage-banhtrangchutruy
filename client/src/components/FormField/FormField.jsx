@@ -1,6 +1,38 @@
-import React, { useId, useState } from "react";
+import { useId, useState } from "react";
+import PropTypes from "prop-types";
 
-const FormField = ({
+FormField.propTypes = {
+	label: PropTypes.string,
+	placeholder: PropTypes.string,
+	type: PropTypes.oneOf([
+		"text",
+		"email",
+		"password",
+		"number",
+		"select",
+		"textarea",
+		"checkbox",
+		"radio",
+	]),
+	value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number]),
+	onChange: PropTypes.func.isRequired,
+	onFocus: PropTypes.func,
+	onBlur: PropTypes.func,
+	error: PropTypes.string,
+	disabled: PropTypes.bool,
+	icon: PropTypes.elementType, // Dành cho component icon
+	id: PropTypes.string,
+	name: PropTypes.string,
+	options: PropTypes.arrayOf(
+		PropTypes.shape({
+			value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+			label: PropTypes.string.isRequired,
+		})
+	),
+	className: PropTypes.string,
+};
+
+function FormField({
 	label,
 	placeholder = "",
 	type = "text",
@@ -15,7 +47,7 @@ const FormField = ({
 	name,
 	options = [], // Dành cho select, radio
 	className = "",
-}) => {
+}) {
 	const fieldId = useId(); // Tạo ID tự động nếu không có
 	const [isFocused, setIsFocused] = useState(false);
 
@@ -32,7 +64,7 @@ const FormField = ({
 	};
 
 	// Xác định class cho phần bọc input
-	const wrapperClass = `flex items-center border rounded-lg px-3 py-3 transition-all ${
+	const wrapperClass = `flex items-center border rounded px-3 py-[6px] transition-all ${
 		error
 			? "border-red-500 focus-within:border-red-500"
 			: isFocused
@@ -74,7 +106,7 @@ const FormField = ({
 					onFocus={handleFocus}
 					onBlur={handleBlur}
 					disabled={disabled}
-					className="w-full bg-transparent focus:outline-none text-gray-700 placeholder-gray-400 resize-none h-24"
+					className="w-full bg-transparent focus:outline-none text-gray-700 placeholder-gray-400 resize-none h-24 "
 				/>
 			);
 			break;
@@ -124,7 +156,7 @@ const FormField = ({
 					onFocus={handleFocus}
 					onBlur={handleBlur}
 					disabled={disabled}
-					className="w-full bg-transparent focus:outline-none text-gray-700 placeholder-gray-400"
+					className="w-full bg-transparent focus:outline-none text-gray-700 placeholder-gray-400 "
 				/>
 			);
 	}
@@ -155,6 +187,6 @@ const FormField = ({
 			{error && <p className="mt-1 text-sm text-red-500">{error}</p>}
 		</div>
 	);
-};
+}
 
 export default FormField;
