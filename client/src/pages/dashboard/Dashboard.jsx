@@ -6,6 +6,8 @@ import { AuthContext } from "../../context/AuthContext";
 import authorizedAxiosInstance from "../../utils/authorizedAxios";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
+import LogoEnglish from "../../assets/english.png";
+import LogoVietnam from "../../assets/vietnam.png";
 
 const MENU_ITEMS = [
 	// { path: "/dashboard/orders/create", icon: "icon-create", label: "create_order" },
@@ -27,6 +29,11 @@ const ADMIN_MENU_ITEMS = [
 	},
 ];
 
+const LANGUAGES = {
+	en: { flag: LogoEnglish, name: "English" },
+	vi: { flag: LogoVietnam, name: "Tiếng Việt" },
+};
+
 function Dashboard() {
 	const [isCollapse, setIsCollapse] = useState(false);
 	const [renderContent, setRenderContent] = useState(true);
@@ -34,12 +41,20 @@ function Dashboard() {
 	const { t, i18n } = useTranslation();
 	const [userInfo, setUserInfo] = useState(null);
 	const [isShowPopover, setIsShowPopover] = useState(false);
+	const [language, setLanguage] = useState(localStorage.getItem("i18nextLng"));
+	const [isOpen, setIsOpen] = useState(false);
 
 	const currentElmRef = useRef(null);
+	const flagEleRef = useRef(null);
 	const navigate = useNavigate();
 
 	const handleCollapse = () => setIsCollapse(!isCollapse);
-	const handleChangeLang = (lang) => i18n.changeLanguage(lang);
+	const handleChangeLang = (lang) => {
+		i18n.changeLanguage(lang);
+
+		setLanguage(lang);
+		setIsOpen(false);
+	};
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -76,6 +91,8 @@ function Dashboard() {
 			window.removeEventListener("click", handleClosePopupOutside);
 		};
 	}, []);
+
+	const togglePopover = () => setIsOpen((prev) => !prev);
 
 	return (
 		<div className="h-[100vh] flex flex-col">
@@ -165,18 +182,53 @@ function Dashboard() {
 							</div>
 							<div className="flex gap-2 items-center">
 								<div className="flex gap-2">
-									<button onClick={() => handleChangeLang("en")}>🇬🇧</button>
-									<button onClick={() => handleChangeLang("vi")}>🇻🇳</button>
+									<div className="relative">
+										<div
+											className="cursor-pointer"
+											onClick={togglePopover}
+											ref={flagEleRef}>
+											<img
+												src={LANGUAGES[language].flag}
+												alt=""
+												width="25"
+											/>
+										</div>
+
+										{isOpen && (
+											<div className="absolute bg-white shadow-2xl w-[130px] h-auto z-10 top-[40px] right-0 rounded-md border border-[#ccc]">
+												<div className="flex flex-col">
+													{Object.keys(LANGUAGES).map((lang) => (
+														<div
+															key={lang}
+															className="flex items-center gap-2 p-2 cursor-pointer hover:bg-gray-200"
+															onClick={() => handleChangeLang(lang)}>
+															<img
+																src={LANGUAGES[lang].flag}
+																alt=""
+																width="25"
+															/>
+															<p>{LANGUAGES[lang].name}</p>
+														</div>
+													))}
+												</div>
+											</div>
+										)}
+									</div>
+
+									{/* <button onClick={() => handleChangeLang("en")}>🇬🇧</button>
+									<button onClick={() => handleChangeLang("vi")}>🇻🇳</button> */}
 								</div>
 								<div className="avatar relative border border-[#ccc] w-[35px] h-[35px] rounded-full bg-[#eee] flex justify-center items-center">
-									<div
-										ref={currentElmRef}
-										onClick={() => setIsShowPopover(!isShowPopover)}
-										className="cursor-pointer">
-										<Icon type="icon-user" />
+									<div>
+										<div
+											ref={currentElmRef}
+											onClick={() => setIsShowPopover(!isShowPopover)}
+											className="cursor-pointer">
+											<Icon type="icon-user" />
+										</div>
 									</div>
 									{isShowPopover && (
-										<div className="absolute bg-[#fff] shadow-2xl w-[200px] h-auto z-10 top-[40px] right-0 rounded-xl border border-[#ccc]">
+										<div className="absolute bg-[#fff] shadow-2xl w-[210px] h-auto z-10 top-[40px] right-0 rounded-xl border border-[#ccc]">
 											<ul className="rounded-xl overflow-hidden">
 												<li className="cursor-pointer px-[11px] py-[13px] hover:bg-[#ccc] ">
 													<div
@@ -186,7 +238,7 @@ function Dashboard() {
 														}>
 														<Icon type="icon-change-info" />
 														<p className="text-[16px]">
-															{t("common.update_infomation")}
+															{t("common.my_profile")}
 														</p>
 													</div>
 												</li>
