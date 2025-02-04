@@ -111,6 +111,24 @@ function FormField({
 			);
 			break;
 
+		case "number":
+			inputField = (
+				<input
+					id={id || fieldId}
+					name={name}
+					type="number"
+					value={value}
+					placeholder={placeholder}
+					onChange={onChange}
+					onFocus={handleFocus}
+					onBlur={handleBlur}
+					disabled={disabled}
+					className="w-full bg-transparent focus:outline-none text-gray-700 placeholder-gray-400 "
+					min={1}
+				/>
+			);
+			break;
+
 		case "checkbox":
 			inputField = (
 				<input

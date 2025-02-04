@@ -261,32 +261,47 @@ function ProductsPage() {
     setProductDelete(product); // Đặt sản phẩm cần xóa
   };
 
-  const handleCategoryChange = (newOption) => {
-    if (newOption) {
-      setCategories((prev) => ({
-        ...prev,
-        value: [...newOption],
-      }));
-    } else {
-      setCategories((prev) => ({
-        ...prev,
-        value: [],
-      }));
-    }
-  };
+	const renderSkeleton = () =>
+		Array.from({ length: products.length }).map((_, rowIndex) => (
+			<tr
+				key={rowIndex}
+				className="animate-pulse h-[81px]">
+				{Array.from({ length: 6 }).map((_, colIndex) => (
+					<td
+						key={colIndex}
+						className="p-4 py-5">
+						<div className="h-6 bg-gray-200 rounded"></div>
+					</td>
+				))}
+			</tr>
+		));
 
-  console.log("categories", categories);
-
-  const renderSkeleton = () =>
-    Array.from({ length: products.length }).map((_, rowIndex) => (
-      <tr key={rowIndex} className="animate-pulse h-[81px]">
-        {Array.from({ length: 6 }).map((_, colIndex) => (
-          <td key={colIndex} className="p-4 py-5">
-            <div className="h-6 bg-gray-200 rounded"></div>
-          </td>
-        ))}
-      </tr>
-    ));
+	const renderProducts = () =>
+		products.map((product) => (
+			<tr
+				key={product.id}
+				className="hover:bg-slate-50 border-b border-slate-200">
+				<td className="p-4 py-5 font-semibold text-sm text-slate-800">{product.name}</td>
+				<td className="p-4 py-5 text-sm text-slate-500">{formatPrice(product.price)}</td>
+				<td className="p-4 py-5 text-sm text-slate-500">{product.quantity}</td>
+				<td className="p-4 py-5 text-sm text-slate-500">{product.status}</td>
+				<td className="p-4 py-5 text-sm text-slate-500">
+					<ul className="list-disc">
+						{product.categories.map((_cate) => (
+							<li key={_cate.id}>{_cate.name}</li>
+						))}
+					</ul>
+				</td>
+				<td className="p-4 py-5 text-sm text-slate-500">
+					{formatDateWithIntl(product.createdAt)}
+				</td>
+				<td className="p-4 py-5">
+					<div className="flex items-center gap-2 flex-wrap">
+						<button
+							className="border p-2 rounded-md"
+							onClick={() => handleEdit(product)}>
+							<Icon type="icon-edit" />
+						</button>
 
   const renderProducts = () =>
     products.map((product) => (

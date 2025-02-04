@@ -2,6 +2,7 @@ import express from "express";
 import { CategoryController } from "~/controllers/category.controller";
 import { DashboardControllers } from "~/controllers/dashboard.controller";
 import { OrderController } from "~/controllers/order.controller";
+import { PartnerController } from "~/controllers/partner.controller";
 import { PermissionController } from "~/controllers/permission.controller";
 import { ProductController } from "~/controllers/product.controller";
 import { userControllers } from "~/controllers/user.controller";
@@ -74,5 +75,13 @@ Router.route("/categories/:categoryId").delete(
 	AuthMiddleware.checkPermission(["DELETE_CATEGORY"]),
 	CategoryController.delete
 );
+//#endregion
+
+//#region [PARTNERS]
+Router.route("/partners/create").post(PartnerController.create);
+Router.route("/partners").get(PartnerController.findAll);
+Router.route("/partners/:partnerId").get(PartnerController.findById);
+Router.route("/partners/:partnerId").put(PartnerController.update);
+Router.route("/partners/:partnerId").delete(PartnerController.delete);
 //#endregion
 export const DashboardRoute = Router;

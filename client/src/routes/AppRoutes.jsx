@@ -3,14 +3,15 @@ import AnalyticPage from "../pages/analytic";
 import CategoryPage from "../pages/category/CategoryPage";
 import Dashboard from "../pages/dashboard";
 import LoginPage from "../pages/LoginPage";
+import OrderList from "../pages/order/list";
+import PartnerPage from "../pages/partner";
+import PermissionPage from "../pages/permission";
 import ProductsPage from "../pages/product";
 import UsersPage from "../pages/users";
 import WholesalePrice from "../pages/wholesale-price";
 import ProtectedRoutes from "../routes/ProtectedRoutes";
-import PermissionPage from "../pages/permission";
-import PartnerPage from "../pages/partner";
 import UnauthorizedRoutes from "../routes/UnauthorizedRoutes";
-import OrderPage from "../pages/order/OrderPage";
+import ProfilePage from "../pages/profile";
 
 const AppRoutes = () => {
   return (
@@ -21,7 +22,8 @@ const AppRoutes = () => {
 
       <Route element={<ProtectedRoutes />}>
         <Route path="/dashboard" element={<Dashboard />}>
-          <Route path="orders" element={<OrderPage />} />
+          <Route path="profile" element={<ProfilePage />} />
+          <Route path="orders" element={<OrderList />} />
           <Route path="products" element={<ProductsPage />} />
           <Route path="categories" element={<CategoryPage />} />
           <Route path="analytics" element={<AnalyticPage />} />

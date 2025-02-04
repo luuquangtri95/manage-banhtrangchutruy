@@ -7,6 +7,7 @@ import { OrderModel } from "./order.model";
 import { CategoryModel } from "./category.model";
 import { ProductModel } from "./product.model";
 import { ProductCategoryModel } from "./product_category.model";
+import { PartnerModel } from "./partner.model";
 
 // Gom tất cả models vào object models
 const models = [
@@ -16,6 +17,7 @@ const models = [
 	OrderModel,
 	CategoryModel,
 	ProductModel,
+	PartnerModel,
 
 	//-------- bảng link sẽ đặt ở đây !
 	UserRoleLinkModel, // Tạo bảng user_roles

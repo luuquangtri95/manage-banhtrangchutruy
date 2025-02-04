@@ -61,6 +61,21 @@
       }
     },
 
+    "partner_page": {
+      "table": {
+        "name": "Tên đối tác",
+        "address": "Địa chỉ",
+        "description": "Chi tiết đối tác",
+        "phone": "Số điện thoại"
+      },
+      "popup": {
+        "name": "Tên đối tác",
+        "address": "Địa chỉ",
+        "description": "Chi tiết đối tác",
+        "phone": "Số điện thoại"
+      }
+    },
+
     "common": {
       "actions": "Hành động",
       "status": "Trạng thái",
@@ -68,6 +83,12 @@
       "search": "Tìm kiếm",
       "description": "Mô tả",
       "link_product_quantity": "Số lượng sản phẩm liên kết",
+      "cancel": "Huỷ bỏ",
+      "close": "Đóng",
+      "category": "Danh mục",
+      "update_infomation": "Cập Nhật Thông Tin",
+      "logout": "Đăng Xuất",
+      "my_profile": "Hồ Sơ Của Tôi",
 
       "confirm_delete": "Bạn có chắc chắn muốn xóa",
 
@@ -75,11 +96,13 @@
       "create_new_category": "Tạo danh mục mới",
       "create_new_user": "Tạo thành viên mới",
       "create_new_permission": "Tạo quyền mới",
+      "create_new_partner": "Tạo đối tác mới",
 
       "edit_product": "Chỉnh sửa sản phẩm",
       "edit_category": "Chỉnh sửa danh mục",
       "edit_user": "Chỉnh sửa thành viên",
-      "edit_permission": "Chỉnh sửa quyền hạn"
+      "edit_permission": "Chỉnh sửa quyền hạn",
+      "edit_partner": "Chỉnh sửa thông tin đối tác"
     },
 
     "validate": {

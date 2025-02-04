@@ -55,11 +55,34 @@
       }
     },
 
-    "user_page": {
-      "table": {
-        "username": "User Name"
-      }
+    "partner_page":{
+        "table":{
+            "name": "Partner Name",
+            "address": "Address",
+            "description": "Description",
+            "phone": "Phone Number"
+        },
+        "popup":{
+            "name": "Partner Name",
+            "address": "Address",
+            "description": "Description",
+            "phone": "Phone Number"
+        }
     },
+
+    "common":{
+        "actions": "Actions",
+        "status":"Status",
+        "created_date": "Created Date",
+        "search": "Search",
+        "description":"Description",
+        "link_product_quantity": "Link Product Quantity",
+        "cancel": "Cancel",
+        "close": "Close",
+        "category":"Category",
+        "update_infomation": "Update Infomation",
+        "logout": "Logout",
+        "my_profile": "My Profile",
 
     "common": {
       "actions": "Actions",
@@ -69,17 +92,17 @@
       "description": "Description",
       "link_product_quantity": "Link Product Quantity",
 
-      "confirm_delete": "Confirm Delete",
+        "create_new_product": "Create New Product",
+        "create_new_category": "Create New Category",
+        "create_new_user": "Create New User",
+        "create_new_permission": "Create New Permission",
+        "create_new_partner": "Create New Partner",
 
-      "create_new_product": "Create New Product",
-      "create_new_category": "Create New Category",
-      "create_new_user": "Create New User",
-      "create_new_permission": "Create New Permission",
-
-      "edit_product": "Edit Product",
-      "edit_category": "Edit Category",
-      "edit_user": "Edit User",
-      "edit_permission": "Edit Permission"
+        "edit_product": "Edit Product",
+        "edit_category": "Edit Category",
+        "edit_user": "Edit User",
+        "edit_permission": "Edit Permission",
+        "edit_partner": "Edit Partner"
     },
 
     "validate": {
