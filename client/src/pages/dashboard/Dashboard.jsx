@@ -153,7 +153,7 @@ function Dashboard() {
 				{/* Content */}
 				<div className="flex-1 bg-[#fafafa] relative">
 					{/* Top Bar */}
-					<div className="top-bar h-[60px] bg-[#ffe9cf] p-2">
+					<div className="top-bar h-[60px] bg-[#ffe9cf] p-2 border-b-2 border-[#000]">
 						<div className="flex justify-between items-center h-full">
 							<div onClick={() => setIsShowPopover(!isShowPopover)}>
 								<img
@@ -176,27 +176,27 @@ function Dashboard() {
 										<Icon type="icon-user" />
 									</div>
 									{isShowPopover && (
-										<div className="absolute bg-[#eee] shadow-xl w-[180px] h-auto z-10 top-[40px] right-0 rounded-md">
-											<ul className="p-3">
-												<li className="cursor-pointer">
+										<div className="absolute bg-[#fff] shadow-2xl w-[200px] h-auto z-10 top-[40px] right-0 rounded-xl border border-[#ccc]">
+											<ul className="rounded-xl overflow-hidden">
+												<li className="cursor-pointer px-[11px] py-[13px] hover:bg-[#ccc] ">
 													<div
-														className="flex gap-1 mb-2"
+														className="flex gap-2 items-center "
 														onClick={() =>
 															navigate("/dashboard/profile")
 														}>
 														<Icon type="icon-change-info" />
-														<p className="text-[14px]">
+														<p className="text-[16px]">
 															{t("common.update_infomation")}
 														</p>
 													</div>
 												</li>
-
-												<li className="cursor-pointer">
+												<li className="w-full h-[1px] bg-[#ccc]"></li>
+												<li className="cursor-pointer  px-[11px] py-[13px] hover:bg-[#ccc] ">
 													<div
-														className="flex gap-1"
+														className="flex gap-2 items-center "
 														onClick={onLogout}>
 														<Icon type="icon-logout" />
-														<p className="text-[14px]">
+														<p className="text-[16px]">
 															{t("common.logout")}
 														</p>
 													</div>

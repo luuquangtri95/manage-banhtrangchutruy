@@ -51,6 +51,21 @@
         }
     },
 
+    "partner_page":{
+        "table":{
+            "name": "Tên đối tác",
+            "address": "Địa chỉ",
+            "description": "Chi tiết đối tác",
+            "phone": "Số điện thoại"
+        },
+        "popup":{
+            "name": "Tên đối tác",
+            "address": "Địa chỉ",
+            "description": "Chi tiết đối tác",
+            "phone": "Số điện thoại"
+        }
+    },
+
 
     "common":{
         "actions": "Hành động",
@@ -71,11 +86,13 @@
         "create_new_category": "Tạo danh mục mới",
         "create_new_user": "Tạo thành viên mới",
         "create_new_permission": "Tạo quyền mới",
+        "create_new_partner": "Tạo đối tác mới",
 
         "edit_product": "Chỉnh sửa sản phẩm",
         "edit_category": "Chỉnh sửa danh mục",
         "edit_user": "Chỉnh sửa thành viên",
-        "edit_permission": "Chỉnh sửa quyền hạn"
+        "edit_permission": "Chỉnh sửa quyền hạn",
+        "edit_partner": "Chỉnh sửa thông tin đối tác"
     },
 
     "validate": {

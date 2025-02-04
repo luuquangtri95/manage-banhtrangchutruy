@@ -1106,8 +1106,8 @@ c2.098-1.39,3.357-3.737,3.357-6.254C347.118,315.421,345.856,313.073,343.759,311.
 			case "icon-logout":
 				return (
 					<svg
-						width="20px"
-						height="20px"
+						width="25px"
+						height="25px"
 						viewBox="0 0 24 24"
 						fill="none"
 						xmlns="http://www.w3.org/2000/svg">
@@ -1352,8 +1352,8 @@ c2.098-1.39,3.357-3.737,3.357-6.254C347.118,315.421,345.856,313.073,343.759,311.
 				return (
 					<svg
 						fill="#000000"
-						width="20px"
-						height="20px"
+						width="25px"
+						height="25px"
 						viewBox="0 0 32 32"
 						data-name="Layer 1"
 						id="Layer_1"

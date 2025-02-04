@@ -51,6 +51,21 @@
         }
     },
 
+    "partner_page":{
+        "table":{
+            "name": "Partner Name",
+            "address": "Address",
+            "description": "Description",
+            "phone": "Phone Number"
+        },
+        "popup":{
+            "name": "Partner Name",
+            "address": "Address",
+            "description": "Description",
+            "phone": "Phone Number"
+        }
+    },
+
     "common":{
         "actions": "Actions",
         "status":"Status",
@@ -70,11 +85,13 @@
         "create_new_category": "Create New Category",
         "create_new_user": "Create New User",
         "create_new_permission": "Create New Permission",
+        "create_new_partner": "Create New Partner",
 
         "edit_product": "Edit Product",
         "edit_category": "Edit Category",
         "edit_user": "Edit User",
-        "edit_permission": "Edit Permission"
+        "edit_permission": "Edit Permission",
+        "edit_partner": "Edit Partner"
     },
 
     "validate": {
