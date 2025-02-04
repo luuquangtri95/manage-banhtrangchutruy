@@ -180,6 +180,7 @@ function Dashboard() {
 									width={50}
 								/>
 							</div>
+
 							<div className="flex gap-2 items-center">
 								<div className="flex gap-2">
 									<div className="relative">
@@ -227,15 +228,14 @@ function Dashboard() {
 											<Icon type="icon-user" />
 										</div>
 									</div>
+
 									{isShowPopover && (
 										<div className="absolute bg-[#fff] shadow-2xl w-[210px] h-auto z-10 top-[40px] right-0 rounded-xl border border-[#ccc]">
 											<ul className="rounded-xl overflow-hidden">
-												<li className="cursor-pointer px-[11px] py-[13px] hover:bg-[#ccc] ">
-													<div
-														className="flex gap-2 items-center "
-														onClick={() =>
-															navigate("/dashboard/profile")
-														}>
+												<li
+													className="cursor-pointer px-[11px] py-[13px] hover:bg-[#ccc]"
+													onClick={() => navigate("/dashboard/profile")}>
+													<div className="flex gap-2 items-center ">
 														<Icon type="icon-change-info" />
 														<p className="text-[16px]">
 															{t("common.my_profile")}
@@ -243,10 +243,10 @@ function Dashboard() {
 													</div>
 												</li>
 												<li className="w-full h-[1px] bg-[#ccc]"></li>
-												<li className="cursor-pointer  px-[11px] py-[13px] hover:bg-[#ccc] ">
-													<div
-														className="flex gap-2 items-center "
-														onClick={onLogout}>
+												<li
+													className="cursor-pointer  px-[11px] py-[13px] hover:bg-[#ccc]"
+													onClick={onLogout}>
+													<div className="flex gap-2 items-center ">
 														<Icon type="icon-logout" />
 														<p className="text-[16px]">
 															{t("common.logout")}
