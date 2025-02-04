@@ -2,6 +2,8 @@ import { Op, Sequelize } from "sequelize";
 import { OrderModel } from "~/models/order.model";
 import { ProductModel } from "~/models/product.model";
 import sequelizeConnectionString from "../config/database";
+import { UserModel } from "~/models/user.model";
+import { RoleModel } from "~/models/role.model";
 
 const findById = async (id) => {
   try {
@@ -25,8 +27,22 @@ const findAll = async (payload) => {
       endDate,
     } = payload;
 
+    const entryUser = await UserModel.findOne({
+      where: { id: user_id },
+      include: [
+        {
+          model: RoleModel,
+          through: { attributes: [] },
+        },
+      ],
+    });
+
     const _offset = (page - 1) * limit;
-    let where = { user_id };
+    let where = {};
+
+    if (entryUser.roles[0].name !== "admin") {
+      where = { user_id };
+    }
 
     if (searchTerm) {
       //   where.title = {
@@ -100,10 +116,10 @@ const create = async (payload) => {
 
 const createWithTransaction = async (payload) => {
   const transaction = await sequelizeConnectionString.transaction();
-
   try {
+    console.log("vo day");
     const { data_json } = payload;
-
+    console.log("data_json", data_json);
     const productNames = data_json.item.map((item) => item.name);
     const products = await ProductModel.findAll({
       where: { name: productNames },

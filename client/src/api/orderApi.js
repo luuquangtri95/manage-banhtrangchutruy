@@ -2,7 +2,8 @@ import authorizedAxiosInstance from "../utils/authorizedAxios";
 
 const OrderApi = {
   create: async (data) => {
-    const url = "dashboards/orders/create";
+    const url = "/dashboards/orders/create";
+    // console.log("data", data);
     return await authorizedAxiosInstance.post(url, data);
   },
   findAll: async (params) => {

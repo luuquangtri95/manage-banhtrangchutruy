@@ -49,7 +49,8 @@ const create = async (req) => {
   try {
     const payload = req.body;
     const userInfo = req.jwtDecoded;
-
+    console.log("payload", payload);
+    console.log("userInfo", userInfo);
     return await OrderRepository.createWithTransaction({
       ...payload,
       user_id: userInfo.id,
