@@ -56,17 +56,13 @@ const INIT_FORMDATA = {
 	},
 };
 
-const INIT_PRODUCT = {
-	value: [],
-	options: [],
-};
-
 function OrderPage() {
 	const [popupData, setPopupData] = useState(null);
 	const [formData, setFormData] = useState(INIT_FORMDATA);
 	const [orders, setOrders] = useState([]);
 	const [products, setProducts] = useState([]);
 	const [originProduct, setOriginProduct] = useState([]);
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		fetchOrders();
@@ -84,16 +80,24 @@ function OrderPage() {
 
 	const fetchProducts = async () => {
 		try {
+			setLoading(true);
+
 			const res = await ProductApi.findAll();
-			const _product = res.metadata.result.map((item) => {
-				return {
-					value: item.id,
-					label: item.name,
-				};
-			});
+			const _product = res.metadata.result
+				.map((item) => {
+					return {
+						value: item.id,
+						label: item.name,
+						quantity: item.quantity,
+					};
+				})
+				.filter((_item) => _item.quantity > 0);
+
 			setProducts(_product);
 		} catch (error) {
 			console.log(error);
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -174,6 +178,16 @@ function OrderPage() {
 
 	const handleChangeQuantityProductPicker = (e, currentProduct) => {
 		const { value } = e.target;
+
+		const originQuantity = products.find(
+			(_item) => _item.value === currentProduct.value
+		).quantity;
+
+		if (value > originQuantity) {
+			toast.error("Số lượng vượt quá số lượng thực tế của sản phẩm");
+			return;
+		}
+
 		const _originProducts = JSON.parse(JSON.stringify(originProduct));
 
 		const index = _originProducts.findIndex((_item) => _item.value === currentProduct.value);
@@ -184,6 +198,12 @@ function OrderPage() {
 
 	const handleCreate = () => {
 		setPopupData({ title: "", fullname: "", address: "", phone: "" });
+	};
+
+	const handleRemoveProductPicked = (itemPicked) => {
+		const _originProduct = JSON.parse(JSON.stringify(originProduct));
+
+		setOriginProduct(_originProduct.filter((_item) => _item.value !== itemPicked.value));
 	};
 
 	return (
@@ -297,23 +317,45 @@ function OrderPage() {
 				{originProduct.map((item) => {
 					return (
 						<div
-							className="flex gap-2 text-sm"
-							key={item.value}>
-							<FormField
-								label="name"
-								value={item?.label}
-								type="text"
-								className="cursor-not-allowed"
-								disabled
-							/>
-							<div className="w-[150px]">
+							key={item.value}
+							className="flex items-end gap-3">
+							<div className=" flex-1 flex gap-2 text-sm items-start">
 								<FormField
-									label="quantity"
-									value={item.quantity}
-									type="number"
-									onChange={(e) => handleChangeQuantityProductPicker(e, item)}
+									label="name"
+									value={item?.label}
+									type="text"
+									className="cursor-not-allowed"
+									disabled
 								/>
+								<div className="w-[150px]">
+									<FormField
+										label="inventory"
+										value={
+											products.find((_i) => _i.value === item.value).quantity
+										}
+										type="number"
+										disabled
+									/>
+								</div>
+								<div className="w-[150px]">
+									<FormField
+										label="quantity"
+										value={item.quantity}
+										type="number"
+										disabled={
+											products.find((_i) => _i.value === item.value)
+												.quantity === 0
+										}
+										onChange={(e) => handleChangeQuantityProductPicker(e, item)}
+									/>
+								</div>
 							</div>
+
+							<button
+								className="mb-4 border p-[6px] border-[#ccc] rounded-md hover:border-[#fe3d3d]"
+								onClick={() => handleRemoveProductPicked(item)}>
+								<Icon type="icon-delete" />
+							</button>
 						</div>
 					);
 				})}
