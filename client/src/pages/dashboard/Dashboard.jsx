@@ -219,14 +219,12 @@ function Dashboard() {
 									{/* <button onClick={() => handleChangeLang("en")}>🇬🇧</button>
 									<button onClick={() => handleChangeLang("vi")}>🇻🇳</button> */}
 								</div>
-								<div className="avatar relative border border-[#ccc] w-[35px] h-[35px] rounded-full bg-[#eee] flex justify-center items-center">
-									<div>
-										<div
-											ref={currentElmRef}
-											onClick={() => setIsShowPopover(!isShowPopover)}
-											className="cursor-pointer">
-											<Icon type="icon-user" />
-										</div>
+								<div
+									onClick={() => setIsShowPopover(!isShowPopover)}
+									ref={currentElmRef}
+									className="avatar relative border border-[#ccc] w-[35px] h-[35px] rounded-full bg-[#eee] flex justify-center items-center">
+									<div className="cursor-pointer">
+										<Icon type="icon-user" />
 									</div>
 
 									{isShowPopover && (
