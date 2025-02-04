@@ -25,7 +25,7 @@ const Popup = ({ isOpen, onClose, title, children, onSubmit, width = "max-w-xl" 
 					</button>
 				</div>
 
-				<div className="mb-4">{children}</div>
+				<div className="mb-4 overflow-auto h-auto max-h-[800px] p-3">{children}</div>
 
 				<div className="flex justify-end gap-1">
 					<button

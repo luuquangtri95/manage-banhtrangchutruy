@@ -12,11 +12,9 @@
     "grant_permission": "Grant Permission",
     "logout": "Logout"
   },
-
   "order_page": {
     "table": {}
   },
-
   "product_page": {
     "table": {
       "product_name": "Product Name",
@@ -24,87 +22,61 @@
       "quantity": "Quantity",
       "category": "Category"
     },
-
-    "order_page": {
-      "table": {}
+    "popup": {
+      "name": "Product Name",
+      "price": "Price",
+      "quantity": "Quantity",
+      "category": "Category"
+    }
+  },
+  "category_page": {
+    "table": {
+      "name": "Category Name",
+      "description": "Description"
     },
-
-    "product_page": {
-      "table": {
-        "product_name": "Product Name",
-        "price": "Price",
-        "quantity": "Quantity",
-        "category": "Category"
-      },
-      "popup": {
-        "name": "Product Name",
-        "price": "Price",
-        "quantity": "Quantity",
-        "category": "Category"
-      }
-    },
-
-    "category_page": {
-      "table": {
-        "name": "Category Name",
-        "description": "Description"
-      },
-      "popup": {
-        "name": "Category Name",
-        "description": "Description"
-      }
-    },
-
-    "partner_page":{
-        "table":{
-            "name": "Partner Name",
-            "address": "Address",
-            "description": "Description",
-            "phone": "Phone Number"
-        },
-        "popup":{
-            "name": "Partner Name",
-            "address": "Address",
-            "description": "Description",
-            "phone": "Phone Number"
-        }
-    },
-
-    "common":{
-        "actions": "Actions",
-        "status":"Status",
-        "created_date": "Created Date",
-        "search": "Search",
-        "description":"Description",
-        "link_product_quantity": "Link Product Quantity",
-        "cancel": "Cancel",
-        "close": "Close",
-        "category":"Category",
-        "update_infomation": "Update Infomation",
-        "logout": "Logout",
-        "my_profile": "My Profile",
-
-    "common": {
-      "actions": "Actions",
-      "status": "Status",
-      "created_date": "Created Date",
-      "search": "Search",
+    "popup": {
+      "name": "Category Name",
+      "description": "Description"
+    }
+  },
+  "partner_page": {
+    "table": {
+      "name": "Partner Name",
+      "address": "Address",
       "description": "Description",
-      "link_product_quantity": "Link Product Quantity",
-
-        "create_new_product": "Create New Product",
-        "create_new_category": "Create New Category",
-        "create_new_user": "Create New User",
-        "create_new_permission": "Create New Permission",
-        "create_new_partner": "Create New Partner",
-
-        "edit_product": "Edit Product",
-        "edit_category": "Edit Category",
-        "edit_user": "Edit User",
-        "edit_permission": "Edit Permission",
-        "edit_partner": "Edit Partner"
+      "phone": "Phone Number"
     },
-
+    "popup": {
+      "name": "Partner Name",
+      "address": "Address",
+      "description": "Description",
+      "phone": "Phone Number"
+    }
+  },
+  "common": {
+    "actions": "Actions",
+    "status": "Status",
+    "created_date": "Created Date",
+    "search": "Search",
+    "description": "Description",
+    "link_product_quantity": "Link Product Quantity",
+    "cancel": "Cancel",
+    "close": "Close",
+    "category": "Category",
+    "update_infomation": "Update Infomation",
+    "logout": "Logout",
+    "my_profile": "My Profile",
+    "confirm_delete": "Confirm Delete",
+    "create_new_product": "Create New Product",
+    "create_new_category": "Create New Category",
+    "create_new_user": "Create New User",
+    "create_new_permission": "Create New Permission",
+    "create_new_partner": "Create New Partner",
+    "edit_product": "Edit Product",
+    "edit_category": "Edit Category",
+    "edit_user": "Edit User",
+    "edit_permission": "Edit Permission",
+    "edit_partner": "Edit Partner",
     "validate": {
       "name_required": "Name is required",
       "name_min_length": "Name must be at least 6 characters",
@@ -119,57 +91,5 @@
       "confirm_password_required": "Confirm Password is required",
       "confirm_password_mismatch": "Passwords do not match"
     }
-  },
-
-  "category_page": {
-    "table": {
-      "name": "Category Name",
-      "description": "Description"
-    },
-    "popup": {
-      "name": "Category Name",
-      "description": "Description"
-    }
-  },
-
-  "user_page": {
-    "table": {
-      "username": "User Name"
-    }
-  },
-
-  "common": {
-    "actions": "Actions",
-    "status": "Status",
-    "created_date": "Created Date",
-    "search": "Search",
-    "description": "Description",
-
-    "confirm_delete": "Confirm Delete",
-
-    "create_new_product": "Create New Product",
-    "create_new_category": "Create New Category",
-    "create_new_user": "Create New User",
-    "create_new_permission": "Create New Permission",
-
-    "edit_product": "Edit Product",
-    "edit_category": "Edit Category",
-    "edit_user": "Edit User",
-    "edit_permission": "Edit Permission"
-  },
-
-  "validate": {
-    "name_required": "Name is required",
-    "name_min_length": "Name must be at least 6 characters",
-    "price_required": "Price is required",
-    "price_min": "Price must be at least 1000",
-    "quantity_required": "Quantity is required",
-    "quantity_min": "Quantity must be at least 10",
-    "email_required": "Email is required",
-    "email_invalid": "Invalid email format",
-    "password_required": "Password is required",
-    "password_min_length": "Password must be at least 6 characters",
-    "confirm_password_required": "Confirm Password is required",
-    "confirm_password_mismatch": "Passwords do not match"
   }
 }
