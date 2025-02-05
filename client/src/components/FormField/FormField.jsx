@@ -114,6 +114,8 @@ function FormField({
 		case "number":
 			inputField = (
 				<input
+					pattern="[0-9]*"
+					inputMode="numeric"
 					id={id || fieldId}
 					name={name}
 					type="number"

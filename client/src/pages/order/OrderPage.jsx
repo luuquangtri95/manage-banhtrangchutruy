@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
+import Select from "react-tailwindcss-select";
+import { toast } from "react-toastify";
+import CategoryApi from "../../api/categoryApi";
 import OrderApi from "../../api/orderApi";
-import { formatDateWithIntl } from "../../helpers/convertDate";
+import Badge from "../../components/Badge/Badge";
+import FormField from "../../components/FormField";
 import Icon from "../../components/Icon/Icon";
 import Popup from "../../components/Popup";
-import FormField from "../../components/FormField";
-import Select from "react-tailwindcss-select";
-import ProductApi from "../../api/productApi";
-import Badge from "../../components/Badge/Badge";
-import { toast } from "react-toastify";
+import { formatDateWithIntl } from "../../helpers/convertDate";
 
 const INIT_FORMDATA = {
 	title: {
@@ -47,6 +47,7 @@ const INIT_FORMDATA = {
 		value: "pending",
 		type: "select",
 		error: "",
+		disabled: true,
 		options: [
 			{ value: "pending", label: "Pending" },
 			{ value: "active", label: "Active" },
@@ -60,13 +61,13 @@ function OrderPage() {
 	const [popupData, setPopupData] = useState(null);
 	const [formData, setFormData] = useState(INIT_FORMDATA);
 	const [orders, setOrders] = useState([]);
-	const [products, setProducts] = useState([]);
+	const [productsCategories, setProductsCategories] = useState([]);
 	const [originProduct, setOriginProduct] = useState([]);
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		fetchOrders();
-		fetchProducts();
+		fetchCategories();
 	}, []);
 
 	const fetchOrders = async () => {
@@ -78,22 +79,39 @@ function OrderPage() {
 		}
 	};
 
-	const fetchProducts = async () => {
+	const fetchCategories = async () => {
 		try {
 			setLoading(true);
 
-			const res = await ProductApi.findAll();
-			const _product = res.metadata.result
-				.map((item) => {
-					return {
-						value: item.id,
-						label: item.name,
-						quantity: item.quantity,
-					};
-				})
-				.filter((_item) => _item.quantity > 0);
+			const res1 = await CategoryApi.findAll();
 
-			setProducts(_product);
+			const __product = res1.metadata.result.map((_item) => {
+				return {
+					label: _item.name.toUpperCase(),
+					options: _item.products
+						.map((item) => {
+							return {
+								value: item.id,
+								label: item.name,
+								quantity: item.quantity,
+							};
+						})
+						.filter((_item) => _item.quantity > 0),
+				};
+			});
+
+			// const res = await ProductApi.findAll();
+			// const _product = res.metadata.result
+			// 	.map((item) => {
+			// 		return {
+			// 			value: item.id,
+			// 			label: item.name,
+			// 			quantity: item.quantity,
+			// 		};
+			// 	})
+			// 	.filter((_item) => _item.quantity > 0);
+
+			setProductsCategories(__product);
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -157,7 +175,7 @@ function OrderPage() {
 		} finally {
 			setPopupData(null);
 			setFormData(INIT_FORMDATA);
-			fetchProducts();
+			fetchCategories();
 			fetchOrders();
 		}
 	};
@@ -179,12 +197,14 @@ function OrderPage() {
 	const handleChangeQuantityProductPicker = (e, currentProduct) => {
 		const { value } = e.target;
 
-		const originQuantity = products.find(
-			(_item) => _item.value === currentProduct.value
-		).quantity;
+		const originQuantity = productsCategories.find((_item) =>
+			_item.options.some((__item) => __item.value === currentProduct.value)
+		).options[0].quantity;
 
 		if (value > originQuantity) {
-			toast.error("Số lượng vượt quá số lượng thực tế của sản phẩm");
+			toast.error(
+				"Số lượng vượt quá tồn kho thực tế của sản phẩm, vui lòng giảm số lượng phù hợp"
+			);
 			return;
 		}
 
@@ -300,6 +320,7 @@ function OrderPage() {
 									options={field.options || []}
 									onChange={(e) => handleFormChange(key, e.target.value)}
 									className="h-[38px] text-sm"
+									disabled={field.disabled || false}
 								/>
 							</div>
 						);
@@ -311,7 +332,7 @@ function OrderPage() {
 						isMultiple
 						value={originProduct}
 						onChange={handleChangeProduct}
-						options={products}
+						options={productsCategories}
 					/>
 				</div>
 				{originProduct.map((item) => {
@@ -324,14 +345,18 @@ function OrderPage() {
 									label="name"
 									value={item?.label}
 									type="text"
+									onChange={() => {}}
 									className="cursor-not-allowed"
 									disabled
 								/>
 								<div className="w-[150px]">
 									<FormField
+										onChange={() => {}}
 										label="inventory"
 										value={
-											products.find((_i) => _i.value === item.value).quantity
+											productsCategories.find((_i) =>
+												_i.options.some((__i) => __i.value === item.value)
+											)?.options?.[0]?.quantity
 										}
 										type="number"
 										disabled
@@ -343,8 +368,9 @@ function OrderPage() {
 										value={item.quantity}
 										type="number"
 										disabled={
-											products.find((_i) => _i.value === item.value)
-												.quantity === 0
+											productsCategories.find((_i) =>
+												_i.options.some((__i) => __i.value === item.value)
+											)?.options[0]?.quantity === 0
 										}
 										onChange={(e) => handleChangeQuantityProductPicker(e, item)}
 									/>
