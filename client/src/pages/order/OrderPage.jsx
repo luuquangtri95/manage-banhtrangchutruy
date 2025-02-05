@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Select from "react-tailwindcss-select";
 import { toast } from "react-toastify";
 import CategoryApi from "../../api/categoryApi";
@@ -8,9 +9,7 @@ import FormField from "../../components/FormField";
 import Icon from "../../components/Icon/Icon";
 import Popup from "../../components/Popup";
 import { formatDateWithIntl } from "../../helpers/convertDate";
-import { useTranslation } from "react-i18next";
 import usePageLoading from "../../hooks/usePageLoading";
-import PageLoading from "../../components/PageLoading";
 
 const INIT_FORMDATA = {
 	title: {
@@ -90,6 +89,10 @@ const DEFAULT_PAGINATION = {
 	total_item: 10,
 };
 
+const convertISOToDate = (isoString) => {
+	return isoString.split("T")[0]; // Lấy phần trước ký tự "T"
+};
+
 function OrderPage() {
 	const [popupData, setPopupData] = useState(null);
 	const [orderDelete, setOrderDelete] = useState(null);
@@ -123,6 +126,10 @@ function OrderPage() {
 				Object.keys(updatedFormData).forEach((key) => {
 					if (popupData[key] !== undefined) {
 						updatedFormData[key].value = popupData[key];
+					}
+
+					if (key === "delivery_date") {
+						updatedFormData[key].value = convertISOToDate(popupData[key]);
 					}
 				});
 				return updatedFormData;
@@ -491,7 +498,11 @@ function OrderPage() {
 								key={key}>
 								<FormField
 									label={key}
-									value={field.value}
+									value={
+										key === "delivery_date"
+											? convertISOToDate(field.value)
+											: field.value
+									}
 									type={field.type}
 									error={field.error}
 									options={field.options || []}
