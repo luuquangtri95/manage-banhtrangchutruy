@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import Select from "react-tailwindcss-select";
 import { toast } from "react-toastify";
+import CategoryApi from "../../api/categoryApi";
 import ProductApi from "../../api/productApi";
 import FormField from "../../components/FormField";
 import Icon from "../../components/Icon/Icon";
 import Popup from "../../components/Popup";
 import { formatDateWithIntl } from "../../helpers/convertDate";
-import ProductFilterForm from "./components/ProductFilterForm/ProductFilterForm";
-import { useTranslation } from "react-i18next";
 import { formatPrice } from "../../helpers/formatPrice";
-import CategoryApi from "../../api/categoryApi";
-import Select from "react-tailwindcss-select";
+import usePageLoading from "../../hooks/usePageLoading";
+import ProductFilterForm from "./components/ProductFilterForm/ProductFilterForm";
 
 const INIT_FORMDATA = {
 	name: {
@@ -57,10 +58,10 @@ function ProductsPage() {
 	const [products, setProducts] = useState([]);
 	const [formData, setFormData] = useState(INIT_FORMDATA);
 	const [categories, setCategories] = useState(INIT_CATEGORIES);
-	const [loading, setLoading] = useState(false);
 	const [filters, setFilters] = useState({ page: 1, limit: 8, searchTerm: "" });
 	const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
 	const { t } = useTranslation();
+	const { isLoading, showLoading, hideLoading } = usePageLoading();
 
 	useEffect(() => {
 		fetchProducts();
@@ -94,7 +95,7 @@ function ProductsPage() {
 
 	const fetchProducts = async () => {
 		try {
-			setLoading(true);
+			showLoading();
 			const res = await ProductApi.findAll(filters);
 
 			setProducts(res.metadata.result);
@@ -103,13 +104,13 @@ function ProductsPage() {
 			console.log("fetchProducts error", error);
 			toast.error("Failed to fetch products");
 		} finally {
-			setLoading(false);
+			hideLoading();
 		}
 	};
 
 	const fetchCategories = async () => {
 		try {
-			setLoading(true);
+			showLoading();
 			const res = await CategoryApi.findAll(filters);
 
 			const _catagories = res.metadata.result.map((_cat) => {
@@ -124,7 +125,7 @@ function ProductsPage() {
 			console.log("fetchProducts error", error);
 			toast.error("Failed to fetch products");
 		} finally {
-			setLoading(false);
+			hideLoading();
 		}
 	};
 
@@ -353,7 +354,7 @@ function ProductsPage() {
 							))}
 						</tr>
 					</thead>
-					<tbody>{loading ? renderSkeleton() : renderProducts()}</tbody>
+					<tbody>{renderProducts()}</tbody>
 				</table>
 
 				<div className="flex justify-between items-center px-4 py-3">

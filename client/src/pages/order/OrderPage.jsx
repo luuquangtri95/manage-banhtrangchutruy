@@ -76,7 +76,7 @@ const INIT_FORMDATA = {
 const DEFAULT_PAGINATION = {
 	page: 1,
 	limit: 8,
-	total_page: 10,
+	total_page: 5,
 	total_item: 10,
 };
 
@@ -87,8 +87,7 @@ function OrderPage() {
 	const [orders, setOrders] = useState([]);
 	const [productsCategories, setProductsCategories] = useState([]);
 	const [originProduct, setOriginProduct] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [filters, setFilters] = useState({ page: 1, limit: 8, searchTerm: "" });
+	const [filters, setFilters] = useState({ page: 1, limit: 5, searchTerm: "" });
 	const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
 	const { t } = useTranslation();
 	const { isLoading, showLoading, hideLoading } = usePageLoading();
@@ -367,7 +366,9 @@ function OrderPage() {
 					))}
 				</td>
 				<td className="p-4 py-1 text-sm text-slate-500">
-					{formatDateWithIntl(order.delivery_date)}
+					<Badge
+						value={formatDateWithIntl(order.delivery_date)}
+						type="active"></Badge>
 				</td>
 				<td className="p-4 py-1 text-sm text-slate-500">
 					<Badge
@@ -395,10 +396,6 @@ function OrderPage() {
 				</td>
 			</tr>
 		));
-
-	if (isLoading) {
-		<PageLoading isLoading={isLoading} />;
-	}
 
 	return (
 		<div className="mt-3 p-1">
