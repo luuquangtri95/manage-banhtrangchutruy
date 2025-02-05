@@ -16,7 +16,7 @@ const INIT_FORMDATA = {
 		type: "text",
 		error: "",
 		validate: (value) => {
-			if (!value.trim()) return "Title invalid";
+			if (!value.trim()) return "Title Is Require";
 			if (value.length < 5) return "Title not less 5 character";
 			return "";
 		},
@@ -26,7 +26,7 @@ const INIT_FORMDATA = {
 		type: "text",
 		error: "",
 		validate: (value) => {
-			if (!value.trim()) return "Name invalid";
+			if (!value.trim()) return "Name Is Require";
 			return "";
 		},
 	},
@@ -35,7 +35,7 @@ const INIT_FORMDATA = {
 		type: "text",
 		error: "",
 		validate: (value) => {
-			if (!value.trim()) return "Name invalid";
+			if (!value.trim()) return "Name Is Require";
 			return "";
 		},
 	},
@@ -44,6 +44,7 @@ const INIT_FORMDATA = {
 		type: "number",
 		error: "",
 		validate: (value) => {
+			if (!value.trim()) return "Phone Is Require";
 			return "";
 		},
 	},
