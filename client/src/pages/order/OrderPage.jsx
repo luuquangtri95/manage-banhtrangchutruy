@@ -8,6 +8,7 @@ import FormField from "../../components/FormField";
 import Icon from "../../components/Icon/Icon";
 import Popup from "../../components/Popup";
 import { formatDateWithIntl } from "../../helpers/convertDate";
+import { useTranslation } from "react-i18next";
 
 const INIT_FORMDATA = {
 	title: {
@@ -17,6 +18,7 @@ const INIT_FORMDATA = {
 		validate: (value) => {
 			if (!value.trim()) return "Title invalid";
 			if (value.length < 5) return "Title not less 5 character";
+			return "";
 		},
 	},
 	fullname: {
@@ -25,6 +27,7 @@ const INIT_FORMDATA = {
 		error: "",
 		validate: (value) => {
 			if (!value.trim()) return "Name invalid";
+			return "";
 		},
 	},
 	address: {
@@ -33,6 +36,7 @@ const INIT_FORMDATA = {
 		error: "",
 		validate: (value) => {
 			if (!value.trim()) return "Name invalid";
+			return "";
 		},
 	},
 	phone: {
@@ -40,7 +44,7 @@ const INIT_FORMDATA = {
 		type: "number",
 		error: "",
 		validate: (value) => {
-			if (!value.trim()) return "Name invalid";
+			return "";
 		},
 	},
 	status: {
@@ -57,25 +61,65 @@ const INIT_FORMDATA = {
 	},
 };
 
+const DEFAULT_PAGINATION = {
+	page: 1,
+	limit: 8,
+	total_page: 10,
+	total_item: 10,
+};
+
 function OrderPage() {
 	const [popupData, setPopupData] = useState(null);
+	const [orderDelete, setOrderDelete] = useState(null);
 	const [formData, setFormData] = useState(INIT_FORMDATA);
 	const [orders, setOrders] = useState([]);
 	const [productsCategories, setProductsCategories] = useState([]);
 	const [originProduct, setOriginProduct] = useState([]);
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
+	const [filters, setFilters] = useState({ page: 1, limit: 8, searchTerm: "" });
+	const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
+	const { t } = useTranslation();
 
 	useEffect(() => {
 		fetchOrders();
 		fetchCategories();
-	}, []);
+	}, [filters]);
+
+	useEffect(() => {
+		if (popupData) {
+			const products = popupData?.data_json?.item?.map((_item) => ({
+				value: _item.id,
+				label: _item.name,
+				quantity: _item.quantity,
+			}));
+
+			setOriginProduct(products || []);
+
+			setFormData((prev) => {
+				const updatedFormData = { ...prev };
+
+				Object.keys(updatedFormData).forEach((key) => {
+					if (popupData[key] !== undefined) {
+						updatedFormData[key].value = popupData[key];
+					}
+				});
+				return updatedFormData;
+			});
+		}
+	}, [popupData]);
 
 	const fetchOrders = async () => {
 		try {
-			const res = await OrderApi.findAll();
+			setLoading(true);
+			const res = await OrderApi.findAll(filters);
+
 			setOrders(res.metadata.result);
+			setPagination(res.metadata.pagination);
 		} catch (error) {
-			console.log(error);
+			console.log("fetchOrders error", error);
+			toast.error("Failed to fetch orders");
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -83,9 +127,9 @@ function OrderPage() {
 		try {
 			setLoading(true);
 
-			const res1 = await CategoryApi.findAll();
+			const res = await CategoryApi.findAll();
 
-			const __product = res1.metadata.result.map((_item) => {
+			const __product = res.metadata.result.map((_item) => {
 				return {
 					label: _item.name.toUpperCase(),
 					options: _item.products
@@ -99,17 +143,6 @@ function OrderPage() {
 						.filter((_item) => _item.quantity > 0),
 				};
 			});
-
-			// const res = await ProductApi.findAll();
-			// const _product = res.metadata.result
-			// 	.map((item) => {
-			// 		return {
-			// 			value: item.id,
-			// 			label: item.name,
-			// 			quantity: item.quantity,
-			// 		};
-			// 	})
-			// 	.filter((_item) => _item.quantity > 0);
 
 			setProductsCategories(__product);
 		} catch (error) {
@@ -132,8 +165,8 @@ function OrderPage() {
 		const newFormData = { ...formData };
 		Object.keys(newFormData).forEach((key) => {
 			const field = newFormData[key];
-			if (field.validate) {
-				const error = field.validate(field.value);
+			if (field?.validate) {
+				const error = field?.validate(field.value);
 				if (error) {
 					hasError = true;
 					newFormData[key].error = error;
@@ -152,7 +185,7 @@ function OrderPage() {
 
 		if (originProduct?.length) {
 			formattedData.data_json = {
-				item: originProduct.map((_item) => ({
+				item: originProduct?.map((_item) => ({
 					id: _item.value,
 					name: _item.label,
 					quantity: _item.quantity,
@@ -163,7 +196,7 @@ function OrderPage() {
 		try {
 			if (popupData && popupData.id) {
 				await OrderApi.update({ ...formattedData, id: popupData.id });
-				toast.success("Product updated successfully");
+				toast.success("Order updated successfully");
 			} else {
 				const res = await OrderApi.create(formattedData);
 
@@ -226,6 +259,121 @@ function OrderPage() {
 		setOriginProduct(_originProduct.filter((_item) => _item.value !== itemPicked.value));
 	};
 
+	const handleClosePopup = () => {
+		setFormData((prev) => {
+			const initData = { ...prev };
+
+			Object.keys(initData).forEach((key) => {
+				initData[key].error = "";
+			});
+
+			return initData;
+		});
+		setPopupData(null);
+	};
+
+	const handleEdit = (item) => {
+		setPopupData(item);
+	};
+
+	const handleConfirmDelete = (product) => {
+		setOrderDelete(product); // Đặt sản phẩm cần xóa
+	};
+
+	const handleDeleteOrder = async () => {
+		if (!orderDelete) return;
+
+		try {
+			await OrderApi.delete(orderDelete.id);
+			toast.success(`Product "${orderDelete.name}" deleted successfully`);
+			fetchCategories();
+		} catch (error) {
+			console.log("handleDeleteProduct error", error);
+		} finally {
+			setOrderDelete(null);
+		}
+	};
+
+	const handleCancelDelete = () => {
+		setOrderDelete(null);
+	};
+
+	const renderSkeleton = () =>
+		Array.from({ length: orders.length }).map((_, rowIndex) => (
+			<tr
+				key={rowIndex}
+				className="animate-pulse h-[81px]">
+				{Array.from({ length: 6 }).map((_, colIndex) => (
+					<td
+						key={colIndex}
+						className="p-4 py-5">
+						<div className="h-6 bg-gray-200 rounded"></div>
+					</td>
+				))}
+			</tr>
+		));
+
+	const handlePageChange = () => {};
+
+	const renderOrders = () =>
+		orders.map((order) => (
+			<tr
+				key={order.id}
+				className="hover:bg-slate-50 border-b border-slate-200">
+				<td className="py-4">
+					<div className="p-4 py-1 text-sm text-slate-800">
+						<span className="font-medium">Name: </span>
+						<span className="font-medium">{order.fullname}</span>
+					</div>
+					<div className="p-4 py-1 text-sm text-slate-500">
+						<span className="font-medium">Phone: </span>
+						{order.phone}
+					</div>
+					<div className="p-4 py-1 text-sm text-slate-500">
+						<span className="font-medium">Address: </span>
+						{order.address}
+					</div>
+				</td>
+				<td className="p-4 py-1 text-sm text-slate-500">
+					{order.data_json.item.map((product, index) => (
+						<div
+							key={index}
+							className="py-1">
+							{product.name}
+							<span className="font-medium"> x{product.quantity}</span>
+						</div>
+					))}
+				</td>
+				<td className="p-4 py-1 text-sm text-slate-500">
+					{formatDateWithIntl(order.delivery_date)}
+				</td>
+				<td className="p-4 py-1 text-sm text-slate-500">
+					<Badge
+						value={order.status}
+						type={order.status}
+					/>
+				</td>
+				<td className="p-4 py-1 text-sm text-slate-500">
+					{formatDateWithIntl(order.createdAt)}
+				</td>
+				<td className="p-4 py-5">
+					<div className="flex items-center gap-2 flex-wrap">
+						<button
+							className="border p-2 rounded-md"
+							onClick={() => handleEdit(order)}>
+							<Icon type="icon-edit" />
+						</button>
+
+						<button
+							className="border p-2 rounded-md"
+							onClick={() => handleConfirmDelete(order)}>
+							<Icon type="icon-delete" />
+						</button>
+					</div>
+				</td>
+			</tr>
+		));
+
 	return (
 		<div className="mt-3 p-1">
 			<div className="flex justify-between">
@@ -242,68 +390,51 @@ function OrderPage() {
 				<table className="w-full text-left">
 					<thead>
 						<tr>
-							{["Info", "Product", "Delivery date", "Pending"].map(
-								(header, index) => (
-									<th
-										key={index}
-										className="p-4 border-b border-slate-200 bg-[#ffe9cf]">
-										<p className="text-sm font-normal leading-none">{header}</p>
-									</th>
-								)
-							)}
+							{[
+								"Order Info",
+								"Products",
+								"Delivery Date",
+								"Status",
+								"common.created_date",
+								"common.actions",
+							].map((header, index) => (
+								<th
+									key={index}
+									className="p-4 border-b border-slate-200 bg-[#ffe9cf]">
+									<p className="text-sm font-normal leading-none">{t(header)}</p>
+								</th>
+							))}
 						</tr>
 					</thead>
-					<tbody>
-						{orders.map((order) => (
-							<tr
-								key={order.id}
-								className="hover:bg-slate-50 border-b border-slate-200">
-								<td className="py-4">
-									<div className="p-4 py-1 text-sm text-slate-800">
-										<span className="font-medium">Name: </span>
-										<span className="font-medium">{order.fullname}</span>
-									</div>
-									<div className="p-4 py-1 text-sm text-slate-500">
-										<span className="font-medium">Phone: </span>
-										{order.phone}
-									</div>
-									<div className="p-4 py-1 text-sm text-slate-500">
-										<span className="font-medium">Address: </span>
-										{order.address}
-									</div>
-								</td>
-								<td className="p-4 py-1 text-sm text-slate-500">
-									{order.data_json.item.map((product, index) => (
-										<div
-											key={index}
-											className="py-1">
-											{product.name}
-											<span className="font-medium">
-												{" "}
-												x{product.quantity}
-											</span>
-										</div>
-									))}
-								</td>
-								<td className="p-4 py-1 text-sm text-slate-500">
-									{formatDateWithIntl(order.delivery_date)}
-								</td>
-								<td className="p-4 py-1 text-sm text-slate-500">
-									<Badge
-										value={order.status}
-										type={order.status}
-									/>
-								</td>
-							</tr>
-						))}
-					</tbody>
+
+					<tbody>{loading ? renderSkeleton() : renderOrders()}</tbody>
 				</table>
+
+				<div className="flex justify-between items-center px-4 py-3">
+					<div className="text-sm text-slate-500">
+						Showing {pagination.page} of {pagination.total_page}
+					</div>
+					<div className="flex space-x-1">
+						{Array.from({ length: pagination.total_page }, (_, i) => (
+							<button
+								key={i}
+								className={`px-3 py-1 text-sm border rounded-md ${
+									pagination.page === i + 1 ? "bg-[#ffe9cf]" : "bg-white"
+								}`}
+								onClick={() => handlePageChange(i + 1)}>
+								{i + 1}
+							</button>
+						))}
+					</div>
+				</div>
 			</div>
+
 			<Popup
 				title="Tạo đơn hàng"
 				width="max-w-6xl"
 				isOpen={popupData}
-				onSubmit={handlePopupSubmit}>
+				onSubmit={handlePopupSubmit}
+				onClose={handleClosePopup}>
 				<div className="flex gap-2 flex-wrap w-full">
 					{Object.keys(formData).map((key) => {
 						const field = formData[key];
@@ -335,7 +466,8 @@ function OrderPage() {
 						options={productsCategories}
 					/>
 				</div>
-				{originProduct.map((item) => {
+
+				{originProduct?.map((item) => {
 					return (
 						<div
 							key={item.value}
@@ -385,6 +517,16 @@ function OrderPage() {
 						</div>
 					);
 				})}
+			</Popup>
+
+			<Popup
+				isOpen={!!orderDelete}
+				title={t("common.confirm_delete")}
+				onClose={handleCancelDelete}
+				onSubmit={handleDeleteOrder}>
+				<p>
+					Bạn có chắc chắn muốn xóa đơn hàng <b>{orderDelete?.title}</b> không?
+				</p>
 			</Popup>
 		</div>
 	);

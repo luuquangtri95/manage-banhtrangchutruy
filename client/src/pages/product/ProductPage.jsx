@@ -67,9 +67,6 @@ function ProductsPage() {
 		fetchCategories();
 	}, [filters]);
 
-	console.log("categories", categories);
-	console.log("products 1", products);
-
 	useEffect(() => {
 		if (popupData) {
 			setCategories((prev) => ({

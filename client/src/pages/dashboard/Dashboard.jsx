@@ -157,14 +157,6 @@ function Dashboard() {
 								</NavLink>
 							))}
 					</div>
-
-					{/* Logout Button */}
-					{/* <button
-						className="p-3 flex items-center gap-2 mt-auto hover:bg-[#ffe9cf] transition-all rounded-md"
-						onClick={onLogout}>
-						<Icon type="icon-logout" />
-						{t("menu.logout")}
-					</button> */}
 				</div>
 
 				{/* Content */}
@@ -215,9 +207,6 @@ function Dashboard() {
 											</div>
 										)}
 									</div>
-
-									{/* <button onClick={() => handleChangeLang("en")}>🇬🇧</button>
-									<button onClick={() => handleChangeLang("vi")}>🇻🇳</button> */}
 								</div>
 								<div
 									onClick={() => setIsShowPopover(!isShowPopover)}
