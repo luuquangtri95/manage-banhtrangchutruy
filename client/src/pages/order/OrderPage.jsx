@@ -90,7 +90,7 @@ const DEFAULT_PAGINATION = {
 };
 
 const convertISOToDate = (isoString) => {
-	return isoString.split("T")[0]; // Lấy phần trước ký tự "T"
+	return isoString?.split("T")[0]; // Lấy phần trước ký tự "T"
 };
 
 function OrderPage() {
