@@ -356,6 +356,12 @@ function OrderPage() {
 					</div>
 				</td>
 				<td className="p-4 py-1 text-sm text-slate-500">
+					<span className="font-medium">{order.user.username}</span>
+				</td>
+				<td className="p-4 py-1 text-sm text-slate-500">
+					<span className="font-medium">{order.user.email}</span>
+				</td>
+				<td className="p-4 py-1 text-sm text-slate-500">
 					{order.data_json.item.map((product, index) => (
 						<div
 							key={index}
@@ -415,6 +421,8 @@ function OrderPage() {
 						<tr>
 							{[
 								"Order Info",
+								"Username",
+								"Email",
 								"Products",
 								"Delivery Date",
 								"Status",
