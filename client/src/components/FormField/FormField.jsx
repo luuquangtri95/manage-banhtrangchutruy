@@ -75,6 +75,23 @@ function FormField({
 	// Xử lý render theo type
 	let inputField;
 	switch (type) {
+		case "date":
+			inputField = (
+				<input
+					type="date"
+					id={id || fieldId}
+					name={name}
+					value={value}
+					placeholder={placeholder}
+					onChange={onChange}
+					onFocus={handleFocus}
+					onBlur={handleBlur}
+					disabled={disabled}
+					className="w-full bg-transparent focus:outline-none text-gray-700 placeholder-gray-400 "
+				/>
+			);
+			break;
+
 		case "select":
 			inputField = (
 				<select

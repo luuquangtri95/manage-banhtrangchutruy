@@ -9,6 +9,8 @@ import Icon from "../../components/Icon/Icon";
 import Popup from "../../components/Popup";
 import { formatDateWithIntl } from "../../helpers/convertDate";
 import { useTranslation } from "react-i18next";
+import usePageLoading from "../../hooks/usePageLoading";
+import PageLoading from "../../components/PageLoading";
 
 const INIT_FORMDATA = {
 	title: {
@@ -60,6 +62,15 @@ const INIT_FORMDATA = {
 			{ value: "success", label: "Success" },
 		],
 	},
+	delivery_date: {
+		value: "",
+		type: "date",
+		error: "",
+		validate: (value) => {
+			if (!value.trim()) return "Date Is Require";
+			return "";
+		},
+	},
 };
 
 const DEFAULT_PAGINATION = {
@@ -80,6 +91,7 @@ function OrderPage() {
 	const [filters, setFilters] = useState({ page: 1, limit: 8, searchTerm: "" });
 	const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
 	const { t } = useTranslation();
+	const { isLoading, showLoading, hideLoading } = usePageLoading();
 
 	useEffect(() => {
 		fetchOrders();
@@ -111,7 +123,7 @@ function OrderPage() {
 
 	const fetchOrders = async () => {
 		try {
-			setLoading(true);
+			showLoading();
 			const res = await OrderApi.findAll(filters);
 
 			setOrders(res.metadata.result);
@@ -120,13 +132,13 @@ function OrderPage() {
 			console.log("fetchOrders error", error);
 			toast.error("Failed to fetch orders");
 		} finally {
-			setLoading(false);
+			hideLoading();
 		}
 	};
 
 	const fetchCategories = async () => {
 		try {
-			setLoading(true);
+			showLoading();
 
 			const res = await CategoryApi.findAll();
 
@@ -149,7 +161,7 @@ function OrderPage() {
 		} catch (error) {
 			console.log(error);
 		} finally {
-			setLoading(false);
+			hideLoading();
 		}
 	};
 
@@ -384,6 +396,10 @@ function OrderPage() {
 			</tr>
 		));
 
+	if (isLoading) {
+		<PageLoading isLoading={isLoading} />;
+	}
+
 	return (
 		<div className="mt-3 p-1">
 			<div className="flex justify-between">
@@ -417,7 +433,8 @@ function OrderPage() {
 						</tr>
 					</thead>
 
-					<tbody>{loading ? renderSkeleton() : renderOrders()}</tbody>
+					{/* <tbody>{loading ? renderSkeleton() : renderOrders()}</tbody> */}
+					<tbody>{renderOrders()}</tbody>
 				</table>
 
 				<div className="flex justify-between items-center px-4 py-3">
