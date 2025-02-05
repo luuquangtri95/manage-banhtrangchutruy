@@ -221,6 +221,9 @@ function OrderPage() {
 					quantity: _item.quantity,
 				})),
 			};
+		} else {
+			toast.error("Không thể tạo order khi không có sản phẩm");
+			return;
 		}
 
 		try {
