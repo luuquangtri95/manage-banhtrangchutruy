@@ -14,8 +14,8 @@ const findAll = async (req) => {
 		const _page = req.query.page ? parseInt(req.query.page) : 1;
 		const _limit = req.query.limit ? parseInt(req.query.limit) : 10;
 		const _searchTerm = req.query.searchTerm || "";
-		const _sort = req.query.sort || "asc";
-		const _order = req.query.order || "title"; // title
+		const _sort = req.query.sort || "desc";
+		const _order = req.query.order || "createdAt";
 		const _status = req.query.status;
 		const _startDate = req.query.startDate || "";
 		const _endDate = req.query.endDate || "";

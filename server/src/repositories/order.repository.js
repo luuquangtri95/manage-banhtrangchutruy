@@ -77,8 +77,15 @@ const findAll = async (payload) => {
 			where,
 			limit: limit,
 			offset: _offset,
-			order: [[order || "delivery_date", sort]],
+			order: [[order, sort]],
 			raw: true,
+			nest: true,
+			include: [
+				{
+					model: UserModel,
+					attributes: ["id", "username", "email"],
+				},
+			],
 		});
 
 		const _metadata = {
