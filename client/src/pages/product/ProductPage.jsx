@@ -111,7 +111,7 @@ function ProductsPage() {
 	const fetchCategories = async () => {
 		try {
 			showLoading();
-			const res = await CategoryApi.findAll(filters);
+			const res = await CategoryApi.findAll();
 
 			const _catagories = res.metadata.result.map((_cat) => {
 				return {
