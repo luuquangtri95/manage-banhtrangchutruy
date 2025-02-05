@@ -67,7 +67,17 @@ const INIT_FORMDATA = {
 		type: "date",
 		error: "",
 		validate: (value) => {
-			if (!value.trim()) return "Date Is Require";
+			if (!value.trim()) return "Date is required";
+
+			const inputDate = new Date(value);
+			const currentDate = new Date();
+
+			currentDate.setHours(0, 0, 0, 0);
+
+			if (isNaN(inputDate.getTime())) return "Invalid date";
+
+			if (inputDate < currentDate) return "Date must be today or later";
+
 			return "";
 		},
 	},
@@ -364,14 +374,16 @@ function OrderPage() {
 					<div className="border w-[50px] h-[2px] border-[#2234ff]"></div>
 				</td>
 				<td className="p-4 py-1 text-sm text-slate-500">
-					{order.data_json.item.map((product, index) => (
-						<div
-							key={index}
-							className="py-1">
-							{product.name}
-							<span className="font-medium"> x{product.quantity}</span>
-						</div>
-					))}
+					<ul className="list-disc">
+						{order.data_json.item.map((product, index) => (
+							<li
+								key={index}
+								className="py-1">
+								{product.name}
+								<span className="font-medium"> x{product.quantity}</span>
+							</li>
+						))}
+					</ul>
 				</td>
 				<td className="p-4 py-1 text-sm text-slate-500">
 					<Badge
