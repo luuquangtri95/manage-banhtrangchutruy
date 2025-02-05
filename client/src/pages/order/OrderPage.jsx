@@ -357,9 +357,11 @@ function OrderPage() {
 				</td>
 				<td className="p-4 py-1 text-sm text-slate-500">
 					<span className="font-medium">{order.user.username}</span>
+					<div className="border w-[50px] h-[2px] border-[#2234ff]"></div>
 				</td>
 				<td className="p-4 py-1 text-sm text-slate-500">
 					<span className="font-medium">{order.user.email}</span>
+					<div className="border w-[50px] h-[2px] border-[#2234ff]"></div>
 				</td>
 				<td className="p-4 py-1 text-sm text-slate-500">
 					{order.data_json.item.map((product, index) => (
