@@ -66,7 +66,7 @@ const INIT_FORMDATA = {
 		type: "date",
 		error: "",
 		validate: (value) => {
-			if (!value.trim()) return "Date is required";
+			if (typeof value !== "string" || !value.trim()) return "Date is required";
 
 			const inputDate = new Date(value);
 			const currentDate = new Date();
@@ -194,7 +194,6 @@ function OrderPage() {
 		const newFormData = { ...formData };
 		Object.keys(newFormData).forEach((key) => {
 			const field = newFormData[key];
-			console.log("field", field);
 
 			if (field?.validate) {
 				const error = field?.validate(field.value);
