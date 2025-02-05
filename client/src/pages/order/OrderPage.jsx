@@ -44,7 +44,7 @@ const INIT_FORMDATA = {
 		type: "number",
 		error: "",
 		validate: (value) => {
-			if (!value.trim()) return "Phone Is Require";
+			if (!value.toString().trim()) return "Phone Is Require";
 			return "";
 		},
 	},
@@ -166,6 +166,8 @@ function OrderPage() {
 		const newFormData = { ...formData };
 		Object.keys(newFormData).forEach((key) => {
 			const field = newFormData[key];
+			console.log("field", field);
+
 			if (field?.validate) {
 				const error = field?.validate(field.value);
 				if (error) {
@@ -209,8 +211,8 @@ function OrderPage() {
 		} finally {
 			setPopupData(null);
 			setFormData(INIT_FORMDATA);
-			fetchCategories();
 			fetchOrders();
+			fetchCategories();
 		}
 	};
 
@@ -286,10 +288,11 @@ function OrderPage() {
 
 		try {
 			await OrderApi.delete(orderDelete.id);
-			toast.success(`Product "${orderDelete.name}" deleted successfully`);
-			fetchCategories();
+			toast.success(`Order "${orderDelete.title}" deleted successfully`);
+			fetchOrders();
 		} catch (error) {
-			console.log("handleDeleteProduct error", error);
+			console.log("handleDeleteOrder error", error);
+			toast.error("Fail to fetch");
 		} finally {
 			setOrderDelete(null);
 		}
@@ -314,7 +317,9 @@ function OrderPage() {
 			</tr>
 		));
 
-	const handlePageChange = () => {};
+	const handlePageChange = (newPage) => {
+		setFilters((prev) => ({ ...prev, page: newPage }));
+	};
 
 	const renderOrders = () =>
 		orders.map((order) => (
@@ -324,15 +329,19 @@ function OrderPage() {
 				<td className="py-4">
 					<div className="p-4 py-1 text-sm text-slate-800">
 						<span className="font-medium">Name: </span>
+						<span className="font-medium">{order.title}</span>
+					</div>
+					<div className="p-4 py-1 text-sm text-slate-800">
+						<span className="font-medium">FullName: </span>
 						<span className="font-medium">{order.fullname}</span>
 					</div>
-					<div className="p-4 py-1 text-sm text-slate-500">
-						<span className="font-medium">Phone: </span>
-						{order.phone}
+					<div className="p-4 py-1 text-sm text-slate-800">
+						<span className="font-medium">Phone Number: </span>
+						<span className="font-medium">{order.phone}</span>
 					</div>
-					<div className="p-4 py-1 text-sm text-slate-500">
+					<div className="p-4 py-1 text-sm text-slate-800">
 						<span className="font-medium">Address: </span>
-						{order.address}
+						<span className="font-medium">{order.address}</span>
 					</div>
 				</td>
 				<td className="p-4 py-1 text-sm text-slate-500">
