@@ -4,3 +4,4 @@ node_modules
 server/build
 .env
 .env.production
+.env.development

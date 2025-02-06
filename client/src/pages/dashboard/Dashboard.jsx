@@ -1,13 +1,12 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { NavLink, Outlet } from "react-router";
+import { useTranslation } from "react-i18next";
+import { NavLink, Outlet, useNavigate } from "react-router";
+import LogoEnglish from "../../assets/english.png";
 import Logo from "../../assets/logo.jpg";
+import LogoVietnam from "../../assets/vietnam.png";
 import Icon from "../../components/Icon/Icon";
 import { AuthContext } from "../../context/AuthContext";
 import authorizedAxiosInstance from "../../utils/authorizedAxios";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router";
-import LogoEnglish from "../../assets/english.png";
-import LogoVietnam from "../../assets/vietnam.png";
 
 const MENU_ITEMS = [
 	// { path: "/dashboard/orders/create", icon: "icon-create", label: "create_order" },
@@ -34,6 +33,11 @@ const LANGUAGES = {
 	vi: { flag: LogoVietnam, name: "Tiếng Việt" },
 };
 
+const getValidLanguage = () => {
+	const lang = localStorage.getItem("i18nextLng") || "en"; // Mặc định là "en"
+	return lang.includes("-") ? lang.split("-")[0] : lang; // Chỉ lấy phần trước "-"
+};
+
 function Dashboard() {
 	const [isCollapse, setIsCollapse] = useState(false);
 	const [renderContent, setRenderContent] = useState(true);
@@ -41,7 +45,7 @@ function Dashboard() {
 	const { t, i18n } = useTranslation();
 	const [userInfo, setUserInfo] = useState(null);
 	const [isShowPopover, setIsShowPopover] = useState(false);
-	const [language, setLanguage] = useState(localStorage.getItem("i18nextLng"));
+	const [language, setLanguage] = useState(getValidLanguage());
 	const [isOpen, setIsOpen] = useState(false);
 
 	const currentElmRef = useRef(null);
@@ -49,10 +53,13 @@ function Dashboard() {
 	const navigate = useNavigate();
 
 	const handleCollapse = () => setIsCollapse(!isCollapse);
-	const handleChangeLang = (lang) => {
-		i18n.changeLanguage(lang);
 
-		setLanguage(lang);
+	const handleChangeLang = (lang) => {
+		const shortLang = lang.includes("-") ? lang.split("-")[0] : lang;
+		i18n.changeLanguage(shortLang);
+
+		setLanguage(shortLang);
+		localStorage.setItem("i18nextLng", shortLang);
 		setIsOpen(false);
 	};
 
