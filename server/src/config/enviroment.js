@@ -1,47 +1,21 @@
 import dotenv from "dotenv";
-import path from "path";
 
-// Xác định môi trường hiện tại
-const NODE_ENV = process.env.NODE_ENV || "development";
+// Xác định môi trường, nếu process.env.NODE_ENV là "production" thì sử dụng production, còn lại mặc định là "dev"
+const NODE_ENV = process.env.NODE_ENV === "production" ? "production" : "dev";
 
-// Xác định file env tương ứng với môi trường
-const envFiles = {
-	development: ".env.development",
-	production: ".env.production",
-	test: ".env.test",
-};
-
-// Lấy tên file env tương ứng
-const envFile = envFiles[NODE_ENV] || ".env";
-
-// Xác định đường dẫn tới file env dựa vào môi trường
-const envPath =
-	NODE_ENV === "production"
-		? path.resolve(process.cwd(), "../", envFile) // Trong production
-		: path.resolve(__dirname, "../../../", envFile); // Trong development
-
-// Log để debug
-console.log("Current Environment:", NODE_ENV);
-console.log("Loading env file:", envPath);
-
-// Load file env
-const result = dotenv.config({ path: envPath });
-
-// Nếu không tìm thấy file .env trong production, thử load từ process.env trực tiếp
-if (result.error && NODE_ENV === "production") {
-	console.log("Using environment variables from process.env");
-}
-
-// Kiểm tra nếu có lỗi loading file env trong development
-if (result.error && NODE_ENV === "development") {
-	console.warn(`Warning: ${envFile} not found. Using default environment variables`);
+// Load file .env phù hợp với môi trường
+if (NODE_ENV === "production") {
+	// Khi môi trường production, load file .env.production
+	dotenv.config({ path: ".env.production" });
+} else {
+	// Ở môi trường dev, bạn có thể load file .env hoặc .env.development
+	dotenv.config({ path: ".env" });
+	// Nếu bạn dùng file .env mặc định, chỉ cần: dotenv.config();
 }
 
 export const env = {
-	// Thêm NODE_ENV vào config
 	NODE_ENV,
 
-	// Server config
 	PORT: process.env.PORT || 8000,
 	HOST: process.env.HOST || "localhost",
 
@@ -58,9 +32,4 @@ export const env = {
 
 	// Other config
 	AUTHOR: process.env.AUTHOR,
-
-	// Thêm hàm helper để check môi trường
-	isDevelopment: NODE_ENV === "development",
-	isProduction: NODE_ENV === "production",
-	isTest: NODE_ENV === "test",
 };

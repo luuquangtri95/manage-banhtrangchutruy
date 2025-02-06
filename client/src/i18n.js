@@ -27,7 +27,7 @@ i18n.use(HttpBackend)
 		},
 
 		backend: {
-			loadPath: `${process.env.VITE_API_URL}/locales/{{lng}}/translation.json`,
+			loadPath: `${import.meta.env.VITE_API_URL}/locales/{{lng}}/translation.json`,
 		},
 
 		// debug: true,
