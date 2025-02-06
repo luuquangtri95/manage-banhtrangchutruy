@@ -358,20 +358,20 @@ function OrderPage() {
 				className="hover:bg-slate-50 border-b border-slate-200">
 				<td className="py-4">
 					<div className="p-4 py-1 text-sm text-slate-800">
-						<span className="font-medium">Name: </span>
-						<span className="font-medium">{order.title}</span>
+						<span className="font-medium">Order Title: </span>
+						<span className="font-medium text-[#2234ff]">{order.title}</span>
 					</div>
 					<div className="p-4 py-1 text-sm text-slate-800">
-						<span className="font-medium">FullName: </span>
+						<span className="font-medium">Full name: </span>
 						<span className="font-medium">{order.fullname}</span>
 					</div>
 					<div className="p-4 py-1 text-sm text-slate-800">
 						<span className="font-medium">Phone Number: </span>
-						<span className="font-medium">{order.phone}</span>
+						<span className="font-medium text-[#2234ff]">{order.phone}</span>
 					</div>
 					<div className="p-4 py-1 text-sm text-slate-800">
 						<span className="font-medium">Address: </span>
-						<span className="font-medium">{order.address}</span>
+						<span className="font-medium text-[#2234ff]">{order.address}</span>
 					</div>
 				</td>
 				<td className="p-4 py-1 text-sm text-slate-500">

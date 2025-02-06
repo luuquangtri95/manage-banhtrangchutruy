@@ -259,6 +259,10 @@ function ProductsPage() {
 		setProductDelete(product); // Đặt sản phẩm cần xóa
 	};
 
+	const handleCategoryChange = (itemPicked) => {
+		setCategories((prev) => ({ ...prev, value: itemPicked }));
+	};
+
 	const renderSkeleton = () =>
 		Array.from({ length: products.length }).map((_, rowIndex) => (
 			<tr
