@@ -13,6 +13,9 @@
     "logout": "Logout"
   },
   "order_page": {
+    "button": {
+      "create_new_order": "Create New Order"
+    },
     "table": {
       "order_title": "Order Info",
       "username": "Username",

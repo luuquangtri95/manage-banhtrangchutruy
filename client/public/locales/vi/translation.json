@@ -13,6 +13,9 @@
     "logout": "Đăng xuất"
   },
   "order_page": {
+    "button": {
+      "create_new_order": "Tạo đơn đặt hàng mới"
+    },
     "table": {
       "order_title": "Thông tin đơn hàng",
       "username": "Người đặt hàng",
