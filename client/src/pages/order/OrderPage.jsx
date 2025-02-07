@@ -359,19 +359,27 @@ function OrderPage() {
 				className="hover:bg-slate-50 border-b border-slate-200">
 				<td className="py-4">
 					<div className="p-4 py-1 text-sm text-slate-800">
-						<span className="font-medium">Order Title: </span>
+						<span className="font-medium">
+							{t("order_page.table.order_title").toUpperCase()} :
+						</span>
 						<span className="font-medium text-[#2234ff]">{order.title}</span>
 					</div>
 					<div className="p-4 py-1 text-sm text-slate-800">
-						<span className="font-medium">Full name: </span>
+						<span className="font-medium">
+							{t("order_page.table.username").toUpperCase()} :
+						</span>
 						<span className="font-medium">{order.fullname}</span>
 					</div>
 					<div className="p-4 py-1 text-sm text-slate-800">
-						<span className="font-medium">Phone Number: </span>
+						<span className="font-medium">
+							{t("order_page.table.phone").toUpperCase()} :
+						</span>
 						<span className="font-medium text-[#2234ff]">{order.phone}</span>
 					</div>
 					<div className="p-4 py-1 text-sm text-slate-800">
-						<span className="font-medium">Address: </span>
+						<span className="font-medium">
+							{t("order_page.table.address").toUpperCase()} :
+						</span>
 						<span className="font-medium text-[#2234ff]">{order.address}</span>
 					</div>
 				</td>
@@ -440,7 +448,7 @@ function OrderPage() {
 						className="flex gap-2 border rounded-md p-2 hover:bg-[#ffe9cf] transition-all"
 						onClick={handleCreate}>
 						<Icon type="icon-create" />
-						<p>Tạo đơn đặt hàng</p>
+						<p>{t("order_page.button.create_new_order")}</p>
 					</button>
 				</div>
 			</div>

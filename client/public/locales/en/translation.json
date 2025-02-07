@@ -22,7 +22,9 @@
       "email":"Email",
       "products": "Products",
       "delivery_date": "Delivery Date (important)",
-      "status": "Status"
+      "status": "Status",
+      "phone": "Phone",
+      "address": "Address"
     },
     "popup":{
       "title": "Order Info",
