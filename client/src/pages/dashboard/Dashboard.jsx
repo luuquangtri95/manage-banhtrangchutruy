@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink, Outlet, useNavigate } from "react-router";
 import LogoEnglish from "../../assets/english.png";
@@ -7,6 +7,8 @@ import LogoVietnam from "../../assets/vietnam.png";
 import Icon from "../../components/Icon/Icon";
 import { AuthContext } from "../../context/AuthContext";
 import authorizedAxiosInstance from "../../utils/authorizedAxios";
+
+export const DashboardContext = createContext(null);
 
 const MENU_ITEMS = [
 	// { path: "/dashboard/orders/create", icon: "icon-create", label: "create_order" },
@@ -267,7 +269,9 @@ function Dashboard() {
 							<div className="border w-[80px] h-[2px] border-[#ff771c]"></div>
 						</div>
 
-						<Outlet />
+						<DashboardContext.Provider value={{ userInfo }}>
+							<Outlet />
+						</DashboardContext.Provider>
 					</div>
 				</div>
 			</div>

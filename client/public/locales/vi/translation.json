@@ -24,7 +24,10 @@
       "delivery_date": "Ngày giao hàng (quan trọng)",
       "status": "Trạng thái đơn hàng",
       "phone": "Số điện thoại",
-      "address": "Địa chỉ"
+      "address": "Địa chỉ",
+      "success": "Giao thành công", 
+      "pending": "Đang xử lý",
+      "active":"Xác nhận đơn hàng"
     },
     "popup":{
       "title": "Tên đơn hàng",

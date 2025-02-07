@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Select from "react-tailwindcss-select";
 import { toast } from "react-toastify";
@@ -10,6 +10,8 @@ import Icon from "../../components/Icon/Icon";
 import Popup from "../../components/Popup";
 import { formatDateWithIntl } from "../../helpers/convertDate";
 import usePageLoading from "../../hooks/usePageLoading";
+import { DashboardContext } from "../dashboard/Dashboard";
+import Dropdown from "../../components/Dropdown/Dropdown";
 
 const INIT_FORMDATA = {
 	title: {
@@ -105,6 +107,10 @@ function OrderPage() {
 	const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
 	const { t } = useTranslation();
 	const { isLoading, showLoading, hideLoading } = usePageLoading();
+	const { userInfo } = useContext(DashboardContext);
+	const [popoverData, setPopoverData] = useState(null);
+
+	const popoverRef = useRef(null);
 
 	useEffect(() => {
 		fetchOrders();
@@ -137,6 +143,23 @@ function OrderPage() {
 			});
 		}
 	}, [popupData]);
+
+	useEffect(() => {
+		const handleClickOutside = (e) => {
+			// Kiểm tra nếu popoverRef.current tồn tại trước khi gọi .contains
+			if (popoverRef.current && !popoverRef.current.contains(e.target)) {
+				setPopoverData(null);
+			}
+		};
+
+		// Chỉ gắn sự kiện nếu popoverData tồn tại (popover đang mở)
+		if (popoverData) {
+			document.addEventListener("mousedown", handleClickOutside);
+		}
+
+		// Cleanup khi component unmount hoặc popoverData thay đổi
+		return () => document.removeEventListener("mousedown", handleClickOutside);
+	}, [popoverData]); // Chạy lại khi popoverData thay đổi
 
 	const fetchOrders = async () => {
 		try {
@@ -232,6 +255,7 @@ function OrderPage() {
 				await OrderApi.update({ ...formattedData, id: popupData.id });
 				toast.success("Order updated successfully");
 			} else {
+				formattedData.status = "active";
 				const res = await OrderApi.create(formattedData);
 
 				toast.success(res.message);
@@ -333,6 +357,27 @@ function OrderPage() {
 		setOrderDelete(null);
 	};
 
+	const handleChangeStatus = async (currentOrder, newStatus) => {
+		try {
+			const _currentOrder = JSON.parse(JSON.stringify(currentOrder));
+
+			_currentOrder.status = newStatus;
+
+			const res = await OrderApi.update(_currentOrder);
+
+			toast.success("Order update status successfully");
+		} catch (error) {
+			console.log("handleChangeStatus error", error);
+			toast.error("Fail to fetch");
+		} finally {
+			fetchOrders();
+		}
+	};
+
+	const handlePopoverChange = (currentOrder) => {
+		setPopoverData(currentOrder);
+	};
+
 	const renderSkeleton = () =>
 		Array.from({ length: orders.length }).map((_, rowIndex) => (
 			<tr
@@ -415,7 +460,7 @@ function OrderPage() {
 				</td>
 				<td className="p-4 py-1 text-sm text-slate-500">
 					<Badge
-						value={order.status}
+						value={t(`order_page.table.${order.status}`)}
 						type={order.status}
 					/>
 				</td>
@@ -424,17 +469,59 @@ function OrderPage() {
 				</td>
 				<td className="p-4 py-5">
 					<div className="flex items-center gap-2 flex-wrap">
-						<button
-							className="border p-2 rounded-md"
-							onClick={() => handleEdit(order)}>
-							<Icon type="icon-edit" />
-						</button>
+						<div className="relative">
+							s
+							<button
+								className=" border p-2 rounded-md"
+								onClick={() => handlePopoverChange(order)}>
+								<Icon type="icon-dot-menu" />
+							</button>
+							{popoverData?.id === order.id && (
+								<div
+									ref={popoverRef}
+									className="absolute w-[200px] h-auto max-h-[186px] bg-white top-[-70px] left-[-210px] rounded-md flex flex-col justify-center gap-1 p-2 shadow-lg">
+									<div
+										className="flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all"
+										onClick={() => handleEdit(order)}>
+										<button className="border p-2 rounded-md">
+											<Icon type="icon-edit" />
+										</button>
+										<label>Edit order</label>
+									</div>
 
-						<button
-							className="border p-2 rounded-md"
-							onClick={() => handleConfirmDelete(order)}>
-							<Icon type="icon-delete" />
-						</button>
+									{userInfo.role === "admin" && (
+										<div
+											className="flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all"
+											onClick={() => handleChangeStatus(order, "success")}>
+											<button className="border p-2 rounded-md">
+												<Icon type="icon-success" />
+											</button>
+											<label>Complete Order</label>
+										</div>
+									)}
+
+									{userInfo.role === "admin" && (
+										<div
+											className="flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all"
+											onClick={() => handleChangeStatus(order, "pending")}>
+											<button className="border p-2 rounded-md">
+												<Icon type="icon-pending" />
+											</button>
+											<label>Pending Order</label>
+										</div>
+									)}
+
+									<div
+										className="flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all"
+										onClick={() => handleConfirmDelete(order)}>
+										<button className="border p-2 rounded-md">
+											<Icon type="icon-delete" />
+										</button>
+										<label>Delete Order</label>
+									</div>
+								</div>
+							)}
+						</div>
 					</div>
 				</td>
 			</tr>

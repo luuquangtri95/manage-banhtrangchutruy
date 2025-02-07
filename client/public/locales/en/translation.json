@@ -24,7 +24,10 @@
       "delivery_date": "Delivery Date (important)",
       "status": "Status",
       "phone": "Phone",
-      "address": "Address"
+      "address": "Address",
+      "success": "Successfully Delivered",
+      "pending": "Pending",
+      "active":"Active"
     },
     "popup":{
       "title": "Order Info",

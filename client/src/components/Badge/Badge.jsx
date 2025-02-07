@@ -24,7 +24,7 @@ function Badge(props) {
 		<div
 			className="status p-2 w-[100px] flex items-center text-sm"
 			value={type}>
-			<span className={`${badgeClass()} w-full text-center pb-[2px] rounded-md`}>
+			<span className={`${badgeClass()} w-full text-center pb-[2px] rounded-md text-black`}>
 				{value}
 			</span>
 		</div>

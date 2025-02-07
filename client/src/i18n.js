@@ -3,6 +3,8 @@ import { initReactI18next } from "react-i18next";
 import HttpBackend from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 
+const isProduction = import.meta.env.MODE === "production";
+
 i18n.use(HttpBackend)
 	.use(LanguageDetector)
 	.use(initReactI18next)
@@ -26,9 +28,11 @@ i18n.use(HttpBackend)
 			whitelist: ["en", "vi"], // Danh sách ngôn ngữ được hỗ trợ
 		},
 
-		backend: {
-			loadPath: `${import.meta.env.VITE_API_URL}/locales/{{lng}}/translation.json`,
-		},
+		...(isProduction && {
+			backend: {
+				loadPath: `${import.meta.env.VITE_API_URL}/locales/{{lng}}/translation.json`,
+			},
+		}),
 
 		// debug: true,
 		interpolation: {
