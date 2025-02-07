@@ -13,7 +13,38 @@
     "logout": "Logout"
   },
   "order_page": {
-    "table": {}
+    "table": {
+      "order_title": "Order Info",
+      "username": "Username",
+      "email":"Email",
+      "products": "Products",
+      "delivery_date": "Delivery Date (important)",
+      "status": "Status"
+    },
+    "popup":{
+      "title": "Order Info",
+      "fullname":"Username",
+      "address": "Address",
+      "phone": "Phone",
+      "status": "Status",
+      "delivery_date": "Delivery Date (*)",
+      "product": "Product Picker"
+    },
+    "validate":{
+      "title_is_required": "Order title is required",
+      "title_min_length": "Order title must be longer than 5 characters",
+      "username_is_required": "Orderer's name is required",
+      "address_is_required": "Address is required",
+      "phone_is_required": "Phone number is required",
+      "delivery_is_required": "Delivery date is required",
+      "invalid_date": "Invalid date",
+      "date_must_be_today_or_later": "Cannot select a past date"
+    },
+    "order_picker":{
+      "name" : "product",
+      "inventory": "Inventory",
+      "quantity": "Quantity"
+    }
   },
   "product_page": {
     "table": {
@@ -54,6 +85,7 @@
     }
   },
   "common": {
+    "welcome_message": "Welcome <b>{{email}}</b> to <b>Chú Truý Food</b>",
     "actions": "Actions",
     "status": "Status",
     "created_date": "Created Date",

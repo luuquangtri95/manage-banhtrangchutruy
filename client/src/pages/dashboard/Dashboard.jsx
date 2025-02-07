@@ -257,10 +257,13 @@ function Dashboard() {
 
 					<div className="px-4">
 						<div className="my-3">
-							<p className="text-[24px] font-thin">
-								Chào mừng tài khoản <b>{userInfo?.email}</b> đến với{" "}
-								<b>Chú Truý Food</b>
-							</p>
+							<p
+								className="text-[24px] font-thin"
+								dangerouslySetInnerHTML={{
+									__html: t("common.welcome_message", { email: userInfo?.email }),
+								}}
+							/>
+
 							<div className="border w-[80px] h-[2px] border-[#ff771c]"></div>
 						</div>
 

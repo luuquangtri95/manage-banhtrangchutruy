@@ -17,8 +17,8 @@ const INIT_FORMDATA = {
 		type: "text",
 		error: "",
 		validate: (value) => {
-			if (!value.trim()) return "Title Is Require";
-			if (value.length < 5) return "Title not less 5 character";
+			if (!value.trim()) return "order_page.validate.title_is_required";
+			if (value.length < 5) return "order_page.validate.title_min_length";
 			return "";
 		},
 	},
@@ -27,7 +27,7 @@ const INIT_FORMDATA = {
 		type: "text",
 		error: "",
 		validate: (value) => {
-			if (!value.trim()) return "Name Is Require";
+			if (!value.trim()) return "order_page.validate.username_is_required";
 			return "";
 		},
 	},
@@ -36,7 +36,7 @@ const INIT_FORMDATA = {
 		type: "text",
 		error: "",
 		validate: (value) => {
-			if (!value.trim()) return "Name Is Require";
+			if (!value.trim()) return "order_page.validate.address_is_required";
 			return "";
 		},
 	},
@@ -45,7 +45,7 @@ const INIT_FORMDATA = {
 		type: "number",
 		error: "",
 		validate: (value) => {
-			if (!value.toString().trim()) return "Phone Is Require";
+			if (!value.toString().trim()) return "order_page.validate.phone_is_required";
 			return "";
 		},
 	},
@@ -66,16 +66,17 @@ const INIT_FORMDATA = {
 		type: "date",
 		error: "",
 		validate: (value) => {
-			if (typeof value !== "string" || !value.trim()) return "Date is required";
+			if (typeof value !== "string" || !value.trim())
+				return "order_page.validate.delivery_is_required";
 
 			const inputDate = new Date(value);
 			const currentDate = new Date();
 
 			currentDate.setHours(0, 0, 0, 0);
 
-			if (isNaN(inputDate.getTime())) return "Invalid date";
+			if (isNaN(inputDate.getTime())) return "order_page.validate.invalid_date";
 
-			if (inputDate < currentDate) return "Date must be today or later";
+			if (inputDate < currentDate) return "order_page.validate.date_must_be_today_or_later";
 
 			return "";
 		},
@@ -387,9 +388,14 @@ function OrderPage() {
 						{order.data_json.item.map((product, index) => (
 							<li
 								key={index}
-								className="py-1">
+								className="py-1 text-black">
 								{product.name}
-								<span className="font-medium"> x{product.quantity}</span>
+								<span className="font-medium">
+									{" "}
+									<b className="text-white bg-blue-700 p-1 rounded-md ">
+										x {product.quantity}
+									</b>
+								</span>
 							</li>
 						))}
 					</ul>
@@ -443,12 +449,12 @@ function OrderPage() {
 					<thead>
 						<tr>
 							{[
-								"Order Info",
-								"Username",
-								"Email",
-								"Products",
-								"Delivery Date",
-								"Status",
+								"order_page.table.order_title",
+								"order_page.table.username",
+								"order_page.table.email",
+								"order_page.table.products",
+								"order_page.table.delivery_date",
+								"order_page.table.status",
 								"common.created_date",
 								"common.actions",
 							].map((header, index) => (
@@ -499,14 +505,14 @@ function OrderPage() {
 								className="w-[calc(50%-4px)]"
 								key={key}>
 								<FormField
-									label={key}
+									label={t(`order_page.popup.${key}`)}
 									value={
 										key === "delivery_date"
 											? convertISOToDate(field.value)
 											: field.value
 									}
 									type={field.type}
-									error={field.error}
+									error={t(`${field.error}`)}
 									options={field.options || []}
 									onChange={(e) => handleFormChange(key, e.target.value)}
 									className="h-[38px] text-sm"
@@ -517,7 +523,9 @@ function OrderPage() {
 					})}
 				</div>
 				<div className="mb-4">
-					<label className="block text-sm font-medium text-gray-700 mb-1">product</label>
+					<label className="block text-sm font-medium text-gray-700 mb-1">
+						{t("order_page.popup.product")}
+					</label>
 					<Select
 						isMultiple
 						value={originProduct}
@@ -533,7 +541,7 @@ function OrderPage() {
 							className="flex items-end gap-3">
 							<div className=" flex-1 flex gap-2 text-sm items-start">
 								<FormField
-									label="name"
+									label={t("order_page.order_picker.name")}
 									value={item?.label}
 									type="text"
 									onChange={() => {}}
@@ -543,7 +551,7 @@ function OrderPage() {
 								<div className="w-[150px]">
 									<FormField
 										onChange={() => {}}
-										label="inventory"
+										label={t("order_page.order_picker.inventory")}
 										value={
 											productsCategories.find((_i) =>
 												_i.options.some((__i) => __i.value === item.value)
@@ -555,7 +563,7 @@ function OrderPage() {
 								</div>
 								<div className="w-[150px]">
 									<FormField
-										label="quantity"
+										label={t("order_page.order_picker.quantity")}
 										value={item.quantity}
 										type="number"
 										disabled={

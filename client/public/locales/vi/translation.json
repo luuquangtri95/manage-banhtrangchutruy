@@ -13,7 +13,38 @@
     "logout": "Đăng xuất"
   },
   "order_page": {
-    "table": {}
+    "table": {
+      "order_title": "Thông tin đơn hàng",
+      "username": "Người đặt hàng",
+      "email":"Email",
+      "products": "Sản phẩm đã đặt",
+      "delivery_date": "Ngày giao hàng (quan trọng)",
+      "status": "Trạng thái đơn hàng"
+    },
+    "popup":{
+      "title": "Tên đơn hàng",
+      "fullname":"Tên người đặt",
+      "address": "Địa chỉ",
+      "phone": "Số điện thoại",
+      "status": "Trạng thái",
+      "delivery_date": "Ngày giao hàng (*)",
+      "product": "Lựa chọn sản phẩm"
+    },
+    "validate":{
+      "title_is_required": "Tên đơn hàng bắt buộc",
+      "title_min_length": "Tên đơn hàng phải lớn hơn 5 ký tự",
+      "username_is_required":"Tên người đặt hàng bắt buộc",
+      "address_is_required":"Địa chỉ bắt buộc",
+      "phone_is_required": "Số điện thoại bắt buộc",
+      "delivery_is_required": "Ngày giao hàng bắt buộc",
+      "invalid_date": "Ngày không hợp lệ",
+      "date_must_be_today_or_later": "Không thể chọn ngày trong quá khứ"
+    },
+    "order_picker":{
+      "name" : "Tên sản phẩm",
+      "inventory": "Tồn kho",
+      "quantity": "Số lượng"
+    }
   },
   "product_page": {
     "table": {
@@ -59,6 +90,7 @@
     }
   },
   "common": {
+    "welcome_message": "Chào mừng tài khoản <b>{{email}}</b> đến với <b>Chú Truý Food</b>",
     "actions": "Hành động",
     "status": "Trạng thái",
     "created_date": "Ngày tạo",
