@@ -470,7 +470,6 @@ function OrderPage() {
 				<td className="p-4 py-5">
 					<div className="flex items-center gap-2 flex-wrap">
 						<div className="relative">
-							s
 							<button
 								className=" border p-2 rounded-md"
 								onClick={() => handlePopoverChange(order)}>
