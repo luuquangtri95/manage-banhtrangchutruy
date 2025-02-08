@@ -480,43 +480,49 @@ function OrderPage() {
 									ref={popoverRef}
 									className="absolute w-[200px] h-auto max-h-[186px] bg-white top-[-70px] left-[-210px] rounded-md flex flex-col justify-center gap-1 p-2 shadow-lg">
 									<div
-										className="flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all"
+										className="cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all"
 										onClick={() => handleEdit(order)}>
 										<button className="border p-2 rounded-md">
 											<Icon type="icon-edit" />
 										</button>
-										<label>Edit order</label>
+										<p>Edit order</p>
 									</div>
 
 									{userInfo.role === "admin" && (
 										<div
-											className="flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all"
+											className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
+												order.status === "success" &&
+												"pointer-events-none opacity-[0.4]"
+											}`}
 											onClick={() => handleChangeStatus(order, "success")}>
 											<button className="border p-2 rounded-md">
 												<Icon type="icon-success" />
 											</button>
-											<label>Complete Order</label>
+											<p>Complete Order</p>
 										</div>
 									)}
 
 									{userInfo.role === "admin" && (
 										<div
-											className="flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all"
+											className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
+												order.status === "pending" &&
+												"pointer-events-none opacity-[0.4]"
+											}`}
 											onClick={() => handleChangeStatus(order, "pending")}>
 											<button className="border p-2 rounded-md">
 												<Icon type="icon-pending" />
 											</button>
-											<label>Pending Order</label>
+											<p>Pending Order</p>
 										</div>
 									)}
 
 									<div
-										className="flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all"
+										className="cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all"
 										onClick={() => handleConfirmDelete(order)}>
 										<button className="border p-2 rounded-md">
 											<Icon type="icon-delete" />
 										</button>
-										<label>Delete Order</label>
+										<p>Delete Order</p>
 									</div>
 								</div>
 							)}

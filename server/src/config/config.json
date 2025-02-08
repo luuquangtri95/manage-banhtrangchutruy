@@ -1,0 +1,9 @@
+{
+    "development": {
+      "username": "luuquangtri",
+      "password": "123456tri",
+      "database": "anvatchutruy_db",
+      "host": "127.0.0.1",
+      "dialect": "postgres"
+    },
+  }

@@ -12,6 +12,7 @@ import WholesalePrice from "../pages/wholesale-price";
 import ProtectedRoutes from "../routes/ProtectedRoutes";
 import UnauthorizedRoutes from "../routes/UnauthorizedRoutes";
 import ProfilePage from "../pages/profile";
+import CreateGroupPage from "../pages/wholesale-price/create-group";
 
 const AppRoutes = () => {
 	return (
@@ -48,8 +49,13 @@ const AppRoutes = () => {
 						element={<AnalyticPage />}
 					/>
 					<Route
-						path="wholesale-price"
+						path="wholesale-prices"
 						element={<WholesalePrice />}
+					/>
+					<Route
+						index
+						path="wholesale-groups"
+						element={<CreateGroupPage />}
 					/>
 					<Route
 						path="manage-permission"
