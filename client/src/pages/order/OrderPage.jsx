@@ -17,6 +17,7 @@ const INIT_FORMDATA = {
 		value: "",
 		type: "text",
 		error: "",
+		disabled: false,
 		validate: (value) => {
 			if (!value.trim()) return "order_page.validate.title_is_required";
 			if (value.length < 5) return "order_page.validate.title_min_length";
@@ -27,6 +28,7 @@ const INIT_FORMDATA = {
 		value: "",
 		type: "text",
 		error: "",
+		disabled: false,
 		validate: (value) => {
 			if (!value.trim()) return "order_page.validate.username_is_required";
 			return "";
@@ -36,6 +38,7 @@ const INIT_FORMDATA = {
 		value: "",
 		type: "text",
 		error: "",
+		disabled: false,
 		validate: (value) => {
 			if (!value.trim()) return "order_page.validate.address_is_required";
 			return "";
@@ -45,6 +48,7 @@ const INIT_FORMDATA = {
 		value: "",
 		type: "number",
 		error: "",
+		disabled: false,
 		validate: (value) => {
 			if (!value.toString().trim()) return "order_page.validate.phone_is_required";
 			return "";
@@ -145,7 +149,6 @@ function OrderPage() {
 
 	useEffect(() => {
 		const handleClickOutside = (e) => {
-			// Kiểm tra nếu popoverRef.current tồn tại trước khi gọi .contains
 			if (popoverRef.current && !popoverRef.current.contains(e.target)) {
 				setPopoverData(null);
 			}
@@ -158,7 +161,7 @@ function OrderPage() {
 
 		// Cleanup khi component unmount hoặc popoverData thay đổi
 		return () => document.removeEventListener("mousedown", handleClickOutside);
-	}, [popoverData]); // Chạy lại khi popoverData thay đổi
+	}, [popoverData]);
 
 	const fetchOrders = async () => {
 		try {
@@ -231,8 +234,8 @@ function OrderPage() {
 
 		if (hasError) return;
 
-		const formattedData = Object.keys(formData).reduce((acc, key) => {
-			acc[key] = formData[key].value;
+		const formattedData = Object.keys(newFormData).reduce((acc, key) => {
+			acc[key] = newFormData[key].value;
 			return acc;
 		}, {});
 
@@ -261,7 +264,7 @@ function OrderPage() {
 			}
 		} catch (error) {
 			console.log("handlePopupSubmit error", error);
-			// toast.error("Failed to submit product");
+			toast.error("Failed to submit product");
 		} finally {
 			setPopupData(null);
 			setFormData(INIT_FORMDATA);
@@ -339,6 +342,13 @@ function OrderPage() {
 
 	const handleDeleteOrder = async () => {
 		if (!orderDelete) return;
+
+		if (orderDelete.status === "success" && !userInfo.role !== "admin") {
+			toast.error(
+				"Đơn hàng đã hoàn tất, bạn không thể xoá đơn hàng này !, vui lòng liên hệ admin"
+			);
+			return;
+		}
 
 		try {
 			await OrderApi.delete(orderDelete.id);
@@ -468,64 +478,147 @@ function OrderPage() {
 				</td>
 				<td className="p-4 py-5">
 					<div className="flex items-center gap-2 flex-wrap">
-						<div className="relative">
-							<button
-								className=" border p-2 rounded-md"
-								onClick={() => handlePopoverChange(order)}>
-								<Icon type="icon-dot-menu" />
-							</button>
-							{popoverData?.id === order.id && (
-								<div
-									ref={popoverRef}
-									className="absolute w-[200px] h-auto max-h-[186px] bg-white top-[-70px] left-[-210px] rounded-md flex flex-col justify-center gap-1 p-2 shadow-lg">
+						{userInfo.role === "admin" && (
+							<div className="relative">
+								<button
+									className=" border p-2 rounded-md"
+									onClick={() => handlePopoverChange(order)}>
+									<Icon type="icon-dot-menu" />
+								</button>
+								{popoverData?.id === order.id && (
 									<div
-										className="cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all"
-										onClick={() => handleEdit(order)}>
-										<button className="border p-2 rounded-md">
-											<Icon type="icon-edit" />
-										</button>
-										<p>Edit order</p>
-									</div>
-
-									{userInfo.role === "admin" && (
+										ref={popoverRef}
+										className="absolute w-[200px] h-auto max-h-[186px] bg-white top-[-70px] left-[-210px] rounded-md flex flex-col justify-center gap-1 p-2 shadow-lg">
 										<div
 											className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
 												order.status === "success" &&
-												"pointer-events-none opacity-[0.4]"
+												userInfo.role !== "admin" &&
+												"pointer-events-none opacity-50"
 											}`}
-											onClick={() => handleChangeStatus(order, "success")}>
+											onClick={() => handleEdit(order)}>
 											<button className="border p-2 rounded-md">
-												<Icon type="icon-success" />
+												<Icon type="icon-edit" />
 											</button>
-											<p>Complete Order</p>
+											<p>Edit order</p>
 										</div>
-									)}
 
-									{userInfo.role === "admin" && (
+										{userInfo.role === "admin" && (
+											<div
+												className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
+													order.status === "success" &&
+													"pointer-events-none opacity-[0.4]"
+												}`}
+												onClick={() =>
+													handleChangeStatus(order, "success")
+												}>
+												<button className="border p-2 rounded-md">
+													<Icon type="icon-success" />
+												</button>
+												<p>Complete Order</p>
+											</div>
+										)}
+
+										{userInfo.role === "admin" && (
+											<div
+												className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
+													order.status === "pending" &&
+													"pointer-events-none opacity-[0.4]"
+												}`}
+												onClick={() =>
+													handleChangeStatus(order, "pending")
+												}>
+												<button className="border p-2 rounded-md">
+													<Icon type="icon-pending" />
+												</button>
+												<p>Pending Order</p>
+											</div>
+										)}
+
 										<div
 											className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
-												order.status === "pending" &&
-												"pointer-events-none opacity-[0.4]"
+												order.status === "success" &&
+												userInfo.role !== "admin" &&
+												"pointer-events-none opacity-50"
 											}`}
-											onClick={() => handleChangeStatus(order, "pending")}>
+											onClick={() => handleConfirmDelete(order)}>
 											<button className="border p-2 rounded-md">
-												<Icon type="icon-pending" />
+												<Icon type="icon-delete" />
 											</button>
-											<p>Pending Order</p>
+											<p>Delete Order</p>
 										</div>
-									)}
-
-									<div
-										className="cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all"
-										onClick={() => handleConfirmDelete(order)}>
-										<button className="border p-2 rounded-md">
-											<Icon type="icon-delete" />
-										</button>
-										<p>Delete Order</p>
 									</div>
-								</div>
-							)}
-						</div>
+								)}
+							</div>
+						)}
+
+						{order.status !== "success" && userInfo.role !== "admin" && (
+							<div className="relative">
+								<button
+									className=" border p-2 rounded-md"
+									onClick={() => handlePopoverChange(order)}>
+									<Icon type="icon-dot-menu" />
+								</button>
+								{popoverData?.id === order.id && (
+									<div
+										ref={popoverRef}
+										className="absolute w-[200px] h-auto max-h-[186px] bg-white top-[-70px] left-[-210px] rounded-md flex flex-col justify-center gap-1 p-2 shadow-lg">
+										<div
+											className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all`}
+											onClick={() => handleEdit(order)}>
+											<button className="border p-2 rounded-md">
+												<Icon type="icon-edit" />
+											</button>
+											<p>Edit order</p>
+										</div>
+
+										{userInfo.role === "admin" && (
+											<div
+												className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
+													order.status === "success" &&
+													"pointer-events-none opacity-[0.4]"
+												}`}
+												onClick={() =>
+													handleChangeStatus(order, "success")
+												}>
+												<button className="border p-2 rounded-md">
+													<Icon type="icon-success" />
+												</button>
+												<p>Complete Order</p>
+											</div>
+										)}
+
+										{userInfo.role === "admin" && (
+											<div
+												className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
+													order.status === "pending" &&
+													"pointer-events-none opacity-[0.4]"
+												}`}
+												onClick={() =>
+													handleChangeStatus(order, "pending")
+												}>
+												<button className="border p-2 rounded-md">
+													<Icon type="icon-pending" />
+												</button>
+												<p>Pending Order</p>
+											</div>
+										)}
+
+										<div
+											className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all`}
+											onClick={() => handleConfirmDelete(order)}>
+											<button className="border p-2 rounded-md">
+												<Icon type="icon-delete" />
+											</button>
+											<p>Delete Order</p>
+										</div>
+									</div>
+								)}
+							</div>
+						)}
+
+						{order.status === "success" && userInfo.role !== "admin" && (
+							<p className="text-[14px]">No action</p>
+						)}
 					</div>
 				</td>
 			</tr>
@@ -595,7 +688,14 @@ function OrderPage() {
 				isOpen={popupData}
 				onSubmit={handlePopupSubmit}
 				onClose={handleClosePopup}>
-				<div className="flex gap-2 flex-wrap w-full">
+				<div
+					className={`flex gap-2 flex-wrap w-full ${
+						popupData &&
+						formData.status.value === "success" &&
+						userInfo.role !== "admin"
+							? "pointer-events-none opacity-50"
+							: ""
+					}`}>
 					{Object.keys(formData).map((key) => {
 						const field = formData[key];
 
@@ -615,74 +715,121 @@ function OrderPage() {
 									options={field.options || []}
 									onChange={(e) => handleFormChange(key, e.target.value)}
 									className="h-[38px] text-sm"
-									disabled={field.disabled || false}
+									disabled={
+										field.disabled ||
+										(popoverData &&
+											formData.status.value === "success" &&
+											userInfo.role !== "admin")
+									}
 								/>
 							</div>
 						);
 					})}
 				</div>
 				<div className="mb-4">
-					<label className="block text-sm font-medium text-gray-700 mb-1">
-						{t("order_page.popup.product")}
-					</label>
-					<Select
-						isMultiple
-						value={originProduct}
-						onChange={handleChangeProduct}
-						options={productsCategories}
-					/>
+					<fieldset
+						className={`${
+							popupData &&
+							formData.status.value === "success" &&
+							userInfo.role !== "admin" &&
+							"opacity-50 pointer-events-none"
+						}`}
+						disabled={
+							popupData &&
+							formData.status.value === "success" &&
+							userInfo.role !== "admin"
+						}>
+						<label className="block text-sm font-medium text-gray-700 mb-1">
+							{t("order_page.popup.product")}
+						</label>
+						<Select
+							isMultiple
+							value={originProduct}
+							onChange={handleChangeProduct}
+							options={productsCategories}
+						/>
+					</fieldset>
 				</div>
 
-				{originProduct?.map((item) => {
-					return (
-						<div
-							key={item.value}
-							className="flex items-end gap-3">
-							<div className=" flex-1 flex gap-2 text-sm items-start">
-								<FormField
-									label={t("order_page.order_picker.name")}
-									value={item?.label}
-									type="text"
-									onChange={() => {}}
-									className="cursor-not-allowed"
-									disabled
-								/>
-								<div className="w-[150px]">
+				<fieldset
+					className={`${
+						popupData &&
+						formData.status.value === "success" &&
+						userInfo.role !== "admin" &&
+						"opacity-50 pointer-events-none"
+					}`}
+					disabled={
+						popupData &&
+						formData.status.value === "success" &&
+						userInfo.role !== "admin"
+					}>
+					{originProduct?.map((item) => {
+						return (
+							<div
+								key={item.value}
+								className={`flex items-end gap-3 ${
+									popoverData &&
+									formData.status.value === "success" &&
+									userInfo.role !== "admin" &&
+									"pointer-events-none"
+								}`}>
+								<div className=" flex-1 flex gap-2 text-sm items-start">
 									<FormField
+										label={t("order_page.order_picker.name")}
+										value={item?.label}
+										type="text"
 										onChange={() => {}}
-										label={t("order_page.order_picker.inventory")}
-										value={
-											productsCategories.find((_i) =>
-												_i.options.some((__i) => __i.value === item.value)
-											)?.options?.[0]?.quantity
-										}
-										type="number"
+										className="cursor-not-allowed"
 										disabled
 									/>
+									<div className="w-[150px]">
+										<FormField
+											onChange={() => {}}
+											label={t("order_page.order_picker.inventory")}
+											value={
+												productsCategories.find((_i) =>
+													_i.options.some(
+														(__i) => __i.value === item.value
+													)
+												)?.options?.[0]?.quantity
+											}
+											type="number"
+											disabled
+										/>
+									</div>
+									<div className="w-[150px]">
+										<FormField
+											label={t("order_page.order_picker.quantity")}
+											value={item.quantity}
+											type="number"
+											disabled={
+												productsCategories.find((_i) =>
+													_i.options.some(
+														(__i) => __i.value === item.value
+													)
+												)?.options[0]?.quantity === 0
+											}
+											onChange={(e) =>
+												handleChangeQuantityProductPicker(e, item)
+											}
+										/>
+									</div>
 								</div>
-								<div className="w-[150px]">
-									<FormField
-										label={t("order_page.order_picker.quantity")}
-										value={item.quantity}
-										type="number"
-										disabled={
-											productsCategories.find((_i) =>
-												_i.options.some((__i) => __i.value === item.value)
-											)?.options[0]?.quantity === 0
-										}
-										onChange={(e) => handleChangeQuantityProductPicker(e, item)}
-									/>
-								</div>
-							</div>
 
-							<button
-								className="mb-4 border p-[6px] border-[#ccc] rounded-md hover:border-[#fe3d3d]"
-								onClick={() => handleRemoveProductPicked(item)}>
-								<Icon type="icon-delete" />
-							</button>
-						</div>
-					);
-				})}
+								<button
+									className={`mb-4 border p-[6px] border-[#ccc] rounded-md hover:border-[#fe3d3d] ${
+										popoverData &&
+										formData.status.value === "success" &&
+										userInfo.role !== "admin" &&
+										"pointer-events-none opacity-[0.4]"
+									}`}
+									onClick={() => handleRemoveProductPicked(item)}>
+									<Icon type="icon-delete" />
+								</button>
+							</div>
+						);
+					})}
+				</fieldset>
 			</Popup>
 
 			<Popup
