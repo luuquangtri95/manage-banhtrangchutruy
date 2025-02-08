@@ -11,7 +11,6 @@ import Popup from "../../components/Popup";
 import { formatDateWithIntl } from "../../helpers/convertDate";
 import usePageLoading from "../../hooks/usePageLoading";
 import { DashboardContext } from "../dashboard/Dashboard";
-import Dropdown from "../../components/Dropdown/Dropdown";
 
 const INIT_FORMDATA = {
 	title: {
