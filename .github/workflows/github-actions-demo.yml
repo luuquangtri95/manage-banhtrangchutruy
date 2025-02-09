@@ -3,12 +3,12 @@ name: CI/CD Pipeline
 
 # Xác định khi nào workflow sẽ được kích hoạt
 on:
-  # Kích hoạt khi có push vào branch main
+  # Kích hoạt khi có push vào branch master
   push:
-    branches: [ main ]
-  # Kích hoạt khi có pull request vào branch main
+    branches: [ master ]
+  # Kích hoạt khi có pull request vào branch master
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
 
 # Định nghĩa các công việc cần thực hiện
 jobs:
