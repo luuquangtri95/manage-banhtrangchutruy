@@ -1,18 +1,89 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
+# Tên của pipeline CI/CD
+name: CI/CD Pipeline
+
+# Xác định khi nào workflow sẽ được kích hoạt
+on:
+  # Kích hoạt khi có push vào branch main
+  push:
+    branches: [ main ]
+  # Kích hoạt khi có pull request vào branch main
+  pull_request:
+    branches: [ main ]
+
+# Định nghĩa các công việc cần thực hiện
 jobs:
-  Explore-GitHub-Actions:
+  # Công việc cho phần client
+  client:
+    # Chạy trên hệ điều hành Ubuntu phiên bản mới nhất
     runs-on: ubuntu-latest
+    # Thiết lập mặc định cho các bước chạy
+    defaults:
+      run:
+        # Đặt thư mục làm việc là ./client
+        working-directory: ./client
+
+    # Các bước thực hiện
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
-        uses: actions/checkout@v4
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+    # Bước 1: Checkout code từ repository
+    - uses: actions/checkout@v4
+    
+    # Bước 2: Cài đặt Node.js
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        # Sử dụng Node.js version 20
+        node-version: '20'
+        # Sử dụng cache cho npm
+        cache: 'npm'
+        # Đường dẫn đến file package-lock.json
+        cache-dependency-path: './client/package-lock.json'
+    
+    # Bước 3: Cài đặt các dependencies
+    - name: Install Dependencies
+      run: npm ci
+    
+    # Bước 4: Build ứng dụng
+    - name: Build
+      run: npm run build
+    
+    # Bước 5: Chạy test
+    - name: Test
+      run: npm test
+
+  # Công việc cho phần server
+  server:
+    # Chạy trên hệ điều hành Ubuntu phiên bản mới nhất
+    runs-on: ubuntu-latest
+    # Thiết lập mặc định cho các bước chạy
+    defaults:
+      run:
+        # Đặt thư mục làm việc là ./server
+        working-directory: ./server
+    
+    # Các bước thực hiện
+    steps:
+    # Bước 1: Checkout code từ repository
+    - uses: actions/checkout@v4
+    
+    # Bước 2: Cài đặt Node.js
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        # Sử dụng Node.js version 20
+        node-version: '20'
+        # Sử dụng cache cho npm
+        cache: 'npm'
+        # Đường dẫn đến file package-lock.json
+        cache-dependency-path: './server/package-lock.json'
+    
+    # Bước 3: Cài đặt các dependencies
+    - name: Install Dependencies
+      run: npm ci
+    
+    # Bước 4: Build ứng dụng
+    - name: Build
+      run: npm run build
+    
+    # Bước 5: Chạy test
+    - name: Test
+      run: npm test

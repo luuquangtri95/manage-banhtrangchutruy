@@ -1,11 +1,5 @@
-/*
-SỬ DỤNG FILE NÀY VỚI MỤC ĐÍCH LÀ MIGRATION DB, KHÔNG SỬA DB TRÊN LIVE 1 CÁCH THỦ CÔNG
-*/
-
 const dotenv = require("dotenv");
-const path = require("path");
-
-dotenv.config({ path: path.join(__dirname, "../../", ".env") });
+dotenv.config();
 
 module.exports = {
 	development: {
