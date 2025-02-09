@@ -419,11 +419,17 @@ function OrderPage() {
 							</span>
 							<div className="flex items-center gap-1">
 								<span className="font-medium text-[#2563EB]">
-									{order.title.length > 20
-										? order.title.slice(0, 20) + "..."
+									{order.title.length > 15
+										? order.title.slice(0, 15) + "..."
 										: order.title}
 								</span>
-								<Icon type="icon-info" />
+								<div className="relative group">
+									<Icon type="icon-info" />
+
+									<div className="absolute flex items-center p-2 w-auto h-[30px] rounded-md top-[-35px] bg-[#eee] shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300">
+										{order.title}
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -432,8 +438,8 @@ function OrderPage() {
 							{t("order_page.table.username").toUpperCase()} :
 						</span>
 						<span className="font-medium text-[#2563EB]">
-							{order.fullname.length > 20
-								? order.fullname.slice(0, 20) + "..."
+							{order.fullname.length > 15
+								? order.fullname.slice(0, 15) + "..."
 								: order.fullname}
 						</span>
 					</div>
@@ -450,11 +456,17 @@ function OrderPage() {
 							</span>
 							<div className="flex items-center gap-1">
 								<span className="font-medium text-[#2563EB]">
-									{order.address.length
-										? order.address.slice(0, 20) + "..."
+									{order.address.length > 15
+										? order.address.slice(0, 15) + "..."
 										: order.address}
 								</span>
-								<Icon type="icon-info" />
+								<div className="relative group">
+									<Icon type="icon-info" />
+
+									<div className="absolute flex items-center p-2 w-auto h-[30px] rounded-md top-[-35px] bg-[#eee] shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300">
+										{order.address}
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
