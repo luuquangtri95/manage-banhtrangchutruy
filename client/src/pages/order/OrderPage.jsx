@@ -729,109 +729,77 @@ function OrderPage() {
 					})}
 				</div>
 				<div className="mb-4">
-					<fieldset
-						className={`${
-							popupData &&
-							formData.status.value === "success" &&
-							userInfo.role !== "admin" &&
-							"opacity-50 pointer-events-none"
-						}`}
-						disabled={
-							popupData &&
-							formData.status.value === "success" &&
-							userInfo.role !== "admin"
-						}>
-						<label className="block text-sm font-medium text-gray-700 mb-1">
-							{t("order_page.popup.product")}
-						</label>
-						<Select
-							isMultiple
-							value={originProduct}
-							onChange={handleChangeProduct}
-							options={productsCategories}
-						/>
-					</fieldset>
+					<label className="block text-sm font-medium text-gray-700 mb-1">
+						{t("order_page.popup.product")}
+					</label>
+					<Select
+						isMultiple
+						value={originProduct}
+						onChange={handleChangeProduct}
+						options={productsCategories}
+					/>
 				</div>
 
-				<fieldset
-					className={`${
-						popupData &&
-						formData.status.value === "success" &&
-						userInfo.role !== "admin" &&
-						"opacity-50 pointer-events-none"
-					}`}
-					disabled={
-						popupData &&
-						formData.status.value === "success" &&
-						userInfo.role !== "admin"
-					}>
-					{originProduct?.map((item) => {
-						return (
-							<div
-								key={item.value}
-								className={`flex items-end gap-3 ${
+				{originProduct?.map((item) => {
+					return (
+						<div
+							key={item.value}
+							className={`flex items-end gap-3 ${
+								popoverData &&
+								formData.status.value === "success" &&
+								userInfo.role !== "admin" &&
+								"pointer-events-none"
+							}`}>
+							<div className=" flex-1 flex gap-2 text-sm items-start">
+								<FormField
+									label={t("order_page.order_picker.name")}
+									value={item?.label}
+									type="text"
+									onChange={() => {}}
+									className="cursor-not-allowed"
+									disabled
+								/>
+								<div className="w-[150px]">
+									<FormField
+										onChange={() => {}}
+										label={t("order_page.order_picker.inventory")}
+										value={
+											productsCategories.find((_i) =>
+												_i.options.some((__i) => __i.value === item.value)
+											)?.options?.[0]?.quantity
+										}
+										type="number"
+										disabled
+									/>
+								</div>
+								<div className="w-[150px]">
+									<FormField
+										label={t("order_page.order_picker.quantity")}
+										value={item.quantity}
+										type="number"
+										disabled={
+											productsCategories.find((_i) =>
+												_i.options.some((__i) => __i.value === item.value)
+											)?.options[0]?.quantity === 0
+										}
+										onChange={(e) => handleChangeQuantityProductPicker(e, item)}
+									/>
+								</div>
+							</div>
+
+							<button
+								className={`mb-4 border p-[6px] border-[#ccc] rounded-md hover:border-[#fe3d3d] ${
 									popoverData &&
 									formData.status.value === "success" &&
 									userInfo.role !== "admin" &&
-									"pointer-events-none"
-								}`}>
-								<div className=" flex-1 flex gap-2 text-sm items-start">
-									<FormField
-										label={t("order_page.order_picker.name")}
-										value={item?.label}
-										type="text"
-										onChange={() => {}}
-										className="cursor-not-allowed"
-										disabled
-									/>
-									<div className="w-[150px]">
-										<FormField
-											onChange={() => {}}
-											label={t("order_page.order_picker.inventory")}
-											value={
-												productsCategories.find((_i) =>
-													_i.options.some(
-														(__i) => __i.value === item.value
-													)
-												)?.options?.[0]?.quantity
-											}
-											type="number"
-											disabled
-										/>
-									</div>
-									<div className="w-[150px]">
-										<FormField
-											label={t("order_page.order_picker.quantity")}
-											value={item.quantity}
-											type="number"
-											disabled={
-												productsCategories.find((_i) =>
-													_i.options.some(
-														(__i) => __i.value === item.value
-													)
-												)?.options[0]?.quantity === 0
-											}
-											onChange={(e) =>
-												handleChangeQuantityProductPicker(e, item)
-											}
-										/>
-									</div>
-								</div>
-
-								<button
-									className={`mb-4 border p-[6px] border-[#ccc] rounded-md hover:border-[#fe3d3d] ${
-										popoverData &&
-										formData.status.value === "success" &&
-										userInfo.role !== "admin" &&
-										"pointer-events-none opacity-[0.4]"
-									}`}
-									onClick={() => handleRemoveProductPicked(item)}>
-									<Icon type="icon-delete" />
-								</button>
-							</div>
-						);
-					})}
-				</fieldset>
+									"pointer-events-none opacity-[0.4]"
+								}`}
+								onClick={() => handleRemoveProductPicked(item)}>
+								<Icon type="icon-delete" />
+							</button>
+						</div>
+					);
+				})}
 			</Popup>
 
 			<Popup
