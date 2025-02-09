@@ -6,7 +6,7 @@ Badge.propTypes = {
 };
 
 function Badge(props) {
-	const { value, type } = props;
+	const { value, type, className = "" } = props;
 	const badgeClass = () => {
 		switch (type) {
 			case "pending":
@@ -16,15 +16,15 @@ function Badge(props) {
 			case "draft":
 				return "bg-[#ffd6a4] text-[#5e4200]";
 			default:
-				return "bg-[#4de74d]";
+				return "bg-[#affebf]";
 		}
 	};
 
 	return (
 		<div
-			className="status p-2 w-[100px] flex items-center text-sm"
+			className="status flex items-center text-sm"
 			value={type}>
-			<span className={`${badgeClass()} w-full text-center pb-[2px] rounded-md text-black`}>
+			<span className={`${badgeClass()} w-auto p-2 text-center rounded-md ${className}`}>
 				{value}
 			</span>
 		</div>

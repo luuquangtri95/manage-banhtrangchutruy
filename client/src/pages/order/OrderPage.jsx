@@ -465,12 +465,14 @@ function OrderPage() {
 				<td className="p-4 py-1 text-sm text-slate-500">
 					<Badge
 						value={formatDateWithIntl(order.delivery_date)}
-						type="active"></Badge>
+						type="active"
+						className="#003a5a"></Badge>
 				</td>
 				<td className="p-4 py-1 text-sm text-slate-500">
 					<Badge
 						value={t(`order_page.table.${order.status}`)}
 						type={order.status}
+						className="text-[#014b40]"
 					/>
 				</td>
 				<td className="p-4 py-1 text-sm text-slate-500">

@@ -11,7 +11,6 @@ import authorizedAxiosInstance from "../../utils/authorizedAxios";
 export const DashboardContext = createContext(null);
 
 const MENU_ITEMS = [
-	// { path: "/dashboard/orders/create", icon: "icon-create", label: "create_order" },
 	{ path: "/dashboard/orders", icon: "icon-manager-order", label: "menu.manage_orders" },
 	{ path: "/dashboard/products", icon: "icon-products", label: "menu.manage_products" },
 	{ path: "/dashboard/categories", icon: "icon-category", label: "menu.manage_categories" },
