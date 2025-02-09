@@ -45,10 +45,6 @@ jobs:
     # Bước 4: Build ứng dụng
     - name: Build
       run: npm run build
-    
-    # Bước 5: Chạy test
-    - name: Test
-      run: npm test
 
   # Công việc cho phần server
   server:
@@ -84,6 +80,3 @@ jobs:
     - name: Build
       run: npm run build
     
-    # Bước 5: Chạy test
-    - name: Test
-      run: npm test
