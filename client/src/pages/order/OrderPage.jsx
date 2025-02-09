@@ -413,37 +413,55 @@ function OrderPage() {
 				className="hover:bg-slate-50 border-b border-slate-200">
 				<td className="py-4">
 					<div className="p-4 py-1 text-sm text-slate-800">
-						<span className="font-medium">
-							{t("order_page.table.order_title").toUpperCase()} :
-						</span>
-						<span className="font-medium text-[#2234ff]">{order.title}</span>
+						<div className="flex items-center gap-1">
+							<span className="font-medium">
+								{t("order_page.table.order_title").toUpperCase()} :
+							</span>
+							<div className="flex items-center gap-1">
+								<span className="font-medium text-[#2563EB]">
+									{order.title.length > 20
+										? order.title.slice(0, 20) + "..."
+										: order.title}
+								</span>
+								<Icon type="icon-info" />
+							</div>
+						</div>
 					</div>
 					<div className="p-4 py-1 text-sm text-slate-800">
 						<span className="font-medium">
 							{t("order_page.table.username").toUpperCase()} :
 						</span>
-						<span className="font-medium">{order.fullname}</span>
+						<span className="font-medium text-[#2563EB]">
+							{order.fullname.length > 20
+								? order.fullname.slice(0, 20) + "..."
+								: order.fullname}
+						</span>
 					</div>
 					<div className="p-4 py-1 text-sm text-slate-800">
 						<span className="font-medium">
 							{t("order_page.table.phone").toUpperCase()} :
 						</span>
-						<span className="font-medium text-[#2234ff]">{order.phone}</span>
+						<span className="font-medium text-[#2563EB]">{order.phone}</span>
 					</div>
 					<div className="p-4 py-1 text-sm text-slate-800">
-						<span className="font-medium">
-							{t("order_page.table.address").toUpperCase()} :
-						</span>
-						<span className="font-medium text-[#2234ff]">{order.address}</span>
+						<div className="flex items-center gap-1">
+							<span className="font-medium">
+								{t("order_page.table.address").toUpperCase()} :
+							</span>
+							<div className="flex items-center gap-1">
+								<span className="font-medium text-[#2563EB]">
+									{order.address.length
+										? order.address.slice(0, 20) + "..."
+										: order.address}
+								</span>
+								<Icon type="icon-info" />
+							</div>
+						</div>
 					</div>
-				</td>
-				<td className="p-4 py-1 text-sm text-slate-500">
-					<span className="font-medium">{order.user.username}</span>
-					<div className="border w-[50px] h-[2px] border-[#2234ff]"></div>
 				</td>
 				<td className="p-4 py-1 text-sm text-slate-500">
 					<span className="font-medium">{order.user.email}</span>
-					<div className="border w-[50px] h-[2px] border-[#2234ff]"></div>
+					<div className="border w-[50px] h-[2px] border-[#2563EB]"></div>
 				</td>
 				<td className="p-4 py-1 text-sm text-slate-500">
 					<ul className="list-disc">
@@ -454,7 +472,7 @@ function OrderPage() {
 								{product.name}
 								<span className="font-medium">
 									{" "}
-									<b className="text-white bg-blue-700 p-1 rounded-md ">
+									<b className="text-white bg-[#2563EB] p-1 rounded-md ">
 										x {product.quantity}
 									</b>
 								</span>
@@ -644,7 +662,6 @@ function OrderPage() {
 						<tr>
 							{[
 								"order_page.table.order_title",
-								"order_page.table.username",
 								"order_page.table.email",
 								"order_page.table.products",
 								"order_page.table.delivery_date",
@@ -687,6 +704,7 @@ function OrderPage() {
 			<Popup
 				title="Tạo đơn hàng"
 				width="max-w-6xl"
+				minHeight="min-h-[400px]"
 				isOpen={popupData}
 				onSubmit={handlePopupSubmit}
 				onClose={handleClosePopup}>
