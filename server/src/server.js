@@ -10,7 +10,7 @@ import { env } from "~/config/enviroment";
 import morgan from "morgan";
 import path from "path";
 import "~/models";
-// import "~/seed/seedDatabase";
+// import "~/seeders/seedDatabase";
 
 const START_SERVER = () => {
 	// Init Express App
