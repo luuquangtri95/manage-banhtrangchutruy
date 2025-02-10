@@ -43,13 +43,17 @@ const findAll = async (payload) => {
         "id",
         "username",
         "email",
-        "password",
         "isActive",
         "createdAt",
         "updatedAt",
       ],
       include: [
-        { model: RoleModel, attributes: ["name"], through: { attributes: [] } },
+        {
+          model: RoleModel,
+          as: "roles",
+          attributes: ["name"],
+          through: { attributes: [] },
+        },
       ],
     });
 

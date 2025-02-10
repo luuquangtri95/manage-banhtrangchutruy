@@ -28,6 +28,7 @@ const login = async (req, res) => {
 			include: [
 				{
 					model: RoleModel,
+					as: "roles",
 					through: { attributes: [] },
 				},
 			],

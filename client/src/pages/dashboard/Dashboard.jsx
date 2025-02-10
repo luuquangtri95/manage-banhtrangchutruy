@@ -14,26 +14,27 @@ const MENU_ITEMS = [
 	{ path: "/dashboard/orders", icon: "icon-manager-order", label: "menu.manage_orders" },
 	{ path: "/dashboard/products", icon: "icon-products", label: "menu.manage_products" },
 	{ path: "/dashboard/categories", icon: "icon-category", label: "menu.manage_categories" },
+
+	// { path: "/dashboard/support", icon: "icon-support", label: "contact_support" },
+];
+
+const ADMIN_MENU_ITEMS = [
 	{
 		label: "menu.wholesale_price",
 		icon: "icon-price",
 		subMenu: [
 			{
-				path: "/dashboard/wholesale-prices",
-				icon: "icon-list",
-				label: "menu.wholesale_prices",
-			},
-			{
 				path: "/dashboard/wholesale-groups",
 				icon: "icon-group",
 				label: "menu.wholesale_groups",
 			},
+			{
+				path: "/dashboard/wholesale-prices",
+				icon: "icon-list",
+				label: "menu.wholesale_prices",
+			},
 		],
 	},
-	// { path: "/dashboard/support", icon: "icon-support", label: "contact_support" },
-];
-
-const ADMIN_MENU_ITEMS = [
 	{ path: "/dashboard/analytics", icon: "icon-analytic", label: "menu.analytics" },
 	{ path: "/dashboard/users", icon: "icon-user-group", label: "menu.members" },
 	{ path: "/dashboard/partners", icon: "icon-partner", label: "menu.manage_partners" },
@@ -131,7 +132,7 @@ function Dashboard() {
 	const toggleWholesaleMenu = () => {
 		if (!isWholesaleOpen) {
 			if (!location.pathname.includes("/dashboard/wholesale")) {
-				navigate("/dashboard/wholesale-prices");
+				navigate("/dashboard/wholesale-groups");
 			}
 		}
 
@@ -161,6 +162,31 @@ function Dashboard() {
 					<div className="mt-2 flex flex-col">
 						<div className="mt-2 flex flex-col">
 							{MENU_ITEMS.map((item) => {
+								return (
+									<NavLink
+										key={item.path}
+										to={item.path}
+										className={({ isActive }) =>
+											`p-3 rounded-md flex items-center gap-2 transition-all duration-200 ${
+												isCollapse && !renderContent
+													? isActive
+														? "bg-[#ffe9cf]"
+														: "hover:text-gray-500"
+													: isActive
+													? "bg-[#ffe9cf]"
+													: "hover:bg-[#f5e6cf]"
+											}`
+										}>
+										<Icon type={item.icon} />
+										{!isCollapse && renderContent && <p>{t(item.label)}</p>}
+									</NavLink>
+								);
+							})}
+						</div>
+
+						{/* ADMIN MENU */}
+						{userInfo?.role === "admin" &&
+							ADMIN_MENU_ITEMS.map((item) => {
 								if (item.subMenu) {
 									return (
 										<div key={item.label}>
@@ -227,29 +253,6 @@ function Dashboard() {
 									);
 								}
 							})}
-						</div>
-
-						{/* ADMIN MENU */}
-						{userInfo?.role === "admin" &&
-							ADMIN_MENU_ITEMS.map((item) => (
-								<NavLink
-									key={item.path}
-									to={item.path}
-									className={({ isActive }) =>
-										`p-3 rounded-md flex items-center gap-2 transition-all duration-200 ${
-											isCollapse && !renderContent
-												? isActive
-													? "bg-[#ffe9cf]"
-													: "hover:text-gray-500"
-												: isActive
-												? "bg-[#ffe9cf]"
-												: "hover:bg-[#f5e6cf]"
-										}`
-									}>
-									<Icon type={item.icon} />
-									{!isCollapse && renderContent && <p>{t(item.label)}</p>}
-								</NavLink>
-							))}
 					</div>
 				</div>
 

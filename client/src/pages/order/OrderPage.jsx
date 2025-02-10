@@ -50,7 +50,13 @@ const INIT_FORMDATA = {
 		error: "",
 		disabled: false,
 		validate: (value) => {
+			const regex = /^(0|\+84)[3|5|7|8|9][0-9]{8}$/;
+
 			if (!value.toString().trim()) return "order_page.validate.phone_is_required";
+			if (!regex.test(value)) {
+				return "order_page.validate.phone_invalid";
+			}
+
 			return "";
 		},
 	},
@@ -472,7 +478,7 @@ function OrderPage() {
 					</div>
 				</td>
 				<td className="p-4 py-1 text-sm text-slate-500">
-					<span className="font-medium">{order.user.email}</span>
+					<span className="font-medium">{order?.users?.email}</span>
 					<div className="border w-[50px] h-[2px] border-[#2563EB]"></div>
 				</td>
 				<td className="p-4 py-1 text-sm text-slate-500">

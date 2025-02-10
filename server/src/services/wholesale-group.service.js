@@ -1,11 +1,21 @@
-import { CategoryRepository } from "~/repositories/category.repository";
+import { WholesaleGroupRepository } from "~/repositories/wholesale-group.repository";
 
 const create = async (req) => {
 	try {
 		const payload = req.body;
-		console.log("payload", payload);
 
-		return await CategoryRepository.create(payload);
+		return await WholesaleGroupRepository.create(payload);
+	} catch (error) {
+		throw error;
+	}
+};
+
+const update = async (req) => {
+	try {
+		const payload = req.body;
+		const { groupId } = req.params;
+
+		return await WholesaleGroupRepository.update(payload, groupId);
 	} catch (error) {
 		throw error;
 	}
@@ -28,7 +38,7 @@ const findAll = async (req) => {
 			order: _order,
 		};
 
-		return await CategoryRepository.findAll({ ...payload });
+		return await WholesaleGroupRepository.findAll({ ...payload });
 	} catch (error) {
 		throw error;
 	}
@@ -36,20 +46,9 @@ const findAll = async (req) => {
 
 const findById = async (req) => {
 	try {
-		const { categoryId } = req.params;
+		const groupId = req.params.groupId;
 
-		return await CategoryRepository.findById(categoryId);
-	} catch (error) {
-		throw error;
-	}
-};
-
-const update = async (req) => {
-	try {
-		const payload = req.body;
-		const { categoryId } = req.params;
-
-		return await CategoryRepository.update(payload, categoryId);
+		return await WholesaleGroupRepository.findById(groupId);
 	} catch (error) {
 		throw error;
 	}
@@ -57,15 +56,15 @@ const update = async (req) => {
 
 const _delete = async (req) => {
 	try {
-		const { categoryId } = req.params;
+		const groupId = req.params.groupId;
 
-		return await CategoryRepository.delete(categoryId);
+		return await WholesaleGroupRepository.delete(groupId);
 	} catch (error) {
 		throw error;
 	}
 };
 
-export const CategoryService = {
+export const WholesaleGroupService = {
 	create,
 	findAll,
 	findById,

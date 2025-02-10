@@ -41,6 +41,7 @@
       "product": "Product Picker"
     },
     "validate":{
+      "phone_invalid": "Phone format 0|+84 xxxx xxx",
       "title_is_required": "Order title is required",
       "title_min_length": "Order title must be longer than 5 characters",
       "username_is_required": "Orderer's name is required",
