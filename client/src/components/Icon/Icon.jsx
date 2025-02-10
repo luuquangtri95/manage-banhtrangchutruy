@@ -1310,156 +1310,108 @@ c2.098-1.39,3.357-3.737,3.357-6.254C347.118,315.421,345.856,313.073,343.759,311.
           </svg>
         );
 
-			case "icon-permission":
-				return (
-					<svg
-						width="25px"
-						height="25px"
-						viewBox="0 0 1920 1920"
-						xmlns="http://www.w3.org/2000/svg">
-						<path
-							d="M960 0c529.355 0 960 430.645 960 960s-430.645 960-960 960S0 1489.355 0 960 430.645 0 960 0Zm0 112.941c-467.125 0-847.059 379.934-847.059 847.059 0 467.125 379.934 847.059 847.059 847.059 467.125 0 847.059-379.934 847.059-847.059 0-467.125-379.934-847.059-847.059-847.059Zm-167.463 643.25c8.007-8.051 19.014-12.934 30.371-12.099h273.303c11.09 0 21.017 3.892 29.734 12.1 8.65 8.207 13.055 17.932 13.055 29.623v268.056h-75.974V1372H855.974v-318.129H780V785.815c0-11.712 4.242-21.438 12.537-29.624ZM960.023 525c62.023 0 92.977 30.837 92.977 92.556 0 60.962-31 91.444-92.978 91.444C898.044 709 867 678.518 867 617.577v-.044C867 555.881 898 525 960.023 525Z"
-							stroke="#979797"
-							fillRule="evenodd"
-						/>
-					</svg>
-				);
+      case "icon-permission":
+        return (
+          <svg
+            width="25px"
+            height="25px"
+            viewBox="0 0 1920 1920"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M960 0c529.355 0 960 430.645 960 960s-430.645 960-960 960S0 1489.355 0 960 430.645 0 960 0Zm0 112.941c-467.125 0-847.059 379.934-847.059 847.059 0 467.125 379.934 847.059 847.059 847.059 467.125 0 847.059-379.934 847.059-847.059 0-467.125-379.934-847.059-847.059-847.059Zm-167.463 643.25c8.007-8.051 19.014-12.934 30.371-12.099h273.303c11.09 0 21.017 3.892 29.734 12.1 8.65 8.207 13.055 17.932 13.055 29.623v268.056h-75.974V1372H855.974v-318.129H780V785.815c0-11.712 4.242-21.438 12.537-29.624ZM960.023 525c62.023 0 92.977 30.837 92.977 92.556 0 60.962-31 91.444-92.978 91.444C898.044 709 867 678.518 867 617.577v-.044C867 555.881 898 525 960.023 525Z"
+              stroke="#979797"
+              fillRule="evenodd"
+            />
+          </svg>
+        );
 
-			case "icon-user":
-				return (
-					<svg
-						width="20px"
-						height="20px"
-						viewBox="0 0 24 24"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg">
-						<circle
-							cx="12"
-							cy="9"
-							r="3"
-							stroke="#1C274C"
-							strokeWidth="1.5"
-						/>
-						<path
-							d="M17.9691 20C17.81 17.1085 16.9247 15 11.9999 15C7.07521 15 6.18991 17.1085 6.03076 20"
-							stroke="#1C274C"
-							strokeWidth="1.5"
-							strokeLinecap="round"
-						/>
-						<path
-							d="M7 3.33782C8.47087 2.48697 10.1786 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 10.1786 2.48697 8.47087 3.33782 7"
-							stroke="#1C274C"
-							strokeWidth="1.5"
-							strokeLinecap="round"
-						/>
-					</svg>
-				);
+      case "icon-user":
+        return (
+          <svg
+            width="20px"
+            height="20px"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="12" cy="9" r="3" stroke="#1C274C" strokeWidth="1.5" />
+            <path
+              d="M17.9691 20C17.81 17.1085 16.9247 15 11.9999 15C7.07521 15 6.18991 17.1085 6.03076 20"
+              stroke="#1C274C"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+            <path
+              d="M7 3.33782C8.47087 2.48697 10.1786 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 10.1786 2.48697 8.47087 3.33782 7"
+              stroke="#1C274C"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+          </svg>
+        );
 
-			case "icon-change-info":
-				return (
-					<svg
-						fill="#000000"
-						width="25px"
-						height="25px"
-						viewBox="0 0 32 32"
-						data-name="Layer 1"
-						id="Layer_1"
-						xmlns="http://www.w3.org/2000/svg">
-						<rect
-							height="1"
-							width="9"
-							x="11"
-							y="2"
-						/>
-						<rect
-							height="1"
-							width="12"
-							x="8"
-							y="29"
-						/>
-						<rect
-							height="1"
-							transform="translate(-13 22) rotate(-90)"
-							width="17"
-							x="-4"
-							y="17"
-						/>
-						<polygon points="24 6 24 17 23 18 23 6 24 6" />
-						<polygon points="23 23 24 22 24 26 23 26 23 23" />
-						<rect
-							height="1"
-							width="7"
-							x="4"
-							y="8"
-						/>
-						<rect
-							height="1"
-							width="8"
-							x="13"
-							y="5"
-						/>
-						<rect
-							height="1"
-							width="8"
-							x="13"
-							y="8"
-						/>
-						<rect
-							height="1"
-							width="14"
-							x="7"
-							y="11"
-						/>
-						<rect
-							height="1"
-							width="14"
-							x="7"
-							y="14"
-						/>
-						<rect
-							height="1"
-							width="14"
-							x="7"
-							y="17"
-						/>
-						<polygon points="7 20 21 20 20 21 7 21 7 20" />
-						<polygon points="7 23 18 23 17 24 7 24 7 23" />
-						<rect
-							height="1"
-							transform="translate(-1.68 6.66) rotate(-45)"
-							width="8.49"
-							x="2.96"
-							y="4.85"
-						/>
-						<rect
-							height="1"
-							transform="translate(5 16) rotate(-90)"
-							width="7"
-							x="7"
-							y="5"
-						/>
-						<path d="M20,2V3h2a1,1,0,0,1,1,1V6h1V4a2,2,0,0,0-2-2Z" />
-						<path d="M20,30V29h2a1,1,0,0,0,1-1V26h1v2a2,2,0,0,1-2,2Z" />
-						<path d="M8,30V29H6a1,1,0,0,1-1-1V26H4v2a2,2,0,0,0,2,2Z" />
-						<rect
-							height="10"
-							transform="translate(21.46 -9.51) rotate(45)"
-							width="2"
-							x="21.2"
-							y="16.15"
-						/>
-						<path
-							d="M27.15,15.2h0a1,1,0,0,1,1,1v1a0,0,0,0,1,0,0h-2a0,0,0,0,1,0,0v-1A1,1,0,0,1,27.15,15.2Z"
-							transform="translate(19.41 -14.46) rotate(45)"
-						/>
-						<polygon points="15.84 27.51 15.84 27.51 17.25 24.68 18.67 26.1 15.84 27.51" />
-					</svg>
-				);
-			default:
-				break;
-		}
-	};
-
+      case "icon-change-info":
+        return (
+          <svg
+            fill="#000000"
+            width="25px"
+            height="25px"
+            viewBox="0 0 32 32"
+            data-name="Layer 1"
+            id="Layer_1"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect height="1" width="9" x="11" y="2" />
+            <rect height="1" width="12" x="8" y="29" />
+            <rect
+              height="1"
+              transform="translate(-13 22) rotate(-90)"
+              width="17"
+              x="-4"
+              y="17"
+            />
+            <polygon points="24 6 24 17 23 18 23 6 24 6" />
+            <polygon points="23 23 24 22 24 26 23 26 23 23" />
+            <rect height="1" width="7" x="4" y="8" />
+            <rect height="1" width="8" x="13" y="5" />
+            <rect height="1" width="8" x="13" y="8" />
+            <rect height="1" width="14" x="7" y="11" />
+            <rect height="1" width="14" x="7" y="14" />
+            <rect height="1" width="14" x="7" y="17" />
+            <polygon points="7 20 21 20 20 21 7 21 7 20" />
+            <polygon points="7 23 18 23 17 24 7 24 7 23" />
+            <rect
+              height="1"
+              transform="translate(-1.68 6.66) rotate(-45)"
+              width="8.49"
+              x="2.96"
+              y="4.85"
+            />
+            <rect
+              height="1"
+              transform="translate(5 16) rotate(-90)"
+              width="7"
+              x="7"
+              y="5"
+            />
+            <path d="M20,2V3h2a1,1,0,0,1,1,1V6h1V4a2,2,0,0,0-2-2Z" />
+            <path d="M20,30V29h2a1,1,0,0,0,1-1V26h1v2a2,2,0,0,1-2,2Z" />
+            <path d="M8,30V29H6a1,1,0,0,1-1-1V26H4v2a2,2,0,0,0,2,2Z" />
+            <rect
+              height="10"
+              transform="translate(21.46 -9.51) rotate(45)"
+              width="2"
+              x="21.2"
+              y="16.15"
+            />
+            <path
+              d="M27.15,15.2h0a1,1,0,0,1,1,1v1a0,0,0,0,1,0,0h-2a0,0,0,0,1,0,0v-1A1,1,0,0,1,27.15,15.2Z"
+              transform="translate(19.41 -14.46) rotate(45)"
+            />
+            <polygon points="15.84 27.51 15.84 27.51 17.25 24.68 18.67 26.1 15.84 27.51" />
+          </svg>
+        );
       case "icon-blank":
         return (
           <svg

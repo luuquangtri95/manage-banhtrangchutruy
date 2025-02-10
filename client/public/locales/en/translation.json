@@ -170,6 +170,24 @@
     "password_required": "Password is required",
     "password_min_length": "Password must be at least 6 characters",
     "confirm_password_required": "Confirm Password is required",
-    "confirm_password_mismatch": "Passwords do not match"
+    "confirm_password_mismatch": "Passwords do not match",
+    "address_required": "Address is required",
+    "phone_required": "Phone is required",
+    "phone_number": "Phone must contain only number",
+    "delivery_date": "Date is required"
+  },
+  "order_popup": {
+    "header_title": "Create order",
+    "header_edit": "Update order",
+    "title": "Title",
+    "fullname": "Name",
+    "address": "Address",
+    "phone": "Phone",
+    "status": "Status",
+    "product": "Choose product",
+    "name_product": "Product name",
+    "inventory": "Inventory",
+    "quantity": "Quantity",
+    "delivery_date": "Delivery date"
   }
 }

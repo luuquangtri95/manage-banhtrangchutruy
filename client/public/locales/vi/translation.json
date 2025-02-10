@@ -146,6 +146,7 @@
     "created_date": "Ngày tạo",
     "search": "Tìm kiếm",
     "description": "Mô tả",
+    "cancel": "Huỷ bỏ",
 
     "confirm_delete": "Bạn có chắc chắn muốn xóa",
 
@@ -174,6 +175,24 @@
     "password_required": "Mật khẩu là bắt buộc",
     "password_min_length": "Mật khẩu phải có ít nhất 6 ký tự",
     "confirm_password_required": "Xác nhận mật khẩu là bắt buộc",
-    "confirm_password_mismatch": "Mật khẩu xác nhận không khớp"
+    "confirm_password_mismatch": "Mật khẩu xác nhận không khớp",
+    "address_required": "Địa chỉ là bắt buộc",
+    "phone_required": "Số điện thoại là bắt buộc",
+    "phone_number": "Số điện thoại không hợp lệ",
+    "delivery_date": "Ngày không hợp lệ"
+  },
+  "order_popup": {
+    "header_title": "Tạo đơn đặt hàng",
+    "header_edit": "Cập nhật đơn hàng",
+    "title": "Tiêu đề",
+    "fullname": "Tên",
+    "address": "Địa chỉ",
+    "phone": "Số điện thoại",
+    "status": "Trạng thái",
+    "product": "Chọn sản phẩm",
+    "name_product": "Tên sản phẩm",
+    "inventory": "Tồn kho",
+    "quantity": "Số lượng",
+    "delivery_date": "Ngày giao"
   }
 }
