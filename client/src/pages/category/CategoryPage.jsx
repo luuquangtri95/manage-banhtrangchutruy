@@ -6,6 +6,7 @@ import Icon from "../../components/Icon/Icon";
 import { formatDateWithIntl } from "../../helpers/convertDate";
 import FormField from "../../components/FormField";
 import Popup from "../../components/Popup";
+import usePageLoading from "../../hooks/usePageLoading";
 
 const INIT_FORMDATA = {
 	name: {
@@ -40,10 +41,10 @@ function CategoryPage() {
 	const [categoryDelete, setCategoryDelete] = useState(null);
 	const [categories, setCategories] = useState([]);
 	const [formData, setFormData] = useState(INIT_FORMDATA);
-	const [loading, setLoading] = useState(false);
 	const [filters, setFilters] = useState({ page: 1, limit: 8, searchTerm: "" });
 	const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
 	const { t } = useTranslation();
+	const { isLoading, showLoading, hideLoading } = usePageLoading();
 
 	useEffect(() => {
 		fetchCategories();
@@ -65,7 +66,7 @@ function CategoryPage() {
 
 	const fetchCategories = async () => {
 		try {
-			setLoading(true);
+			showLoading();
 			const res = await CategoryApi.findAll(filters);
 
 			setCategories(res.metadata.result);
@@ -74,7 +75,7 @@ function CategoryPage() {
 			console.log("fetchCategories error", error);
 			toast.error("Failed to fetch products");
 		} finally {
-			setLoading(false);
+			hideLoading();
 		}
 	};
 
@@ -286,7 +287,7 @@ function CategoryPage() {
 							))}
 						</tr>
 					</thead>
-					<tbody>{loading ? renderSkeleton() : renderCatgories()}</tbody>
+					<tbody>{renderCatgories()}</tbody>
 				</table>
 
 				<div className="flex justify-between items-center px-4 py-3">

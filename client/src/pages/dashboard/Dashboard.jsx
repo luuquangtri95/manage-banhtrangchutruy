@@ -1,20 +1,35 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import { NavLink, Outlet } from "react-router";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router";
+import LogoEnglish from "../../assets/english.png";
 import Logo from "../../assets/logo.jpg";
+import LogoVietnam from "../../assets/vietnam.png";
 import Icon from "../../components/Icon/Icon";
 import { AuthContext } from "../../context/AuthContext";
 import authorizedAxiosInstance from "../../utils/authorizedAxios";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router";
-import LogoEnglish from "../../assets/english.png";
-import LogoVietnam from "../../assets/vietnam.png";
+
+export const DashboardContext = createContext(null);
 
 const MENU_ITEMS = [
-	// { path: "/dashboard/orders/create", icon: "icon-create", label: "create_order" },
 	{ path: "/dashboard/orders", icon: "icon-manager-order", label: "menu.manage_orders" },
 	{ path: "/dashboard/products", icon: "icon-products", label: "menu.manage_products" },
 	{ path: "/dashboard/categories", icon: "icon-category", label: "menu.manage_categories" },
-	{ path: "/dashboard/wholesale-price", icon: "icon-price", label: "menu.wholesale_price" },
+	{
+		label: "menu.wholesale_price",
+		icon: "icon-price",
+		subMenu: [
+			{
+				path: "/dashboard/wholesale-prices",
+				icon: "icon-list",
+				label: "menu.wholesale_prices",
+			},
+			{
+				path: "/dashboard/wholesale-groups",
+				icon: "icon-group",
+				label: "menu.wholesale_groups",
+			},
+		],
+	},
 	// { path: "/dashboard/support", icon: "icon-support", label: "contact_support" },
 ];
 
@@ -34,6 +49,11 @@ const LANGUAGES = {
 	vi: { flag: LogoVietnam, name: "Tiếng Việt" },
 };
 
+const getValidLanguage = () => {
+	const lang = localStorage.getItem("i18nextLng") || "en"; // Mặc định là "en"
+	return lang.includes("-") ? lang.split("-")[0] : lang; // Chỉ lấy phần trước "-"
+};
+
 function Dashboard() {
 	const [isCollapse, setIsCollapse] = useState(false);
 	const [renderContent, setRenderContent] = useState(true);
@@ -41,18 +61,23 @@ function Dashboard() {
 	const { t, i18n } = useTranslation();
 	const [userInfo, setUserInfo] = useState(null);
 	const [isShowPopover, setIsShowPopover] = useState(false);
-	const [language, setLanguage] = useState(localStorage.getItem("i18nextLng"));
+	const [language, setLanguage] = useState(getValidLanguage());
 	const [isOpen, setIsOpen] = useState(false);
+	const [isWholesaleOpen, setIsWholesaleOpen] = useState(false);
 
 	const currentElmRef = useRef(null);
 	const flagEleRef = useRef(null);
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	const handleCollapse = () => setIsCollapse(!isCollapse);
-	const handleChangeLang = (lang) => {
-		i18n.changeLanguage(lang);
 
-		setLanguage(lang);
+	const handleChangeLang = (lang) => {
+		const shortLang = lang.includes("-") ? lang.split("-")[0] : lang;
+		i18n.changeLanguage(shortLang);
+
+		setLanguage(shortLang);
+		localStorage.setItem("i18nextLng", shortLang);
 		setIsOpen(false);
 	};
 
@@ -92,7 +117,26 @@ function Dashboard() {
 		};
 	}, []);
 
+	useEffect(() => {
+		if (
+			!["/dashboard/wholesale-prices", "/dashboard/wholesale-groups"].includes(
+				location.pathname
+			)
+		) {
+			setIsWholesaleOpen(false);
+		}
+	}, [location.pathname]);
+
 	const togglePopover = () => setIsOpen((prev) => !prev);
+	const toggleWholesaleMenu = () => {
+		if (!isWholesaleOpen) {
+			if (!location.pathname.includes("/dashboard/wholesale")) {
+				navigate("/dashboard/wholesale-prices");
+			}
+		}
+
+		setIsWholesaleOpen((prev) => !prev);
+	};
 
 	return (
 		<div className="h-[100vh] flex flex-col">
@@ -115,25 +159,75 @@ function Dashboard() {
 
 					{/* Navigation Links */}
 					<div className="mt-2 flex flex-col">
-						{MENU_ITEMS.map((item) => (
-							<NavLink
-								key={item.path}
-								to={item.path}
-								className={({ isActive }) =>
-									`p-3 rounded-md flex items-center gap-2 transition-all duration-200 ${
-										isCollapse && !renderContent
-											? isActive
-												? "bg-[#ffe9cf]"
-												: "hover:text-gray-500"
-											: isActive
-											? "bg-[#ffe9cf]"
-											: "hover:bg-[#f5e6cf]"
-									}`
-								}>
-								<Icon type={item.icon} />
-								{!isCollapse && renderContent && <p>{t(item.label)}</p>}
-							</NavLink>
-						))}
+						<div className="mt-2 flex flex-col">
+							{MENU_ITEMS.map((item) => {
+								if (item.subMenu) {
+									return (
+										<div key={item.label}>
+											<div
+												className={`min-h-[45px] px-3 rounded-md flex items-center justify-between w-full 
+													transition-all duration-200 hover:bg-[#f5e6cf] 
+													${isWholesaleOpen ? "bg-[#ffe9cf]" : ""}
+												`}
+												onClick={toggleWholesaleMenu}>
+												<div className="flex gap-2">
+													<Icon type={item.icon} />
+													{!isCollapse && <p>{t(item.label)}</p>}
+												</div>
+
+												<div>
+													{!isCollapse && (
+														<Icon
+															type={
+																isWholesaleOpen
+																	? "arrow-down-light"
+																	: "arrow-right"
+															}
+														/>
+													)}
+												</div>
+											</div>
+
+											{isWholesaleOpen && (
+												<div className="pl-6 mt-1">
+													{item.subMenu.map((subItem) => (
+														<NavLink
+															key={subItem.path}
+															to={subItem.path}
+															className={({ isActive }) =>
+																`p-2 rounded-md flex items-center gap-2 transition-all duration-200 ${
+																	isActive
+																		? "bg-[#ffe9cf]"
+																		: "hover:bg-[#f5e6cf]"
+																}`
+															}>
+															<Icon type={subItem.icon} />
+															{!isCollapse && (
+																<p>{t(subItem.label)}</p>
+															)}
+														</NavLink>
+													))}
+												</div>
+											)}
+										</div>
+									);
+								} else {
+									return (
+										<NavLink
+											key={item.path}
+											to={item.path}
+											className={({ isActive }) =>
+												`p-3 rounded-md flex items-center gap-2 transition-all duration-200 ${
+													isActive ? "bg-[#ffe9cf]" : "hover:bg-[#f5e6cf]"
+												}`
+											}>
+											<Icon type={item.icon} />
+											{!isCollapse && <p>{t(item.label)}</p>}
+										</NavLink>
+									);
+								}
+							})}
+						</div>
 
 						{/* ADMIN MENU */}
 						{userInfo?.role === "admin" &&
@@ -157,14 +251,6 @@ function Dashboard() {
 								</NavLink>
 							))}
 					</div>
-
-					{/* Logout Button */}
-					{/* <button
-						className="p-3 flex items-center gap-2 mt-auto hover:bg-[#ffe9cf] transition-all rounded-md"
-						onClick={onLogout}>
-						<Icon type="icon-logout" />
-						{t("menu.logout")}
-					</button> */}
 				</div>
 
 				{/* Content */}
@@ -215,9 +301,6 @@ function Dashboard() {
 											</div>
 										)}
 									</div>
-
-									{/* <button onClick={() => handleChangeLang("en")}>🇬🇧</button>
-									<button onClick={() => handleChangeLang("vi")}>🇻🇳</button> */}
 								</div>
 								<div
 									onClick={() => setIsShowPopover(!isShowPopover)}
@@ -260,7 +343,20 @@ function Dashboard() {
 					</div>
 
 					<div className="px-4">
-						<Outlet />
+						<div className="my-3">
+							<p
+								className="text-[24px] font-thin"
+								dangerouslySetInnerHTML={{
+									__html: t("common.welcome_message", { email: userInfo?.email }),
+								}}
+							/>
+
+							<div className="border w-[80px] h-[2px] border-[#ff771c]"></div>
+						</div>
+
+						<DashboardContext.Provider value={{ userInfo }}>
+							<Outlet />
+						</DashboardContext.Provider>
 					</div>
 				</div>
 			</div>

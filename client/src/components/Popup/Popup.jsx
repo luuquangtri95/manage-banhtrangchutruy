@@ -2,7 +2,15 @@ import { createPortal } from "react-dom";
 import Icon from "../Icon/Icon";
 import { useTranslation } from "react-i18next";
 
-const Popup = ({ isOpen, onClose, title, children, onSubmit, width = "max-w-xl" }) => {
+const Popup = ({
+	isOpen,
+	onClose,
+	title,
+	children,
+	onSubmit,
+	width = "max-w-xl",
+	minHeight = "",
+}) => {
 	const { t } = useTranslation();
 
 	if (!isOpen) return null;
@@ -25,7 +33,9 @@ const Popup = ({ isOpen, onClose, title, children, onSubmit, width = "max-w-xl" 
 					</button>
 				</div>
 
-				<div className="mb-4">{children}</div>
+				<div className={`mb-4 overflow-auto h-auto ${minHeight} max-h-[800px] p-3`}>
+					{children}
+				</div>
 
 				<div className="flex justify-end gap-1">
 					<button

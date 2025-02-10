@@ -5,18 +5,57 @@
     "manage_products": "Quản lý sản phẩm",
     "manage_categories": "Quản lý danh mục",
     "analytics": "Thống kê",
-    "wholesale_price": "Giá sỉ",
+    "wholesale_price": "Quản lý giá sỉ",
+    "wholesale_prices": "Danh sách giá sỉ",
+    "wholesale_groups": "Nhóm áp dụng giá sỉ",
     "members": "Thành viên",
     "manage_partners": "Quản lý đối tác",
     "contact_support": "Liên hệ hỗ trợ",
     "grant_permission": "Quản lý quyền hạn",
     "logout": "Đăng xuất"
   },
-
   "order_page": {
-    "table": {}
+    "button": {
+      "create_new_order": "Tạo đơn đặt hàng mới"
+    },
+    "table": {
+      "order_title": "Thông tin đơn hàng",
+      "username": "Người đặt hàng",
+      "email": "Email",
+      "products": "Sản phẩm đã đặt",
+      "delivery_date": "Ngày giao hàng (quan trọng)",
+      "status": "Trạng thái đơn hàng",
+      "phone": "Số điện thoại",
+      "address": "Địa chỉ",
+      "success": "Giao thành công",
+      "pending": "Đang xử lý",
+      "active": "Xác nhận đơn hàng"
+    },
+    "popup": {
+      "title": "Tên đơn hàng",
+      "fullname": "Tên người đặt",
+      "address": "Địa chỉ",
+      "phone": "Số điện thoại",
+      "status": "Trạng thái",
+      "delivery_date": "Ngày giao hàng (*)",
+      "product": "Lựa chọn sản phẩm"
+    },
+    "validate": {
+      "title_is_required": "Tên đơn hàng bắt buộc",
+      "title_min_length": "Tên đơn hàng phải lớn hơn 5 ký tự",
+      "username_is_required": "Tên người đặt hàng bắt buộc",
+      "address_is_required": "Địa chỉ bắt buộc",
+      "phone_is_required": "Số điện thoại bắt buộc",
+      "delivery_is_required": "Ngày giao hàng bắt buộc",
+      "invalid_date": "Ngày không hợp lệ",
+      "date_must_be_today_or_later": "Không thể chọn ngày trong quá khứ"
+    },
+    "order_picker": {
+      "name": "Tên sản phẩm",
+      "inventory": "Tồn kho",
+      "quantity": "Số lượng"
+    }
   },
-
   "product_page": {
     "table": {
       "product_name": "Tên sản phẩm",
@@ -24,105 +63,13 @@
       "quantity": "Số lượng",
       "category": "Danh mục"
     },
-
-    "order_page": {
-      "table": {}
-    },
-
-    "product_page": {
-      "table": {
-        "product_name": "Tên sản phẩm",
-        "price": "Giá",
-        "quantity": "Số lượng",
-        "category": "Danh mục"
-      },
-      "popup": {
-        "name": "Tên sản phẩm",
-        "price": "Giá",
-        "quantity": "Số lượng",
-        "category": "Danh mục"
-      }
-    },
-
-    "category_page": {
-      "table": {
-        "name": "Tên danh mục",
-        "description": "Mô tả"
-      },
-      "popup": {
-        "name": "Tên danh mục",
-        "description": "Mô tả"
-      }
-    },
-
-    "user_page": {
-      "table": {
-        "username": "Tên tài khoản"
-      }
-    },
-
-    "partner_page": {
-      "table": {
-        "name": "Tên đối tác",
-        "address": "Địa chỉ",
-        "description": "Chi tiết đối tác",
-        "phone": "Số điện thoại"
-      },
-      "popup": {
-        "name": "Tên đối tác",
-        "address": "Địa chỉ",
-        "description": "Chi tiết đối tác",
-        "phone": "Số điện thoại"
-      }
-    },
-
-    "common": {
-      "actions": "Hành động",
-      "status": "Trạng thái",
-      "created_date": "Ngày tạo",
-      "search": "Tìm kiếm",
-      "description": "Mô tả",
-      "link_product_quantity": "Số lượng sản phẩm liên kết",
-      "cancel": "Huỷ bỏ",
-      "close": "Đóng",
-      "category": "Danh mục",
-      "update_infomation": "Cập Nhật Thông Tin",
-      "logout": "Đăng Xuất",
-      "my_profile": "Hồ Sơ Của Tôi",
-
-      "confirm_delete": "Bạn có chắc chắn muốn xóa",
-
-      "create_new_product": "Tạo sản phẩm mới",
-      "create_new_category": "Tạo danh mục mới",
-      "create_new_user": "Tạo thành viên mới",
-      "create_new_permission": "Tạo quyền mới",
-      "create_new_partner": "Tạo đối tác mới",
-
-      "edit_product": "Chỉnh sửa sản phẩm",
-      "edit_category": "Chỉnh sửa danh mục",
-      "edit_user": "Chỉnh sửa thành viên",
-      "edit_permission": "Chỉnh sửa quyền hạn",
-      "edit_partner": "Chỉnh sửa thông tin đối tác"
-    },
-
-    "validate": {
-      "name_required": "Tên là bắt buộc",
-      "title_required": "Tiêu đề là bắt buộc",
-      "name_min_length": "Tên phải có ít nhất 6 ký tự",
-      "title_min_length": "Tiêu đề phải có ít nhất 6 ký tự",
-      "price_required": "Giá là bắt buộc",
-      "price_min": "Giá phải lớn hơn hoặc bằng 1000",
-      "quantity_required": "Số lượng là bắt buộc",
-      "quantity_min": "Số lượng phải ít nhất 10",
-      "email_required": "Email là bắt buộc",
-      "email_invalid": "Email không hợp lệ",
-      "password_required": "Mật khẩu là bắt buộc",
-      "password_min_length": "Mật khẩu phải có ít nhất 6 ký tự",
-      "confirm_password_required": "Xác nhận mật khẩu là bắt buộc",
-      "confirm_password_mismatch": "Mật khẩu xác nhận không khớp"
+    "popup": {
+      "name": "Tên sản phẩm",
+      "price": "Giá",
+      "quantity": "Số lượng",
+      "category": "Danh mục"
     }
   },
-
   "category_page": {
     "table": {
       "name": "Tên danh mục",
@@ -133,34 +80,51 @@
       "description": "Mô tả"
     }
   },
-
   "user_page": {
     "table": {
       "username": "Tên tài khoản"
     }
   },
-
+  "partner_page": {
+    "table": {
+      "name": "Tên đối tác",
+      "address": "Địa chỉ",
+      "description": "Chi tiết đối tác",
+      "phone": "Số điện thoại"
+    },
+    "popup": {
+      "name": "Tên đối tác",
+      "address": "Địa chỉ",
+      "description": "Chi tiết đối tác",
+      "phone": "Số điện thoại"
+    }
+  },
   "common": {
+    "welcome_message": "Chào mừng tài khoản <b>{{email}}</b> đến với <b>Chú Truý Food</b>",
     "actions": "Hành động",
     "status": "Trạng thái",
     "created_date": "Ngày tạo",
     "search": "Tìm kiếm",
     "description": "Mô tả",
+    "link_product_quantity": "Số lượng sản phẩm liên kết",
     "cancel": "Huỷ bỏ",
-
+    "close": "Đóng",
+    "category": "Danh mục",
+    "update_infomation": "Cập Nhật Thông Tin",
+    "logout": "Đăng Xuất",
+    "my_profile": "Hồ Sơ Của Tôi",
     "confirm_delete": "Bạn có chắc chắn muốn xóa",
-
     "create_new_product": "Tạo sản phẩm mới",
     "create_new_category": "Tạo danh mục mới",
     "create_new_user": "Tạo thành viên mới",
     "create_new_permission": "Tạo quyền mới",
-
+    "create_new_partner": "Tạo đối tác mới",
     "edit_product": "Chỉnh sửa sản phẩm",
     "edit_category": "Chỉnh sửa danh mục",
     "edit_user": "Chỉnh sửa thành viên",
-    "edit_permission": "Chỉnh sửa quyền hạn"
+    "edit_permission": "Chỉnh sửa quyền hạn",
+    "edit_partner": "Chỉnh sửa thông tin đối tác"
   },
-
   "validate": {
     "name_required": "Tên là bắt buộc",
     "title_required": "Tiêu đề là bắt buộc",

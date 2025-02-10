@@ -8,49 +8,61 @@ import { APIs_V1 } from "~/routes/v1";
 import { APIs_V2 } from "~/routes/v2";
 import { env } from "~/config/enviroment";
 import morgan from "morgan";
+import path from "path";
 import "~/models";
-// import "~/seed/seedDatabase";
 
 const START_SERVER = () => {
-  // Init Express App
-  const app = express();
+	// Init Express App
+	const frontendPath = path.join(__dirname, "../../../client/dist");
 
-  // Fix Cache from disk from ExpressJS
-  app.use((req, res, next) => {
-    res.set("Cache-Control", "no-store");
-    next();
-  });
+	const app = express();
 
-  app.use(morgan("dev"));
+	// Fix Cache from disk from ExpressJS
+	app.use((req, res, next) => {
+		res.set("Cache-Control", "no-store");
+		next();
+	});
 
-  // Use Cookie
-  app.use(cookieParser());
+	app.use(morgan("dev"));
 
-  // Allow CORS: for more info
-  app.use(cors(corsOptions));
+	// Use Cookie
+	app.use(cookieParser());
 
-  // Enable req.body json data
-  app.use(express.json());
+	// Allow CORS: for more info
+	app.use(cors(corsOptions));
 
-  // Use Route APIs V1
-  app.use("/v1", APIs_V1);
-  app.use("/v2", APIs_V2);
+	// Enable req.body json data
+	app.use(express.json());
 
-  const { LOCAL_DEV_APP_PORT, LOCAL_DEV_APP_HOST, AUTHOR } = env;
-  app.listen(LOCAL_DEV_APP_PORT, LOCAL_DEV_APP_HOST, () => {
-    console.log(
-      `Local DEV: Hello ${AUTHOR}, Back-end Server is running successfully at Host: ${LOCAL_DEV_APP_HOST} and Port: ${LOCAL_DEV_APP_PORT}`
-    );
-  });
+	// Use Route APIs V1
+	app.use("/v1", APIs_V1);
+	app.use("/v2", APIs_V2);
+
+	// Serve frontend
+	if (env.NODE_ENV === "production") {
+		app.use(express.static(frontendPath));
+		app.use("/locales", express.static(path.join(frontendPath, "locales")));
+
+		app.get("*", (req, res) => {
+			res.sendFile(path.join(frontendPath, "index.html"));
+		});
+	}
+
+	const { PORT, HOST, AUTHOR } = env;
+	app.listen(PORT, HOST, () => {
+		console.log(
+			`Local DEV: Hello ${AUTHOR}, Back-end Server is running successfully at Host: ${HOST} and Port: ${PORT}`
+		);
+	});
 };
 
 (async () => {
-  try {
-    // Start Back-end Server
-    console.log("Starting Server...");
-    START_SERVER();
-  } catch (error) {
-    console.error(error);
-    process.exit(0); // End process with status code success
-  }
+	try {
+		// Start Back-end Server
+		console.log("Starting Server...");
+		START_SERVER();
+	} catch (error) {
+		console.error(error);
+		process.exit(0); // End process with status code success
+	}
 })();

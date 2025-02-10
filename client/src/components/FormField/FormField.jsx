@@ -116,25 +116,11 @@ function FormField({
       );
       break;
 
-    case "textarea":
-      inputField = (
-        <textarea
-          id={id || fieldId}
-          name={name}
-          value={value}
-          placeholder={placeholder}
-          onChange={onChange}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          disabled={disabled}
-          className="w-full bg-transparent focus:outline-none text-gray-700 placeholder-gray-400 resize-none h-24 "
-        />
-      );
-      break;
-
     case "number":
       inputField = (
         <input
+          pattern="[0-9]*"
+          inputMode="numeric"
           id={id || fieldId}
           name={name}
           type="number"

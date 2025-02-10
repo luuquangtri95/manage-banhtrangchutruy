@@ -5,18 +5,57 @@
     "manage_products": "Manage Products",
     "manage_categories": "Manage Categories",
     "analytics": "Analytics",
-    "wholesale_price": "Wholesale Price",
+    "wholesale_price": "Manage Wholesale",
+    "wholesale_prices": "Wholesale List",
+    "wholesale_groups": "Wholesale Groups",
     "members": "Members",
     "manage_partners": "Manage Partners",
     "contact_support": "Contact Support",
     "grant_permission": "Grant Permission",
     "logout": "Logout"
   },
-
   "order_page": {
-    "table": {}
+    "button": {
+      "create_new_order": "Create New Order"
+    },
+    "table": {
+      "order_title": "Order Info",
+      "username": "Username",
+      "email": "Email",
+      "products": "Products",
+      "delivery_date": "Delivery Date (important)",
+      "status": "Status",
+      "phone": "Phone",
+      "address": "Address",
+      "success": "Successfully Delivered",
+      "pending": "Pending",
+      "active": "Active"
+    },
+    "popup": {
+      "title": "Order Info",
+      "fullname": "Username",
+      "address": "Address",
+      "phone": "Phone",
+      "status": "Status",
+      "delivery_date": "Delivery Date (*)",
+      "product": "Product Picker"
+    },
+    "validate": {
+      "title_is_required": "Order title is required",
+      "title_min_length": "Order title must be longer than 5 characters",
+      "username_is_required": "Orderer's name is required",
+      "address_is_required": "Address is required",
+      "phone_is_required": "Phone number is required",
+      "delivery_is_required": "Delivery date is required",
+      "invalid_date": "Invalid date",
+      "date_must_be_today_or_later": "Cannot select a past date"
+    },
+    "order_picker": {
+      "name": "product",
+      "inventory": "Inventory",
+      "quantity": "Quantity"
+    }
   },
-
   "product_page": {
     "table": {
       "product_name": "Product Name",
@@ -24,103 +63,13 @@
       "quantity": "Quantity",
       "category": "Category"
     },
-
-    "order_page": {
-      "table": {}
-    },
-
-    "product_page": {
-      "table": {
-        "product_name": "Product Name",
-        "price": "Price",
-        "quantity": "Quantity",
-        "category": "Category"
-      },
-      "popup": {
-        "name": "Product Name",
-        "price": "Price",
-        "quantity": "Quantity",
-        "category": "Category"
-      }
-    },
-
-    "category_page": {
-      "table": {
-        "name": "Category Name",
-        "description": "Description"
-      },
-      "popup": {
-        "name": "Category Name",
-        "description": "Description"
-      }
-    },
-
-    "partner_page":{
-        "table":{
-            "name": "Partner Name",
-            "address": "Address",
-            "description": "Description",
-            "phone": "Phone Number"
-        },
-        "popup":{
-            "name": "Partner Name",
-            "address": "Address",
-            "description": "Description",
-            "phone": "Phone Number"
-        }
-    },
-
-    "common":{
-        "actions": "Actions",
-        "status":"Status",
-        "created_date": "Created Date",
-        "search": "Search",
-        "description":"Description",
-        "link_product_quantity": "Link Product Quantity",
-        "cancel": "Cancel",
-        "close": "Close",
-        "category":"Category",
-        "update_infomation": "Update Infomation",
-        "logout": "Logout",
-        "my_profile": "My Profile",
-
-    "common": {
-      "actions": "Actions",
-      "status": "Status",
-      "created_date": "Created Date",
-      "search": "Search",
-      "description": "Description",
-      "link_product_quantity": "Link Product Quantity",
-
-        "create_new_product": "Create New Product",
-        "create_new_category": "Create New Category",
-        "create_new_user": "Create New User",
-        "create_new_permission": "Create New Permission",
-        "create_new_partner": "Create New Partner",
-
-        "edit_product": "Edit Product",
-        "edit_category": "Edit Category",
-        "edit_user": "Edit User",
-        "edit_permission": "Edit Permission",
-        "edit_partner": "Edit Partner"
-    },
-
-    "validate": {
-      "name_required": "Name is required",
-      "name_min_length": "Name must be at least 6 characters",
-      "price_required": "Price is required",
-      "price_min": "Price must be at least 1000",
-      "quantity_required": "Quantity is required",
-      "quantity_min": "Quantity must be at least 10",
-      "email_required": "Email is required",
-      "email_invalid": "Invalid email format",
-      "password_required": "Password is required",
-      "password_min_length": "Password must be at least 6 characters",
-      "confirm_password_required": "Confirm Password is required",
-      "confirm_password_mismatch": "Passwords do not match"
+    "popup": {
+      "name": "Product Name",
+      "price": "Price",
+      "quantity": "Quantity",
+      "category": "Category"
     }
   },
-
   "category_page": {
     "table": {
       "name": "Category Name",
@@ -131,33 +80,46 @@
       "description": "Description"
     }
   },
-
-  "user_page": {
+  "partner_page": {
     "table": {
-      "username": "User Name"
+      "name": "Partner Name",
+      "address": "Address",
+      "description": "Description",
+      "phone": "Phone Number"
+    },
+    "popup": {
+      "name": "Partner Name",
+      "address": "Address",
+      "description": "Description",
+      "phone": "Phone Number"
     }
   },
-
   "common": {
+    "welcome_message": "Welcome <b>{{email}}</b> to <b>Chú Truý Food</b>",
     "actions": "Actions",
     "status": "Status",
     "created_date": "Created Date",
     "search": "Search",
     "description": "Description",
-
+    "link_product_quantity": "Link Product Quantity",
+    "cancel": "Cancel",
+    "close": "Close",
+    "category": "Category",
+    "update_infomation": "Update Infomation",
+    "logout": "Logout",
+    "my_profile": "My Profile",
     "confirm_delete": "Confirm Delete",
-
     "create_new_product": "Create New Product",
     "create_new_category": "Create New Category",
     "create_new_user": "Create New User",
     "create_new_permission": "Create New Permission",
-
+    "create_new_partner": "Create New Partner",
     "edit_product": "Edit Product",
     "edit_category": "Edit Category",
     "edit_user": "Edit User",
-    "edit_permission": "Edit Permission"
+    "edit_permission": "Edit Permission",
+    "edit_partner": "Edit Partner"
   },
-
   "validate": {
     "name_required": "Name is required",
     "name_min_length": "Name must be at least 6 characters",
@@ -170,24 +132,6 @@
     "password_required": "Password is required",
     "password_min_length": "Password must be at least 6 characters",
     "confirm_password_required": "Confirm Password is required",
-    "confirm_password_mismatch": "Passwords do not match",
-    "address_required": "Address is required",
-    "phone_required": "Phone is required",
-    "phone_number": "Phone must contain only number",
-    "delivery_date": "Date is required"
-  },
-  "order_popup": {
-    "header_title": "Create order",
-    "header_edit": "Update order",
-    "title": "Title",
-    "fullname": "Name",
-    "address": "Address",
-    "phone": "Phone",
-    "status": "Status",
-    "product": "Choose product",
-    "name_product": "Product name",
-    "inventory": "Inventory",
-    "quantity": "Quantity",
-    "delivery_date": "Delivery date"
+    "confirm_password_mismatch": "Passwords do not match"
   }
 }

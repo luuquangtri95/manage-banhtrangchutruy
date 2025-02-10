@@ -1,5 +1,7 @@
 .DS_Store
 node_modules
 **/node_modules
-server/.env
-server/.env.production
+server/build
+.env
+.env.production
+.env.development

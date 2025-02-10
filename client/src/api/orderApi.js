@@ -9,18 +9,17 @@ const OrderApi = {
     const url = "/dashboards/orders";
     return await authorizedAxiosInstance.get(url, { params });
   },
-  findById: async (id) => {
-    const url = `/dashboards/orders/${id}`;
+  findById: async (orderId) => {
+    const url = `/dashboards/orders/${orderId}`;
     return await authorizedAxiosInstance.get(url);
   },
   update: async (data) => {
-    const url = `/dashboards/orders/${data.id}`;
+    const url = `dashboards/orders/${data.id}`;
     return await authorizedAxiosInstance.put(url, data);
   },
-  delete: async (id) => {
-    const url = `dashboards/orders/${id}`;
-    console.log("url", url);
-    return await authorizedAxiosInstance.delete(url, id);
+  delete: async (orderId) => {
+    const url = `dashboards/orders/${orderId}`;
+    return await authorizedAxiosInstance.delete(url);
   },
 };
 

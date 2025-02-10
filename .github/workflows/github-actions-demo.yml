@@ -1,0 +1,98 @@
+# Tên của pipeline CI/CD
+name: CI/CD Pipeline
+
+# Xác định khi nào workflow sẽ được kích hoạt
+on:
+  # Kích hoạt khi có push vào branch master
+  push:
+    branches: [ master ]
+  # Kích hoạt khi có pull request vào branch master
+  pull_request:
+    branches: [ master ]
+
+# Định nghĩa các công việc cần thực hiện
+jobs:
+  # Công việc cho phần client
+  client:
+    # Chạy trên hệ điều hành Ubuntu phiên bản mới nhất
+    runs-on: ubuntu-latest
+    # Thiết lập mặc định cho các bước chạy
+    defaults:
+      run:
+        # Đặt thư mục làm việc là ./client
+        working-directory: ./client
+
+    # Các bước thực hiện
+    steps:
+    # Bước 1: Checkout code từ repository
+    - uses: actions/checkout@v4
+    
+    # Bước 2: Cài đặt Node.js
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        # Sử dụng Node.js version 20
+        node-version: '20'
+        # Sử dụng cache cho npm
+        cache: 'npm'
+        # Đường dẫn đến file package-lock.json
+        cache-dependency-path: './client/package-lock.json'
+    
+    # Bước 3: Cài đặt các dependencies
+    - name: Install Dependencies
+      run: npm ci
+    
+    # Bước 4: Build ứng dụng
+    - name: Build
+      run: npm run build
+
+  # Công việc cho phần server
+  server:
+    # Chạy trên hệ điều hành Ubuntu phiên bản mới nhất
+    runs-on: ubuntu-latest
+    # Thiết lập mặc định cho các bước chạy
+    defaults:
+      run:
+        # Đặt thư mục làm việc là ./server
+        working-directory: ./server
+    
+    # Các bước thực hiện
+    steps:
+    # Bước 1: Checkout code từ repository
+    - uses: actions/checkout@v4
+    
+    # Bước 2: Cài đặt Node.js
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        # Sử dụng Node.js version 20
+        node-version: '20'
+        # Sử dụng cache cho npm
+        cache: 'npm'
+        # Đường dẫn đến file package-lock.json
+        cache-dependency-path: './server/package-lock.json'
+    
+    # Bước 3: Cài đặt các dependencies
+    - name: Install Dependencies
+      run: npm ci
+    
+    # Bước 4: Build ứng dụng
+    - name: Build
+      run: npm run build
+    
+    # Bước 6: Thiết lập SSH key
+    - name: Install SSH Key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        known_hosts: unnecessary
+        if_key_exists: replace
+    
+    # Bước 7: Thêm địa chỉ server vào known_hosts
+    - name: Adding Known Hosts
+      run: ssh-keyscan -H 68.123.123.23 >> ~/.ssh/known_hosts
+    
+    # Bước 8: Deploy qua SSH
+    - name: Deploy with rsync
+      run: |
+        rsync -avz --delete ./dist/ ${{ secrets.SSH_USER }}@68.123.123.23:/path/to/your/app/

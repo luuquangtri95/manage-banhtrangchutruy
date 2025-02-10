@@ -8,6 +8,9 @@ import { CategoryModel } from "./category.model";
 import { ProductModel } from "./product.model";
 import { ProductCategoryModel } from "./product_category.model";
 import { PartnerModel } from "./partner.model";
+import { WholesaleGroupModel } from "./wholesale_groups.model";
+import { wholesalePricesModel } from "./wholesale_prices.model";
+import { UserWholesalePriceGroupModel } from "./user_wholesale_groups.model";
 
 // Gom tất cả models vào object models
 const models = [
@@ -18,11 +21,14 @@ const models = [
 	CategoryModel,
 	ProductModel,
 	PartnerModel,
+	WholesaleGroupModel,
 
 	//-------- bảng link sẽ đặt ở đây !
 	UserRoleLinkModel, // Tạo bảng user_roles
 	RolePermissionLinkModel, // Tạo bảng roles_permissions
 	ProductCategoryModel,
+	UserWholesalePriceGroupModel,
+	wholesalePricesModel,
 	// ... các models về sau luôn luôn đặt dưới đây
 ];
 
@@ -82,6 +88,31 @@ const setupAssociations = () => {
 		onDelete: "CASCADE",
 	});
 	//#endregion
+	//#endregion
+
+	//#region [group - wholesale_price]
+	//#region [1 group wholesale => n user]
+	WholesaleGroupModel.belongsToMany(UserModel, {
+		through: UserWholesalePriceGroupModel,
+		foreignKey: "wholesale_group_id",
+		otherKey: "user_id",
+		onDelete: "CASCADE",
+		onUpdate: "CASCADE",
+	});
+	//#endregion
+
+	//#region [1 group wholesale => n user]
+	UserModel.belongsToMany(WholesaleGroupModel, {
+		through: UserWholesalePriceGroupModel,
+		foreignKey: "user_id",
+		otherKey: "wholesale_group_id",
+		onDelete: "CASCADE",
+		onUpdate: "CASCADE",
+	});
+	//#endregion
+
+	//#region [1 wholesale => n gorup ]
+
 	//#endregion
 };
 

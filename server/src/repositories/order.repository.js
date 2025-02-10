@@ -6,193 +6,188 @@ import { UserModel } from "~/models/user.model";
 import { RoleModel } from "~/models/role.model";
 
 const findById = async (id) => {
-  try {
-    return await OrderModel.findById({ where: { id }, raw: true });
-  } catch (error) {
-    throw error;
-  }
+	try {
+		return await OrderModel.findById({ where: { id }, raw: true });
+	} catch (error) {
+		throw error;
+	}
 };
 
 const findAll = async (payload) => {
-  try {
-    const {
-      user_id,
-      page,
-      limit,
-      searchTerm,
-      sort,
-      order,
-      status,
-      startDate,
-      endDate,
-    } = payload;
+	try {
+		const { user_id, page, limit, searchTerm, sort, order, status, startDate, endDate } =
+			payload;
 
-    const entryUser = await UserModel.findOne({
-      where: { id: user_id },
-      include: [
-        {
-          model: RoleModel,
-          through: { attributes: [] },
-        },
-      ],
-    });
+		const entryUser = await UserModel.findOne({
+			where: { id: user_id },
+			include: [
+				{
+					model: RoleModel,
+					through: { attributes: [] },
+				},
+			],
+		});
 
-    const _offset = (page - 1) * limit;
-    let where = {};
+		const _offset = (page - 1) * limit;
+		let where = {};
 
-    if (entryUser.roles[0].name !== "admin") {
-      where = { user_id };
-    }
+		if (entryUser.roles[0].name !== "admin") {
+			where = { user_id };
+		}
 
-    if (searchTerm) {
-      //   where.title = {
-      //     [Op.like]: `%${searchTerm}%`,
-      //   };
-      where = {
-        user_id,
-        [Op.or]: [
-          //   { title: { [Op.iLike]: `%${searchTerm}%` } },
-          { fullname: { [Op.iLike]: `%${searchTerm}%` } },
-          Sequelize.where(
-            Sequelize.cast(Sequelize.col("phone"), "TEXT"), // Chuyển `phone` thành chuỗi
-            {
-              [Op.iLike]: `%${searchTerm}%`,
-            }
-          ),
-        ],
-      };
-    }
+		if (searchTerm) {
+			//   where.title = {
+			//     [Op.like]: `%${searchTerm}%`,
+			//   };
+			where = {
+				user_id,
+				[Op.or]: [
+					//   { title: { [Op.iLike]: `%${searchTerm}%` } },
+					{ fullname: { [Op.iLike]: `%${searchTerm}%` } },
+					Sequelize.where(
+						Sequelize.cast(Sequelize.col("phone"), "TEXT"), // Chuyển `phone` thành chuỗi
+						{
+							[Op.iLike]: `%${searchTerm}%`,
+						}
+					),
+				],
+			};
+		}
 
-    // Lọc theo ngày
-    if (startDate && endDate) {
-      where.delivery_date = {
-        [Op.between]: [startDate, endDate],
-      };
-    } else if (startDate) {
-      where.delivery_date = {
-        [Op.gte]: startDate,
-      };
-    } else if (endDate) {
-      where.delivery_date = {
-        [Op.lte]: endDate,
-      };
-    }
+		// Lọc theo ngày
+		if (startDate && endDate) {
+			where.delivery_date = {
+				[Op.between]: [startDate, endDate],
+			};
+		} else if (startDate) {
+			where.delivery_date = {
+				[Op.gte]: startDate,
+			};
+		} else if (endDate) {
+			where.delivery_date = {
+				[Op.lte]: endDate,
+			};
+		}
 
-    if (status) {
-      where.status = status;
-    }
+		if (status) {
+			where.status = status;
+		}
 
-    const { count, rows } = await OrderModel.findAndCountAll({
-      where,
-      limit: limit,
-      offset: _offset,
-      order: [[order || "delivery_date", sort]],
-      raw: true,
-    });
+		const { count, rows } = await OrderModel.findAndCountAll({
+			where,
+			limit: limit,
+			offset: _offset,
+			order: [[order, sort]],
+			raw: true,
+			nest: true,
+			include: [
+				{
+					model: UserModel,
+					attributes: ["id", "username", "email"],
+				},
+			],
+		});
 
-    const _metadata = {
-      result: rows,
-      pagination: {
-        page: page,
-        limit: limit,
-        total_page: Math.ceil(count / limit),
-        total_item: count,
-      },
-    };
+		const _metadata = {
+			result: rows,
+			pagination: {
+				page: page,
+				limit: limit,
+				total_page: Math.ceil(count / limit),
+				total_item: count,
+			},
+		};
 
-    return _metadata;
-  } catch (error) {
-    throw error;
-  }
+		return _metadata;
+	} catch (error) {
+		throw error;
+	}
 };
 
 const create = async (payload) => {
-  try {
-    return (await OrderModel.create(payload)).toJSON();
-  } catch (error) {
-    throw error;
-  }
+	try {
+		return (await OrderModel.create(payload)).toJSON();
+	} catch (error) {
+		throw error;
+	}
 };
 
 const createWithTransaction = async (payload) => {
-  const transaction = await sequelizeConnectionString.transaction();
-  try {
-    console.log("vo day");
-    const { data_json } = payload;
-    console.log("data_json", data_json);
-    const productNames = data_json.item.map((item) => item.name);
-    const products = await ProductModel.findAll({
-      where: { name: productNames },
-      transaction,
-      lock: true,
-    });
+	const transaction = await sequelizeConnectionString.transaction();
+	try {
+		const { data_json } = payload;
 
-    if (products.length === 0) {
-      throw new Error("No matching products found in the database.");
-    }
+		const productIds = data_json.item.map((item) => item.id);
+		const products = await ProductModel.findAll({
+			where: { id: productIds },
+			transaction,
+			lock: true,
+		});
 
-    const productMap = products.reduce((acc, product) => {
-      acc[product.name] = product;
-      return acc;
-    }, {});
+		if (products.length === 0) {
+			throw new Error("No matching products found in the database.");
+		}
 
-    for (const item of data_json.item) {
-      const product = productMap[item.name];
+		const productMap = products.reduce((acc, product) => {
+			acc[product.name] = product;
+			return acc;
+		}, {});
 
-      if (!product) {
-        throw new Error(`Product ${item.name} not found`);
-      }
+		for (const item of data_json.item) {
+			const product = productMap[item.name];
 
-      if (product.quantity < item.quantity) {
-        throw new Error(
-          `Insufficient quantity for product ${item.name}. Available: ${product.quantity}`
-        );
-      }
+			if (!product) {
+				throw new Error(`Product ${item.name} not found`);
+			}
 
-      product.quantity -= item.quantity;
-      await product.save({ transaction }).catch((err) => {
-        throw new Error(
-          `Failed to save product ${product.name}: ${err.message}`
-        );
-      });
-    }
+			if (product.quantity < item.quantity) {
+				throw new Error(
+					`Insufficient quantity for product ${item.name}. Available: ${product.quantity}`
+				);
+			}
 
-    const newOrder = await OrderModel.create({ ...payload }, { transaction });
+			product.quantity -= item.quantity;
+			await product.save({ transaction }).catch((err) => {
+				throw new Error(`Failed to save product ${product.name}: ${err.message}`);
+			});
+		}
 
-    await transaction.commit();
+		const newOrder = await OrderModel.create({ ...payload }, { transaction });
 
-    return newOrder;
-  } catch (error) {
-    try {
-      await transaction.rollback();
-    } catch (rollbackError) {
-      console.error("Rollback failed:", rollbackError);
-    }
-    throw error;
-  }
+		await transaction.commit();
+
+		return newOrder;
+	} catch (error) {
+		try {
+			await transaction.rollback();
+		} catch (rollbackError) {
+			console.error("Rollback failed:", rollbackError);
+		}
+		throw error;
+	}
 };
 
 const update = async (payload, id) => {
-  try {
-    return await OrderModel.update({ ...payload }, { where: { id } });
-  } catch (error) {
-    throw error;
-  }
+	try {
+		return await OrderModel.update({ ...payload }, { where: { id } });
+	} catch (error) {
+		throw error;
+	}
 };
 
 const _delete = async (id) => {
-  try {
-    return await OrderModel.destroy({ where: { id } });
-  } catch (error) {
-    throw error;
-  }
+	try {
+		return await OrderModel.destroy({ where: { id } });
+	} catch (error) {
+		throw error;
+	}
 };
 
 export const OrderRepository = {
-  create,
-  createWithTransaction,
-  findById,
-  findAll,
-  update,
-  delete: _delete,
+	create,
+	createWithTransaction,
+	findById,
+	findAll,
+	update,
+	delete: _delete,
 };
