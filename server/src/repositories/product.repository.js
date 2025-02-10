@@ -12,7 +12,7 @@ const create = async (payload) => {
 			for (let i = 0; i < categories.length; i++) {
 				const category = await CategoryModel.findByPk(categories[i].id);
 
-				category.addProduct(product);
+				await category.addProduct(product);
 			}
 		}
 
@@ -71,7 +71,7 @@ const findAll = async (payload) => {
 			offset: _offset,
 			order: [[order, sort]],
 			// raw: true,
-			include: [{ model: CategoryModel, through: { attributes: [] } }],
+			include: [{ model: CategoryModel, as: "categories", through: { attributes: [] } }],
 		});
 
 		const _metadata = {

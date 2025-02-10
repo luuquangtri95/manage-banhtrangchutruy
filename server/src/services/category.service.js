@@ -3,6 +3,7 @@ import { CategoryRepository } from "~/repositories/category.repository";
 const create = async (req) => {
 	try {
 		const payload = req.body;
+		console.log("payload", payload);
 
 		return await CategoryRepository.create(payload);
 	} catch (error) {

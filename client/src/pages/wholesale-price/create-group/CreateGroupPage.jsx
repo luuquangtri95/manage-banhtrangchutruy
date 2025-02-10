@@ -7,6 +7,7 @@ import Icon from "../../../components/Icon/Icon";
 import Popup from "../../../components/Popup";
 import { formatDateWithIntl } from "../../../helpers/convertDate";
 import UserApi from "../../../api/userApi";
+import Select from "react-tailwindcss-select";
 
 const INIT_FORMDATA = {
 	name: {
@@ -27,6 +28,11 @@ const DEFAULT_PAGINATION = {
 	total_item: 10,
 };
 
+const INIT_USERS = {
+	value: [],
+	options: [],
+};
+
 function CreateGroupPage(props) {
 	const [popupData, setPopupData] = useState(null);
 	const [groupDelete, setGroupDelete] = useState(null);
@@ -35,7 +41,7 @@ function CreateGroupPage(props) {
 	const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
 	const [formData, setFormData] = useState(INIT_FORMDATA);
 	const [groups, setGroups] = useState([]);
-	const [users, setUsers] = useState([]);
+	const [users, setUsers] = useState(INIT_USERS);
 
 	const { t } = useTranslation();
 
@@ -79,7 +85,14 @@ function CreateGroupPage(props) {
 			setLoading(true);
 			const res = await UserApi.findAll();
 
-			setUsers(res.metadata.result);
+			const _users = res.metadata.result.map((_cat) => {
+				return {
+					label: _cat.username,
+					value: _cat.id,
+				};
+			});
+
+			setUsers((prev) => ({ ...prev, options: _users }));
 		} catch (error) {
 			console.log("fetchUser error", error);
 			toast.error("Failed to fetch users");
@@ -87,8 +100,6 @@ function CreateGroupPage(props) {
 			setLoading(false);
 		}
 	};
-
-	console.log("users", users);
 
 	const handleCreate = () => {
 		setPopupData({ name: "" });
@@ -161,6 +172,13 @@ function CreateGroupPage(props) {
 			return acc;
 		}, {});
 
+		if (users?.value?.length) {
+			formattedData.users = users.value.map((_u) => ({
+				name: _u.label,
+				id: _u.value,
+			}));
+		}
+
 		try {
 			if (popupData && popupData.id) {
 				await WholesaleGroupApi.update({ ...formattedData, id: popupData.id });
@@ -187,12 +205,23 @@ function CreateGroupPage(props) {
 		}));
 	};
 
+	const handleUserChange = (itemPicked) => {
+		setUsers((prev) => ({ ...prev, value: itemPicked }));
+	};
+
 	const renderGroups = () => {
 		return groups.map((group) => (
 			<tr
 				key={group.id}
 				className="hover:bg-slate-50 border-b border-slate-200">
 				<td className="p-4 py-5 font-semibold text-sm text-slate-800">{group.name}</td>
+				<td className="p-4 py-5 font-semibold text-sm text-slate-800">
+					<td className="p-4 py-5 text-sm text-slate-500">
+						{group.users.map((_u) => (
+							<div key={_u.id}>{_u.username}</div>
+						))}
+					</td>
+				</td>
 				<td className="p-4 py-5 text-sm text-slate-500">
 					{formatDateWithIntl(group.createdAt)}
 				</td>
@@ -242,14 +271,18 @@ function CreateGroupPage(props) {
 				<table className="w-full table-fixed text-left">
 					<thead>
 						<tr>
-							{["name", "createdAt", "common.actions"].map((header, idx) => (
-								<th
-									key={idx}
-									className="p-4 border-b border-slate-200 bg-[#ffe9cf]"
-									style={{ width: `${100 / 6}%` }}>
-									<p className="text-sm font-normal leading-none">{t(header)}</p>
-								</th>
-							))}
+							{["Group Name", "Assign User", "Created At", "common.actions"].map(
+								(header, idx) => (
+									<th
+										key={idx}
+										className="p-4 border-b border-slate-200 bg-[#ffe9cf]"
+										style={{ width: `${100 / 6}%` }}>
+										<p className="text-sm font-normal leading-none">
+											{t(header)}
+										</p>
+									</th>
+								)
+							)}
 						</tr>
 					</thead>
 					<tbody>{renderGroups()}</tbody>
@@ -299,6 +332,18 @@ function CreateGroupPage(props) {
 						/>
 					);
 				})}
+
+				<label
+					htmlFor="#"
+					className="block text-sm font-medium text-gray-700 mb-1">
+					{t("common.category")}
+				</label>
+				<Select
+					isMultiple
+					value={users.value}
+					onChange={(value) => handleUserChange(value)}
+					options={users.options}
+				/>
 			</Popup>
 
 			<Popup

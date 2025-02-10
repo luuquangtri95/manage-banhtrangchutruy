@@ -39,12 +39,14 @@ const setupAssociations = () => {
 		through: RolePermissionLinkModel,
 		foreignKey: "role_id",
 		otherKey: "permission_id",
+		as: "permissions",
 		onDelete: "CASCADE",
 	});
 	PermissionModel.belongsToMany(RoleModel, {
 		through: RolePermissionLinkModel,
 		foreignKey: "permission_id",
 		otherKey: "role_id",
+		as: "roles",
 		onDelete: "CASCADE",
 	});
 	//#endregion
@@ -54,6 +56,7 @@ const setupAssociations = () => {
 		through: UserRoleLinkModel,
 		foreignKey: "user_id",
 		otherKey: "role_id",
+		as: "roles",
 		onDelete: "CASCADE",
 	});
 
@@ -61,13 +64,14 @@ const setupAssociations = () => {
 		through: UserRoleLinkModel,
 		foreignKey: "role_id",
 		otherKey: "user_id",
+		as: "users",
 		onDelete: "CASCADE",
 	});
 	//#endregion
 
 	//#region [n order - 1 user]
-	OrderModel.belongsTo(UserModel, { foreignKey: "user_id" });
-	UserModel.hasMany(OrderModel, { foreignKey: "user_id" });
+	OrderModel.belongsTo(UserModel, { foreignKey: "user_id", as: "users" });
+	UserModel.hasMany(OrderModel, { foreignKey: "user_id", as: "orders" });
 	//#endregion
 
 	//#region [category - product]
@@ -76,6 +80,7 @@ const setupAssociations = () => {
 		through: ProductCategoryModel,
 		foreignKey: "product_id",
 		otherKey: "category_id",
+		as: "categories",
 		onDelete: "CASCADE",
 	});
 	//#endregion
@@ -85,6 +90,7 @@ const setupAssociations = () => {
 		through: ProductCategoryModel,
 		foreignKey: "category_id",
 		otherKey: "product_id",
+		as: "products",
 		onDelete: "CASCADE",
 	});
 	//#endregion
@@ -92,27 +98,25 @@ const setupAssociations = () => {
 
 	//#region [group - wholesale_price]
 	//#region [1 group wholesale => n user]
-	WholesaleGroupModel.belongsToMany(UserModel, {
-		through: UserWholesaleGroupModel,
-		foreignKey: "id",
-		otherKey: "user_id",
-		onDelete: "CASCADE",
-		onUpdate: "CASCADE",
-	});
-	//#endregion
-
-	//#region [1 group wholesale => n user]
 	UserModel.belongsToMany(WholesaleGroupModel, {
 		through: UserWholesaleGroupModel,
-		foreignKey: "id",
+		foreignKey: "user_id",
 		otherKey: "group_id",
+		as: "wholesaleGroups",
+		onDelete: "CASCADE",
+		onUpdate: "CASCADE",
+	});
+
+	//#region [1 user => n group wholesale]
+	WholesaleGroupModel.belongsToMany(UserModel, {
+		through: UserWholesaleGroupModel,
+		foreignKey: "group_id",
+		otherKey: "user_id",
+		as: "users",
 		onDelete: "CASCADE",
 		onUpdate: "CASCADE",
 	});
 	//#endregion
-
-	//#region [1 wholesale => n gorup ]
-
 	//#endregion
 };
 

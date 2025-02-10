@@ -40,7 +40,14 @@ const findAll = async (payload) => {
 			order: [[order, sort]],
 			nest: true,
 			attributes: ["id", "username", "email", "isActive", "createdAt", "updatedAt"],
-			include: [{ model: RoleModel, attributes: ["name"], through: { attributes: [] } }],
+			include: [
+				{
+					model: RoleModel,
+					as: "roles",
+					attributes: ["name"],
+					through: { attributes: [] },
+				},
+			],
 		});
 
 		const _metadata = {

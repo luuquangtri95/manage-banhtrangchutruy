@@ -1,10 +1,37 @@
 import { Op } from "sequelize";
+import { UserModel } from "~/models/user.model";
 import { WholesaleGroupModel } from "~/models/wholesale_groups.model";
-
 const create = async (payload) => {
 	try {
-		return await WholesaleGroupModel.create(payload);
+		const { users, ...rest } = payload;
+
+		const wholesaleGroup = await WholesaleGroupModel.create(rest);
+		if (!wholesaleGroup) {
+			throw new Error("Failed to create wholesale group.");
+		}
+
+		if (users && users.length > 0) {
+			for (let i = 0; i < users.length; i++) {
+				const user = await UserModel.findByPk(users[i].id);
+
+				if (!user) {
+					console.warn(`User with ID ${users[i].id} not found.`);
+					continue;
+				}
+
+				/**
+				 * quan trọng, không xoá log này
+				 */
+				console.log("Available methods:", Object.keys(user.__proto__)); // hàm kiểm tra xem method liên kết bảng thứ 3 có không
+
+				await user.addWholesaleGroups(wholesaleGroup);
+			}
+		}
+
+		console.log("Wholesale group and users added successfully.");
+		return wholesaleGroup;
 	} catch (error) {
+		console.error("Error adding users to wholesale group:", error);
 		throw error;
 	}
 };
@@ -28,7 +55,15 @@ const findAll = async (payload) => {
 			limit: limit,
 			offset: _offset,
 			order: [[order, sort]],
-			raw: true,
+			// raw: true,
+
+			include: [
+				{
+					model: UserModel,
+					as: "users",
+					through: { attributes: [] },
+				},
+			],
 		});
 
 		const _metadata = {

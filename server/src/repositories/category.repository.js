@@ -32,6 +32,7 @@ const findAll = async (payload) => {
 			include: [
 				{
 					model: ProductModel,
+					as: "products",
 					through: {
 						attributes: [],
 					},
