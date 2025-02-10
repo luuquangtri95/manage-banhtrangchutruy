@@ -41,6 +41,7 @@
       "product": "Lựa chọn sản phẩm"
     },
     "validate":{
+      "phone_invalid": "Số điện thoại phải format theo 0|+84 xxxx xxx",
       "title_is_required": "Tên đơn hàng bắt buộc",
       "title_min_length": "Tên đơn hàng phải lớn hơn 5 ký tự",
       "username_is_required":"Tên người đặt hàng bắt buộc",

@@ -1,13 +1,13 @@
 import { StatusCodes } from "http-status-codes";
-import { WholesalePriceService } from "~/services/wholesale-price.service";
+import { WholesaleGroupService } from "~/services/wholesale-group.service";
 
 const create = async (req, res) => {
 	try {
-		const metadata = await WholesalePriceService.create(req);
+		const metadata = await WholesaleGroupService.create(req);
 
 		res.status(StatusCodes.OK).json({
 			metadata,
-			message: "create wholesale price success !",
+			message: "create wholesale group success !",
 		});
 	} catch (error) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
@@ -16,7 +16,7 @@ const create = async (req, res) => {
 
 const findAll = async (req, res) => {
 	try {
-		const metadata = await WholesalePriceService.findAll(req);
+		const metadata = await WholesaleGroupService.findAll(req);
 
 		res.status(StatusCodes.OK).json({ metadata });
 	} catch (error) {
@@ -26,7 +26,7 @@ const findAll = async (req, res) => {
 
 const findById = async (req, res) => {
 	try {
-		const metadata = await WholesalePriceService.findById(req);
+		const metadata = await WholesaleGroupService.findById(req);
 
 		res.status(StatusCodes.OK).json({ metadata });
 	} catch (error) {
@@ -36,9 +36,9 @@ const findById = async (req, res) => {
 
 const update = async (req, res) => {
 	try {
-		const metadata = await WholesalePriceService.update(req);
+		const metadata = await WholesaleGroupService.update(req);
 
-		res.status(StatusCodes.OK).json({ message: "update wholesale price success !", metadata });
+		res.status(StatusCodes.OK).json({ message: "update wholesale group success !", metadata });
 	} catch (error) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
 	}
@@ -46,15 +46,15 @@ const update = async (req, res) => {
 
 const _delete = async (req, res) => {
 	try {
-		const metadata = await WholesalePriceService.delete(req);
+		const metadata = await WholesaleGroupService.delete(req);
 
-		res.status(StatusCodes.OK).json({ message: "delete wholesale price success !" });
+		res.status(StatusCodes.OK).json({ message: "delete wholesale group success !" });
 	} catch (error) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
 	}
 };
 
-export const WholesalePriceController = {
+export const WholesaleGroupController = {
 	create,
 	findAll,
 	findById,

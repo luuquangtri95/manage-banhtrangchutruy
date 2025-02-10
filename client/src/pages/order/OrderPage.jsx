@@ -50,7 +50,13 @@ const INIT_FORMDATA = {
 		error: "",
 		disabled: false,
 		validate: (value) => {
+			const regex = /^(0|\+84)[3|5|7|8|9][0-9]{8}$/;
+
 			if (!value.toString().trim()) return "order_page.validate.phone_is_required";
+			if (!regex.test(value)) {
+				return "order_page.validate.phone_invalid";
+			}
+
 			return "";
 		},
 	},

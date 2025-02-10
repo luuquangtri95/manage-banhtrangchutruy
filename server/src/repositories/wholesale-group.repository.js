@@ -1,19 +1,9 @@
 import { Op } from "sequelize";
-import { RoleModel } from "~/models/role.model";
-import { UserModel } from "~/models/user.model";
-import bcrypt from "bcrypt";
+import { WholesaleGroupModel } from "~/models/wholesale_groups.model";
 
 const create = async (payload) => {
 	try {
-		return await UserModel.create(payload);
-	} catch (error) {
-		throw error;
-	}
-};
-
-const update = async (payload, id) => {
-	try {
-		return await UserModel.update({ ...payload }, { where: { id } });
+		return await WholesaleGroupModel.create(payload);
 	} catch (error) {
 		throw error;
 	}
@@ -33,24 +23,21 @@ const findAll = async (payload) => {
 			};
 		}
 
-		const { count, rows } = await UserModel.findAndCountAll({
+		const { count, rows } = await WholesaleGroupModel.findAndCountAll({
 			where,
 			limit: limit,
 			offset: _offset,
 			order: [[order, sort]],
-			nest: true,
-			attributes: ["id", "username", "email", "isActive", "createdAt", "updatedAt"],
-			include: [{ model: RoleModel, attributes: ["name"], through: { attributes: [] } }],
+			raw: true,
 		});
 
 		const _metadata = {
-			result: rows.filter((row) => row.roles[0].name !== "admin"),
-
+			result: rows,
 			pagination: {
 				page: page,
 				limit: limit,
 				total_page: Math.ceil(count / limit),
-				total_item: rows.filter((row) => row.roles[0].name !== "admin").length,
+				total_item: count,
 			},
 		};
 
@@ -62,7 +49,7 @@ const findAll = async (payload) => {
 
 const findById = async (id) => {
 	try {
-		return await UserModel.findOne({
+		return await WholesaleGroupModel.findOne({
 			where: {
 				id,
 			},
@@ -72,15 +59,23 @@ const findById = async (id) => {
 	}
 };
 
-const _delete = async (id) => {
+const update = async (payload, id) => {
 	try {
-		return await UserModel.destroy({ where: { id } });
+		return await WholesaleGroupModel.update({ ...payload }, { where: { id } });
 	} catch (error) {
 		throw error;
 	}
 };
 
-export const UserRepository = {
+const _delete = async (id) => {
+	try {
+		return await WholesaleGroupModel.destroy({ where: { id } });
+	} catch (error) {
+		throw error;
+	}
+};
+
+export const WholesaleGroupRepository = {
 	create,
 	findAll,
 	update,

@@ -6,6 +6,7 @@ import { PartnerController } from "~/controllers/partner.controller";
 import { PermissionController } from "~/controllers/permission.controller";
 import { ProductController } from "~/controllers/product.controller";
 import { userControllers } from "~/controllers/user.controller";
+import { WholesaleGroupController } from "~/controllers/wholesale-group.controller";
 import { AuthMiddleware } from "~/middlewares/auth.middleware";
 
 const Router = express.Router();
@@ -75,6 +76,14 @@ Router.route("/categories/:categoryId").delete(
 	AuthMiddleware.checkPermission(["DELETE_CATEGORY"]),
 	CategoryController.delete
 );
+//#endregion
+
+//#region [WHOLESALE GROUP]
+Router.route("/wholesale-groups/create").post(WholesaleGroupController.create);
+Router.route("/wholesale-groups").get(WholesaleGroupController.findAll);
+Router.route("/wholesale-groups/:groupId").get(WholesaleGroupController.findById);
+Router.route("/wholesale-groups/:groupId").put(WholesaleGroupController.update);
+Router.route("/wholesale-groups/:groupId").delete(WholesaleGroupController.delete);
 //#endregion
 
 //#region [PARTNERS]

@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import sequelizeConnectionString from "~/config/database";
 
 export const wholesalePricesModel = sequelizeConnectionString.define(
-	"WholesalePrices",
+	"wholesale_price",
 	{
 		id: {
 			type: DataTypes.UUID,
@@ -15,12 +15,11 @@ export const wholesalePricesModel = sequelizeConnectionString.define(
 		product_id: {
 			type: DataTypes.UUID,
 		},
-		wholesale_group_id: {
+		group_id: {
 			type: DataTypes.UUID,
-			allowNull: false,
 		},
 	},
 	{
-		modelName: "WholesalePrices",
+		modelName: "wholesale_price",
 	}
 );

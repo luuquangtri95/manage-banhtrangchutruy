@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import sequelizeConnectionString from "~/config/database";
 
-export const UserWholesalePriceGroupModel = sequelizeConnectionString.define(
-	"users_wholesale_prices",
+export const UserWholesaleGroupModel = sequelizeConnectionString.define(
+	"users_wholesale_groups",
 	{
 		id: {
 			type: DataTypes.UUID,
@@ -12,12 +12,12 @@ export const UserWholesalePriceGroupModel = sequelizeConnectionString.define(
 		user_id: {
 			type: DataTypes.UUID,
 		},
-		wholesale_group_id: {
+		group_id: {
 			type: DataTypes.UUID,
 		},
 	},
 	{
 		freezeTableName: true,
-		modelName: "users_wholesale_prices",
+		modelName: "users_wholesale_groups",
 	}
 );
