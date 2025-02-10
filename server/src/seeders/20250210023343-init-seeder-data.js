@@ -1,7 +1,8 @@
 "use strict";
 
+const PERMISSIONS = require("../mock/permission");
+const ROLES = require("../mock/role");
 const { QueryInterface } = require("sequelize");
-const { v4: uuidv4 } = require("uuid");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -16,46 +17,14 @@ module.exports = {
 		 * }], {});
 		 */
 		//#region [ROLE]
-		await queryInterface.bulkInsert("roles", [
-			{
-				id: uuidv4(),
-				name: "admin",
-				description: "ADMIN",
-				createdAt: new Date(),
-				updatedAt: new Date(),
-			},
-			{
-				id: uuidv4(),
-				name: "user",
-				description: "USER",
-				createdAt: new Date(),
-				updatedAt: new Date(),
-			},
-			{
-				id: uuidv4(),
-				name: "editor",
-				description: "EDITOR",
-				createdAt: new Date(),
-				updatedAt: new Date(),
-			},
-			{
-				id: uuidv4(),
-				name: "manager",
-				description: "MANAGER",
-				createdAt: new Date(),
-				updatedAt: new Date(),
-			},
-			{
-				id: uuidv4(),
-				name: "guest",
-				description: "GUEST",
-				createdAt: new Date(),
-				updatedAt: new Date(),
-			},
-		]);
+		await queryInterface.bulkDelete("roles", null, {});
+		await queryInterface.bulkInsert("roles", ROLES);
 		//#endregion
 
 		//#region [PERMISSION]
+		// --------- reset table permission
+		await queryInterface.bulkDelete("permissions", null, {});
+		await queryInterface.bulkInsert("permissions", PERMISSIONS);
 		//#endregion
 	},
 
@@ -68,5 +37,6 @@ module.exports = {
 		 */
 
 		await queryInterface.bulkDelete("roles", null, {});
+		await queryInterface.bulkDelete("permissions", null, {});
 	},
 };
