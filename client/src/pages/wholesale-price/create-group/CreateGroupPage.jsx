@@ -52,6 +52,14 @@ function CreateGroupPage(props) {
 
 	useEffect(() => {
 		if (popupData) {
+			setUsers((prev) => ({
+				...prev,
+				value:
+					popupData?.users?.map((_u) => ({
+						label: _u.username,
+						value: _u.id,
+					})) || [],
+			}));
 			setFormData((prev) => {
 				const updatedFormData = { ...prev };
 
@@ -105,13 +113,31 @@ function CreateGroupPage(props) {
 		setPopupData({ name: "" });
 	};
 
-	const handlePageChange = () => {};
+	const handlePageChange = (newPage) => {
+		setFilters((prev) => ({ ...prev, page: newPage }));
+	};
 
 	const handleEdit = (item) => {
 		setPopupData(item);
 	};
 
-	const handleClone = () => {};
+	const handleClone = async (oldItem) => {
+		try {
+			const _newItem = {
+				name: oldItem.name + " clone",
+			};
+
+			const res = await WholesaleGroupApi.create(_newItem);
+
+			if (res.metadata.id) {
+				toast.success(`Clone ${res.metadata.name} success !`);
+			}
+		} catch (error) {
+			console.log("error", error);
+		} finally {
+			fetchWholesaleGroup();
+		}
+	};
 
 	const handleConfirmDelete = (partner) => {
 		setGroupDelete(partner);
@@ -336,7 +362,7 @@ function CreateGroupPage(props) {
 				<label
 					htmlFor="#"
 					className="block text-sm font-medium text-gray-700 mb-1">
-					{t("common.category")}
+					{t("Choose users")}
 				</label>
 				<Select
 					isMultiple
