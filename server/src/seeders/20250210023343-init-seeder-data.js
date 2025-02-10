@@ -17,14 +17,14 @@ module.exports = {
 		 * }], {});
 		 */
 		//#region [ROLE]
-		await queryInterface.bulkDelete("roles", null, {});
-		await queryInterface.bulkInsert("roles", ROLES);
+		await queryInterface.bulkDelete("Roles", null, {}); // lấy theo tên bảng trong dbearver
+		await queryInterface.bulkInsert("Roles", ROLES);
 		//#endregion
 
 		//#region [PERMISSION]
 		// --------- reset table permission
-		await queryInterface.bulkDelete("permissions", null, {});
-		await queryInterface.bulkInsert("permissions", PERMISSIONS);
+		await queryInterface.bulkDelete("Permissions", null, {});
+		await queryInterface.bulkInsert("Permissions", PERMISSIONS);
 		//#endregion
 	},
 
@@ -36,7 +36,7 @@ module.exports = {
 		 * await queryInterface.bulkDelete('People', null, {});
 		 */
 
-		await queryInterface.bulkDelete("roles", null, {});
-		await queryInterface.bulkDelete("permissions", null, {});
+		await queryInterface.bulkDelete("Roles", null, {});
+		await queryInterface.bulkDelete("Permissions", null, {});
 	},
 };
