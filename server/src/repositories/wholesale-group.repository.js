@@ -22,7 +22,7 @@ const create = async (payload) => {
 				/**
 				 * quan trọng, không xoá log này
 				 */
-				console.log("Available methods:", Object.keys(user.__proto__)); // hàm kiểm tra xem method liên kết bảng thứ 3 có không
+				// console.log("Available methods:", Object.keys(user.__proto__)); // hàm kiểm tra xem method liên kết bảng thứ 3 có không
 
 				await user.addWholesaleGroups(wholesaleGroup);
 			}

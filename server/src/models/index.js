@@ -9,8 +9,9 @@ import { ProductModel } from "./product.model";
 import { ProductCategoryModel } from "./product_category.model";
 import { PartnerModel } from "./partner.model";
 import { WholesaleGroupModel } from "./wholesale_groups.model";
-import { wholesalePricesModel } from "./wholesale_prices.model";
+import { WholesalePricesModel } from "./wholesale_prices.model";
 import { UserWholesaleGroupModel } from "./user_wholesale_groups.model";
+import { WholesalePriceMappingModel } from "./user_product_wholesale-price.model";
 
 // Gom tất cả models vào object models
 const models = [
@@ -28,7 +29,8 @@ const models = [
 	RolePermissionLinkModel, // Tạo bảng roles_permissions
 	ProductCategoryModel,
 	UserWholesaleGroupModel,
-	wholesalePricesModel,
+	WholesalePricesModel,
+	WholesalePriceMappingModel,
 	// ... các models về sau luôn luôn đặt dưới đây
 ];
 
@@ -96,7 +98,7 @@ const setupAssociations = () => {
 	//#endregion
 	//#endregion
 
-	//#region [group - wholesale_price]
+	//#region [user - wholesale_group]
 	//#region [1 group wholesale => n user]
 	UserModel.belongsToMany(WholesaleGroupModel, {
 		through: UserWholesaleGroupModel,
@@ -117,6 +119,40 @@ const setupAssociations = () => {
 		onUpdate: "CASCADE",
 	});
 	//#endregion
+	//#endregion
+
+	//#region [temp...]
+	// 1 Product - n wholesale price
+	ProductModel.belongsToMany(WholesalePricesModel, {
+		through: WholesalePriceMappingModel,
+		foreignKey: "product_id",
+		otherKey: "price_id",
+		as: "wholesalePrices",
+	});
+
+	// 1 Wholesale Group  - n wholesale price
+	WholesaleGroupModel.belongsToMany(WholesalePricesModel, {
+		through: WholesalePriceMappingModel,
+		foreignKey: "group_id",
+		otherKey: "price_id",
+		as: "wholesalePrices",
+	});
+
+	// 1 WholesalePrice - n product
+	WholesalePricesModel.belongsToMany(ProductModel, {
+		through: WholesalePriceMappingModel,
+		foreignKey: "price_id",
+		otherKey: "product_id",
+		as: "products",
+	});
+
+	// 1 WholesalePrice - group
+	WholesalePricesModel.belongsToMany(WholesaleGroupModel, {
+		through: WholesalePriceMappingModel,
+		foreignKey: "price_id",
+		otherKey: "group_id",
+		as: "wholesaleGroups",
+	});
 	//#endregion
 };
 

@@ -7,6 +7,7 @@ import { PermissionController } from "~/controllers/permission.controller";
 import { ProductController } from "~/controllers/product.controller";
 import { userControllers } from "~/controllers/user.controller";
 import { WholesaleGroupController } from "~/controllers/wholesale-group.controller";
+import { WholesalePriceController } from "~/controllers/wholesale-price.controller";
 import { AuthMiddleware } from "~/middlewares/auth.middleware";
 
 const Router = express.Router();
@@ -87,6 +88,14 @@ Router.route("/wholesale-groups").get(WholesaleGroupController.findAll);
 Router.route("/wholesale-groups/:groupId").get(WholesaleGroupController.findById);
 Router.route("/wholesale-groups/:groupId").put(WholesaleGroupController.update);
 Router.route("/wholesale-groups/:groupId").delete(WholesaleGroupController.delete);
+//#endregion
+
+//#region [WHOLESALE PRICE]
+Router.route("/wholesale-prices/create").post(WholesalePriceController.create);
+Router.route("/wholesale-prices").get(WholesalePriceController.findAll);
+Router.route("/wholesale-prices/:priceId").get(WholesalePriceController.findById);
+Router.route("/wholesale-prices/:priceId").put(WholesalePriceController.update);
+Router.route("/wholesale-prices/:priceId").delete(WholesalePriceController.delete);
 //#endregion
 
 //#region [PARTNERS]
