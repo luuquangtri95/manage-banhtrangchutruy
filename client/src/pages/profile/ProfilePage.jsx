@@ -5,12 +5,19 @@ import Icon from "../../components/Icon/Icon";
 import Popup from "../../components/Popup";
 import { useContext } from "react";
 import { DashboardContext } from "../dashboard/Dashboard";
+import UserApi from "../../api/userApi";
+import { toast } from "react-toastify";
+import PermissionApi from "../../api/permissionApi";
 
 const INIT_FORMDATA = {
   username: {
     value: "",
     type: "text",
     error: "",
+    validate: (value) => {
+      if (!value.trim()) return "validate.name_required";
+      if (value.length < 5) return "validate.name_min_length";
+    },
     disabled: false,
   },
   email: {
@@ -23,24 +30,73 @@ const INIT_FORMDATA = {
     value: "",
     type: "text",
     error: "",
+    // validate: (value) => {
+    //   if (!value.trim()) return "order_page.validate.address_is_required";
+    //   return "";
+    // },
     disabled: false,
   },
   phone: {
     value: "",
     type: "number",
     error: "",
+    // validate: (value) => {
+    //   const regex = /^(0|\+84)[3|5|7|8|9][0-9]{8}$/;
+
+    //   if (!value.toString().trim())
+    //     return "order_page.validate.phone_is_required";
+    //   if (!regex.test(value)) {
+    //     return "order_page.validate.phone_invalid";
+    //   }
+
+    //   return "";
+    // },
     disabled: false,
   },
 };
 
 function ProfilePage(props) {
   const [formData, setFormData] = useState(INIT_FORMDATA);
-  const [popupProfile, setPopupProfile] = useState(false);
+  const [popupProfile, setPopupProfile] = useState(null);
   const [uploadImage, setImageUpload] = useState(null);
+  const [permisions, setPermissions] = useState([]);
 
   const { userInfo } = useContext(DashboardContext);
 
-  console.log("userInfo", userInfo);
+  // console.log("userInfo", userInfo);
+  // console.log("formData", formData);
+
+  useEffect(() => {
+    fetchProfile();
+  }, [popupProfile]);
+
+  const fetchProfile = async () => {
+    try {
+      const res = await UserApi.findById(userInfo.id);
+      console.log("res", res.metadata);
+
+      setFormData((prev) => {
+        const updatedFormData = { ...formData };
+        Object.keys(updatedFormData).forEach((key) => {
+          updatedFormData[key] = {
+            ...prev[key],
+            value: res.metadata[key] || "",
+          };
+        });
+        return updatedFormData;
+      });
+    } catch (error) {
+      console.log("fetchProfile error", error);
+      toast.error("Failed to fetch Profile");
+    }
+  };
+
+  const handleFormChange = (name, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: { ...prev[name], value, error: "" },
+    }));
+  };
 
   const handleUploadImage = (e) => {
     let urlImg = e.target.files[0];
@@ -49,19 +105,55 @@ function ProfilePage(props) {
   };
 
   const handleClosePopupProfile = () => {
-    setPopupProfile(false);
+    setPopupProfile(null);
   };
   const handleShowPopupProfile = () => {
     setPopupProfile(true);
   };
 
+  const handlePopupSubmit = async () => {
+    let hasError = false;
+    const newFormData = { ...formData };
+
+    Object.keys(newFormData).forEach((key) => {
+      const field = newFormData[key];
+      if (field.validate) {
+        const error = field.validate(field.value);
+        if (error) {
+          hasError = true;
+          newFormData[key].error = error;
+        }
+      }
+    });
+
+    setFormData(newFormData);
+    if (hasError) return;
+
+    try {
+      const res = await UserApi.update(userInfo.id);
+      console.log("res update", res);
+      setFormData((prev) => {
+        const updatedFormData = { ...formData };
+        Object.keys(updatedFormData).forEach((key) => {
+          updatedFormData[key] = {
+            ...prev,
+            value: res.metadata[key] || "",
+          };
+        });
+        return updatedFormData;
+      });
+    } catch (error) {
+      console.log("handlePopupSubmit error", error);
+    }
+  };
+
   return (
-    <div className="max-w-[900px] m-auto bg-white mb-[30px] mt-[30px] ">
-      <div className="text-center p-5 lg:pb-8 xl:pb-11.5 bg-white shadow-sm">
-        <div className="relative z-30 mx-auto h-[11rem] w-full max-w-[11rem] rounded-full sm:p-3 bg-gray-50">
+    <div className="max-w-[900px] m-auto bg-white mb-[30px] mt-[30px]">
+      <div className="text-center p-5 sm:pt-8 lg:pb-8 xl:pb-11.5 bg-white shadow-sm">
+        <div className="relative z-30 flex justify-center items-center mx-auto h-[124px] w-full max-w-[124px] sm:max-w-[176px] sm:w-[176px] sm:h-[176px] rounded-full sm:p-3 bg-gradient-to-b from-gray-200 to-transparent backdrop-blur-md">
           <div className="relative drop-shadow-2 m-auto">
             <img
-              className="rounded-full w-[152px] h-[152px]"
+              className="rounded-full w-[112px] h-[112px] sm:w-[152px] sm:h-[152px]"
               src={uploadImage ? uploadImage : ImageProfile}
               alt="profile"
             />
@@ -107,12 +199,12 @@ function ProfilePage(props) {
             isOpen={popupProfile}
             title="Edit Profile"
             onClose={handleClosePopupProfile}
-            onSubmit={handleShowPopupProfile}
+            onSubmit={handlePopupSubmit}
           >
-            <div className="relative z-30 mx-auto h-[11rem] w-full max-w-[11rem] rounded-full sm:p-3 bg-gray-50 mb-5">
+            <div className="relative z-30 flex justify-center items-center mx-auto mb-4 h-[124px] w-full max-w-[124px] sm:max-w-[176px] sm:w-[176px] sm:h-[176px] rounded-full sm:p-3 bg-gradient-to-b from-gray-200 to-transparent backdrop-blur-md">
               <div className="relative drop-shadow-2 m-auto">
                 <img
-                  className="rounded-full w-[152px] h-[152px]"
+                  className="rounded-full w-[112px] h-[112px] sm:w-[152px] sm:h-[152px]"
                   src={uploadImage ? uploadImage : ImageProfile}
                   alt="profile"
                 />
@@ -159,7 +251,7 @@ function ProfilePage(props) {
                       type={field.type}
                       error={field.error}
                       options={field.options || []}
-                      onChange={() => {}}
+                      onChange={(e) => handleFormChange(key, e.target.value)}
                       className="h-[38px] text-sm"
                       disabled={field.disabled}
                     />
@@ -169,15 +261,31 @@ function ProfilePage(props) {
             </div>
           </Popup>
         </div>
-        <div className="mx-auto px-5 pt-4">
-          <h4 className="font-medium text-black ">About Me</h4>
-          <p className="mt-4.5 text-sm font-normal">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Pellentesque posuere fermentum urna, eu condimentum mauris tempus
-            ut. Donec fermentum blandit aliquet. Etiam dictum dapibus ultricies.
-            Sed vel aliquet libero. Nunc a augue fermentum, pharetra ligula sed,
-            aliquam lacus.
-          </p>
+
+        <div className="pt-6 sm:px-5">
+          <h4 className="text-left font-semibold text-gray-800 border-b border-gray-200 pb-2">
+            Permissions
+          </h4>
+          <ul className="mt-4 text-sm text-gray-600">
+            <li className="flex justify-between items-center py-2 border-b border-gray-100 text-left min-h-11">
+              <span>View Wholesale Price</span>
+              <span className="text-green-500">Granted</span>
+            </li>
+            <li className="flex justify-between items-center py-2 border-b border-gray-100 text-left min-h-11">
+              <span>View User</span>
+              <span className="text-green-500">Granted</span>
+            </li>
+            <li className="flex justify-between items-center py-2 border-b border-gray-100 text-left min-h-11">
+              <span>View Partner</span>
+              <span className="text-green-500">Granted</span>
+            </li>
+            <li className="flex justify-between items-center py-2 border-b border-gray-100 text-left">
+              <span>Additional Permission Required</span>
+              <button className="px-3 py-1 text-sm text-white bg-blue-500 rounded hover:bg-blue-600">
+                Request Access
+              </button>
+            </li>
+          </ul>
         </div>
       </div>
     </div>

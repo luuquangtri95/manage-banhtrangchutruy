@@ -12,6 +12,8 @@ const create = async (payload) => {
 };
 
 const update = async (payload, id) => {
+  console.log("va day nua");
+
   try {
     return await UserModel.update({ ...payload }, { where: { id } });
   } catch (error) {

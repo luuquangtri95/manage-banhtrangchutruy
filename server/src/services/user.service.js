@@ -43,6 +43,8 @@ const findById = async (req) => {
 };
 
 const update = async (req) => {
+  console.log("vay con day");
+
   try {
     const payload = req.body;
     const { permissionId } = req.params;
