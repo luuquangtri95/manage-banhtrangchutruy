@@ -9,6 +9,8 @@ import { userControllers } from "~/controllers/user.controller";
 import { WholesaleGroupController } from "~/controllers/wholesale-group.controller";
 import { WholesalePriceController } from "~/controllers/wholesale-price.controller";
 import { AuthMiddleware } from "~/middlewares/auth.middleware";
+import { upload } from "~/config/multer";
+import { CloudinaryMiddleware } from "~/middlewares/cloudinary.middleware";
 
 const Router = express.Router();
 
@@ -52,7 +54,11 @@ Router.route("/users/register").post(userControllers.register);
 Router.route("/users/create").post(userControllers.create);
 Router.route("/users").get(userControllers.findAll);
 Router.route("/users/:userId").get(userControllers.findById);
-Router.route("/users/:userId").put(userControllers.update);
+Router.route("/users/:userId").put(
+	upload.single("avatar"),
+	CloudinaryMiddleware.uploadFile,
+	userControllers.update
+);
 Router.route("/users/:userId").delete(userControllers.delete);
 //#endregion
 
