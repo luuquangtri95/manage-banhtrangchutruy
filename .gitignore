@@ -5,4 +5,4 @@ server/build
 .env
 .env.production
 .env.development
-server/uploads/avatars/*
+server/uploads/tmp/*
