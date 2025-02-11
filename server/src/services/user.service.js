@@ -34,9 +34,9 @@ const findAll = async (req) => {
 
 const findById = async (req) => {
 	try {
-		const { permissionId } = req.params;
+		const { userId } = req.params;
 
-		return await UserRepository.findById(permissionId);
+		return await UserRepository.findById(userId);
 	} catch (error) {
 		throw error;
 	}
@@ -45,9 +45,9 @@ const findById = async (req) => {
 const update = async (req) => {
 	try {
 		const payload = req.body;
-		const { permissionId } = req.params;
+		const { userId } = req.params;
 
-		return await UserRepository.update(payload, permissionId);
+		return await UserRepository.update(payload, userId);
 	} catch (error) {
 		throw error;
 	}
@@ -55,9 +55,9 @@ const update = async (req) => {
 
 const _delete = async (req) => {
 	try {
-		const { permissionId } = req.params;
+		const { userId } = req.params;
 
-		return await UserRepository.delete(permissionId);
+		return await UserRepository.delete(userId);
 	} catch (error) {
 		throw error;
 	}
