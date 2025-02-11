@@ -2,6 +2,7 @@
 
 const PERMISSIONS = require("../mock/permission");
 const ROLES = require("../mock/role");
+const CATEGORIES = require("../mock/category");
 const { QueryInterface } = require("sequelize");
 
 /** @type {import('sequelize-cli').Migration} */
@@ -26,6 +27,11 @@ module.exports = {
 		await queryInterface.bulkDelete("Permissions", null, {});
 		await queryInterface.bulkInsert("Permissions", PERMISSIONS);
 		//#endregion
+
+		//#region [CATEGORIES]
+		await queryInterface.bulkInsert("Categories", null, {});
+		await queryInterface.bulkInsert("Categories", CATEGORIES);
+		//#endregion
 	},
 
 	async down(queryInterface, Sequelize) {
@@ -38,5 +44,6 @@ module.exports = {
 
 		await queryInterface.bulkDelete("Roles", null, {});
 		await queryInterface.bulkDelete("Permissions", null, {});
+		await queryInterface.bulkDelete("Categories", null, {});
 	},
 };
