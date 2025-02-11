@@ -8,6 +8,8 @@ import Select from "react-tailwindcss-select";
 import Icon from "../../components/Icon/Icon";
 import { useTranslation } from "react-i18next";
 import FormField from "../../components/FormField";
+import { formatDateWithIntl } from "../../helpers/convertDate";
+import { formatPrice } from "../../helpers/formatPrice";
 
 const INIT_FORMDATA = {
 	name: {
@@ -24,7 +26,7 @@ const INIT_FORMDATA = {
 		type: "number",
 		error: "",
 		validate: (value) => {
-			// if (value < 1000) return "validate.price_min";
+			// if (Number(value) === 0) return "validate.price_min";
 			return "";
 		},
 	},
@@ -33,7 +35,7 @@ const INIT_FORMDATA = {
 		type: "number",
 		error: "",
 		validate: (value) => {
-			// if (value < 1000) return "validate.price_min";
+			// if (Number(value) > 100) return "validate.price_min";
 			return "";
 		},
 	},
@@ -61,6 +63,7 @@ function WholesalePrice(props) {
 	const [wholesaleGroups, setWholesaleGroups] = useState(INIT_WHOLESALE_GROUPS);
 	const [products, setProducts] = useState(INIT_PRODUCTS);
 	const [wholesalePrices, setWholesalePrices] = useState([]);
+	const [wholesalePriceDelete, setWholesalePriceDelete] = useState(null);
 	const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
 	const [loading, setLoading] = useState(false);
 	const [filters, setFilters] = useState({ page: 1, limit: 8, searchTerm: "" });
@@ -73,11 +76,45 @@ function WholesalePrice(props) {
 		fetchProducts();
 	}, [filters]);
 
+	useEffect(() => {
+		if (popupData) {
+			setWholesaleGroups((prev) => ({
+				...prev,
+				value:
+					popupData?.wholesaleGroups?.map((_wp) => ({
+						label: _wp.name,
+						value: _wp.id,
+					})) || [],
+			}));
+			setProducts((prev) => ({
+				...prev,
+				value:
+					popupData?.products?.map((_p) => ({
+						label: _p.name,
+						value: _p.id,
+					})) || [],
+			}));
+			setFormData((prev) => {
+				const updatedFormData = { ...prev };
+
+				console.log("updatedFormData", updatedFormData);
+
+				Object.keys(updatedFormData).forEach((key) => {
+					if (popupData[key] !== undefined && key !== "category") {
+						updatedFormData[key].value = popupData[key];
+					}
+				});
+				return updatedFormData;
+			});
+		}
+	}, [popupData]);
+
 	const fetchWholesalePrices = async () => {
 		try {
 			const res = await WholesalePriceApi.findAll(filters);
 
 			setWholesalePrices(res.metadata.result);
+			setPagination(res.metadata.pagination);
 		} catch (error) {
 			console.log("fetchWholesaleGroup error", error);
 			toast.error("fail to fetch WholesalePriceApi");
@@ -214,10 +251,85 @@ function WholesalePrice(props) {
 			setWholesaleGroups(INIT_WHOLESALE_GROUPS);
 			fetchProducts();
 			fetchWholesaleGroups();
+			fetchWholesalePrices();
 		}
 	};
 
-	const renderWholesalePrice = () => {};
+	const handleCancelDelete = () => {
+		setWholesalePriceDelete(null);
+	};
+	const handleDeletePrice = async () => {
+		if (!wholesalePriceDelete) return;
+
+		try {
+			await WholesalePriceApi.delete(wholesalePriceDelete.id);
+			toast.success(`Product "${wholesalePriceDelete.name}" deleted successfully`);
+			fetchWholesalePrices();
+		} catch (error) {
+			console.log("handleDeletePrice error", error);
+		} finally {
+			setWholesalePriceDelete(null);
+		}
+	};
+
+	const handleEdit = (item) => {
+		setPopupData(item);
+	};
+
+	const handleClone = async () => {};
+
+	const handleConfirmDelete = (price) => {
+		setWholesalePriceDelete(price);
+	};
+
+	const renderWholesalePrice = () =>
+		wholesalePrices.map((_wp) => (
+			<tr
+				key={_wp.id}
+				className="hover:bg-slate-50 border-b border-slate-200">
+				<td className="p-4 py-5 font-semibold text-sm text-slate-800">{_wp.name}</td>
+				<td className="p-4 py-5 text-sm text-slate-500">{_wp.min_quantity}</td>
+				<td className="p-4 py-5 text-sm text-slate-500">{formatPrice(_wp.price)}</td>
+				<td className="p-4 py-5 text-sm text-slate-500">
+					<ul className="list-disc">
+						{_wp?.products?.map((_p) => {
+							return <li key={_p.key}>{_p.name}</li>;
+						})}
+					</ul>
+				</td>
+				<td className="p-4 py-5 text-sm text-slate-500">
+					<ul className="list-disc">
+						{_wp?.wholesaleGroups.map((_g) => {
+							return <li key={_g.key}>{_g.name}</li>;
+						})}
+					</ul>
+				</td>
+				<td className="p-4 py-5 text-sm text-slate-500">
+					{formatDateWithIntl(_wp.createdAt)}
+				</td>
+				<td className="p-4 py-5">
+					<div className="flex items-center gap-2 flex-wrap">
+						<button
+							className="border p-2 rounded-md"
+							onClick={() => handleEdit(_wp)}>
+							<Icon type="icon-edit" />
+						</button>
+
+						<button
+							className="border p-2 rounded-md"
+							onClick={() => handleClone(_wp)}>
+							<Icon type="icon-clone" />
+						</button>
+
+						<button
+							className="border p-2 rounded-md"
+							onClick={() => handleConfirmDelete(_wp)}>
+							<Icon type="icon-delete" />
+						</button>
+					</div>
+				</td>
+			</tr>
+		));
 
 	return (
 		<div className="mt-3 p-1">
@@ -241,11 +353,11 @@ function WholesalePrice(props) {
 					<thead>
 						<tr>
 							{[
-								"product_page.table.product_name",
-								"product_page.table.price",
-								"product_page.table.quantity",
-								"common.status",
-								"product_page.table.category",
+								"Name",
+								"Min quantity",
+								"Price",
+								"Ref groups",
+								"Ref products",
 								"common.created_date",
 								"common.actions",
 							].map((header, idx) => (
@@ -335,15 +447,15 @@ function WholesalePrice(props) {
 				</div>
 			</Popup>
 
-			{/* <Popup
-				isOpen={!!productDelete}
+			<Popup
+				isOpen={!!wholesalePriceDelete}
 				title={t("common.confirm_delete")}
 				onClose={handleCancelDelete}
-				onSubmit={handleDeleteProduct}>
+				onSubmit={handleDeletePrice}>
 				<p>
-					Bạn có chắc chắn muốn xóa sản phẩm <b>{productDelete?.name}</b> không?
+					Bạn có chắc chắn muốn xóa sản phẩm <b>{wholesalePriceDelete?.name}</b> không?
 				</p>
-			</Popup> */}
+			</Popup>
 		</div>
 	);
 }

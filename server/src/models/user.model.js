@@ -12,7 +12,14 @@ export const UserModel = sequelizeConnectionString.define(
 		},
 		username: {
 			type: DataTypes.STRING,
-			unique: true,
+			allowNull: false,
+		},
+		phone: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		address: {
+			type: DataTypes.STRING,
 			allowNull: false,
 		},
 		email: {
