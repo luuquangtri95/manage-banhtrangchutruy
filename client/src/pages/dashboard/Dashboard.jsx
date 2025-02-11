@@ -14,6 +14,7 @@ const MENU_ITEMS = [
 	{ path: "/dashboard/orders", icon: "icon-manager-order", label: "menu.manage_orders" },
 	{ path: "/dashboard/products", icon: "icon-products", label: "menu.manage_products" },
 	{ path: "/dashboard/categories", icon: "icon-category", label: "menu.manage_categories" },
+	{ path: "/dashboard/view-price", icon: "icon-price", label: "menu.wholesale_prices" },
 
 	// { path: "/dashboard/support", icon: "icon-support", label: "contact_support" },
 ];

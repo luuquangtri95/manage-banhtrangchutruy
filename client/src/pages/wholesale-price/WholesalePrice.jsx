@@ -356,8 +356,8 @@ function WholesalePrice(props) {
 								"Name",
 								"Min quantity",
 								"Price",
-								"Ref groups",
 								"Ref products",
+								"Ref groups",
 								"common.created_date",
 								"common.actions",
 							].map((header, idx) => (
