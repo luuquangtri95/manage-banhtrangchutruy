@@ -1,8 +1,5 @@
 import { DataTypes } from "sequelize";
 import sequelizeConnectionString from "~/config/database";
-import { ProductModel } from "./product.model";
-import { WholesaleGroupModel } from "./wholesale_groups.model";
-import { WholesalePricesModel } from "./wholesale_prices.model";
 
 export const WholesalePriceMappingModel = sequelizeConnectionString.define(
 	"WholesalePriceMapping",
@@ -14,23 +11,22 @@ export const WholesalePriceMappingModel = sequelizeConnectionString.define(
 		},
 		product_id: {
 			type: DataTypes.UUID,
-			references: {
-				model: ProductModel,
-				key: "id",
-			},
+			allowNull: false,
 		},
 		group_id: {
 			type: DataTypes.UUID,
-			references: {
-				model: WholesaleGroupModel,
-				key: "id",
-			},
+			allowNull: false,
 		},
 		price_id: {
 			type: DataTypes.UUID,
-			references: {
-				model: WholesalePricesModel,
-				key: "id",
+			allowNull: false,
+		},
+	},
+	{
+		constraints: true,
+		uniqueKeys: {
+			wholesale_price_mapping_unique: {
+				fields: ["product_id", "group_id", "price_id"],
 			},
 		},
 	}

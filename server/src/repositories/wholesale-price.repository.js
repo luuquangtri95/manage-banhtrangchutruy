@@ -1,3 +1,4 @@
+import sequelizeConnectionString from "~/config/database";
 import { ProductModel } from "~/models/product.model";
 import { WholesalePriceMappingModel } from "~/models/user_product_wholesale-price.model";
 import { WholesaleGroupModel } from "~/models/wholesale_groups.model";
@@ -14,7 +15,6 @@ const create = async (payload) => {
 
 		const mappings = [];
 
-		// ✅ Trường hợp chỉ có `products`, không có `groups`
 		if (products?.length > 0 && (!groups || groups.length === 0)) {
 			products.forEach((product) => {
 				mappings.push({
@@ -48,13 +48,21 @@ const create = async (payload) => {
 		}
 
 		if (mappings.length > 0) {
-			await WholesalePriceMappingModel.bulkCreate(mappings, {
-				ignoreDuplicates: true,
-			});
+			for (let i = 0; i < mappings.length; i++) {
+				await WholesalePriceMappingModel.findCreateFind({
+					where: {
+						price_id: mappings[i].price_id,
+						product_id: mappings[i].product_id,
+						group_id: mappings[i].group_id,
+					},
+				});
+			}
 		}
 
 		return wholesalePrice;
 	} catch (error) {
+		console.log("create wholesale price error", error);
+
 		throw error;
 	}
 };
@@ -135,7 +143,7 @@ const update = async (payload, id) => {
 
 const _delete = async (id) => {
 	try {
-		return await CategoryModel.destroy({ where: { id } });
+		return await WholesalePricesModel.destroy({ where: { id } });
 	} catch (error) {
 		throw error;
 	}

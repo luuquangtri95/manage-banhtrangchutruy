@@ -29,7 +29,7 @@ module.exports = {
 		//#endregion
 
 		//#region [CATEGORIES]
-		await queryInterface.bulkInsert("Categories", null, {});
+		await queryInterface.bulkDelete("Categories", null, {});
 		await queryInterface.bulkInsert("Categories", CATEGORIES);
 		//#endregion
 	},
