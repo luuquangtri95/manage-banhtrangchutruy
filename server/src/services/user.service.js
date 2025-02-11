@@ -45,9 +45,10 @@ const findById = async (req) => {
 const update = async (req) => {
 	try {
 		const payload = req.body;
+		const avatarUrl = req.avatarUrl;
 		const { userId } = req.params;
 
-		return await UserRepository.update(payload, userId);
+		return await UserRepository.update({ ...payload, avatar: avatarUrl }, userId);
 	} catch (error) {
 		throw error;
 	}
