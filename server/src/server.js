@@ -1,21 +1,40 @@
 /* eslint-disable no-console */
 
-import express from "express";
-import cors from "cors";
+import { BullMQAdapter } from "@bull-board/api/bullMQAdapter";
+import { ExpressAdapter } from "@bull-board/express";
+import { createBullBoard } from "@bull-board/api";
 import cookieParser from "cookie-parser";
-import { corsOptions } from "~/config/corsOptions";
-import { APIs_V1 } from "~/routes/v1";
-import { APIs_V2 } from "~/routes/v2";
-import { env } from "~/config/enviroment";
+import cors from "cors";
+import express from "express";
 import morgan from "morgan";
 import path from "path";
+import { corsOptions } from "~/config/corsOptions";
+import { env } from "~/config/enviroment";
 import "~/models";
+import { APIs_V1 } from "~/routes/v1";
+import { APIs_V2 } from "~/routes/v2";
+import imageUploadedQueue from "./backgroundJobs/queues/imageUploadQueue";
 
 const START_SERVER = () => {
 	// Init Express App
 	const frontendPath = path.join(__dirname, "../../../client/dist");
 
+	/**
+	 * BULL BOARD
+	 */
+
+	const serverAdapter = new ExpressAdapter();
+	serverAdapter.setBasePath("/bull-board");
+
+	createBullBoard({
+		queues: [new BullMQAdapter(imageUploadedQueue)],
+		serverAdapter: serverAdapter,
+	});
+
 	const app = express();
+
+	// admin bull board
+	app.use("/bull-board", serverAdapter.getRouter());
 
 	// Fix Cache from disk from ExpressJS
 	app.use((req, res, next) => {

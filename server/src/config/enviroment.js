@@ -32,4 +32,7 @@ export const env = {
 
 	// Other config
 	AUTHOR: process.env.AUTHOR,
+	CLOUDINARY_NAME: process.env.CLOUDINARY_NAME,
+	CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+	CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
 };

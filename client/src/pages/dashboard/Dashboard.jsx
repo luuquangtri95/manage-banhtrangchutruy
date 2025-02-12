@@ -10,6 +10,10 @@ import authorizedAxiosInstance from "../../utils/authorizedAxios";
 
 export const DashboardContext = createContext(null);
 
+const USER_MENU_ITEMS = [
+	{ path: "/dashboard/view-price", icon: "icon-price", label: "menu.wholesale_prices" },
+];
+
 const MENU_ITEMS = [
 	{ path: "/dashboard/orders", icon: "icon-manager-order", label: "menu.manage_orders" },
 	{ path: "/dashboard/products", icon: "icon-products", label: "menu.manage_products" },
@@ -253,6 +257,28 @@ function Dashboard() {
 									);
 								}
 							})}
+
+						{/* USER MENU */}
+						{userInfo?.role !== "admin" &&
+							USER_MENU_ITEMS.map((_item) => (
+								<NavLink
+									key={_item.path}
+									to={_item.path}
+									className={({ isActive }) =>
+										`p-3 rounded-md flex items-center gap-2 transition-all duration-200 ${
+											isCollapse && !renderContent
+												? isActive
+													? "bg-[#ffe9cf]"
+													: "hover:text-gray-500"
+												: isActive
+												? "bg-[#ffe9cf]"
+												: "hover:bg-[#f5e6cf]"
+										}`
+									}>
+									<Icon type={_item.icon} />
+									{!isCollapse && renderContent && <p>{t(_item.label)}</p>}
+								</NavLink>
+							))}
 					</div>
 				</div>
 

@@ -1,7 +1,8 @@
 import { Op } from "sequelize";
 import { RoleModel } from "~/models/role.model";
 import { UserModel } from "~/models/user.model";
-import bcrypt from "bcrypt";
+import { WholesaleGroupModel } from "~/models/wholesale_groups.model";
+import { WholesalePricesModel } from "~/models/wholesale_prices.model";
 
 const create = async (payload) => {
   try {
@@ -77,16 +78,31 @@ const findAll = async (payload) => {
 };
 
 const findById = async (id) => {
-  console.log("zo repository");
-
   try {
-    const user = await UserModel.findOne({
+    const entryUser = await UserModel.findOne({
       where: {
         id,
       },
+      include: [
+        {
+          model: WholesaleGroupModel,
+          as: "wholesaleGroups",
+          through: { attributes: [] },
+          include: [
+            {
+              model: WholesalePricesModel,
+              as: "wholesalePrices",
+              through: { attributes: [] },
+            },
+          ],
+        },
+      ],
     });
-    console.log("user repo", user);
-    return user;
+
+    const _entryUser = entryUser.toJSON();
+    delete _entryUser.password;
+
+    return _entryUser;
   } catch (error) {
     throw error;
   }

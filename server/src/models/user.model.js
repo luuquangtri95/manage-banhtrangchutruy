@@ -13,6 +13,9 @@ export const UserModel = sequelizeConnectionString.define(
 		username: {
 			type: DataTypes.STRING,
 		},
+		avatar: {
+			type: DataTypes.STRING,
+		},
 		phone: {
 			type: DataTypes.STRING,
 		},
