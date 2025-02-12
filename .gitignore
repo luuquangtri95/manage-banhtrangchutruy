@@ -6,3 +6,4 @@ server/build
 .env.production
 .env.development
 server/uploads/tmp/*
+server/dump.rdb

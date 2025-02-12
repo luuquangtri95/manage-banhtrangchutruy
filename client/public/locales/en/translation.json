@@ -93,6 +93,22 @@
       "address": "Address",
       "description": "Description",
       "phone": "Phone Number"
+    
+    }
+  },
+  "manage_wholesale": {
+    "group": {
+      "create_new_group": "Create new group",
+      "group_name": "Group name",
+      "assign_user": "Assign user"
+    },
+    "price": {
+      "create_new_price": "Create new wholesale price",
+      "name": "Wholesale price name",
+      "min_quantity": "Minimum quantity",
+      "price": "Applicable wholesale price",
+      "ref_group": "Applicable group",
+      "ref_product": "Applicable product"
     }
   },
   "common": {

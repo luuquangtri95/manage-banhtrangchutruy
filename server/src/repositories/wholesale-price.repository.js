@@ -8,61 +8,47 @@ const create = async (payload) => {
 	try {
 		const { groups, products, ...rest } = payload;
 
+		// Tạo bản ghi mới cho bảng WholesalePricesModel
 		const wholesalePrice = await WholesalePricesModel.create(rest);
 		if (!wholesalePrice) {
 			throw new Error("Failed to create wholesale price.");
 		}
 
-		const mappings = [];
-
-		if (products?.length > 0 && (!groups || groups.length === 0)) {
-			products.forEach((product) => {
-				mappings.push({
-					product_id: product.id,
-					group_id: null,
-					price_id: wholesalePrice.id,
-				});
-			});
-		}
-
-		if (groups?.length > 0 && (!products || products.length === 0)) {
-			groups.forEach((group) => {
-				mappings.push({
-					product_id: null,
-					group_id: group.id,
-					price_id: wholesalePrice.id,
-				});
-			});
-		}
-
-		if (products?.length > 0 && groups?.length > 0) {
-			products.forEach((product) => {
-				groups.forEach((group) => {
-					mappings.push({
+		const mappings = [
+			...(products?.length > 0 && (!groups || groups.length === 0)
+				? products.map((product) => ({
 						product_id: product.id,
+						group_id: null,
+						price_id: wholesalePrice.id,
+				  }))
+				: []),
+			...(groups?.length > 0 && (!products || products.length === 0)
+				? groups.map((group) => ({
+						product_id: null,
 						group_id: group.id,
 						price_id: wholesalePrice.id,
-					});
-				});
-			});
-		}
+				  }))
+				: []),
+			...(products?.length > 0 && groups?.length > 0
+				? products.flatMap((product) =>
+						groups.map((group) => ({
+							product_id: product.id,
+							group_id: group.id,
+							price_id: wholesalePrice.id,
+						}))
+				  )
+				: []),
+		];
 
 		if (mappings.length > 0) {
-			for (let i = 0; i < mappings.length; i++) {
-				await WholesalePriceMappingModel.findCreateFind({
-					where: {
-						price_id: mappings[i].price_id,
-						product_id: mappings[i].product_id,
-						group_id: mappings[i].group_id,
-					},
-				});
-			}
+			await WholesalePriceMappingModel.bulkCreate(mappings, {
+				ignoreDuplicates: true,
+			});
 		}
 
 		return wholesalePrice;
 	} catch (error) {
-		console.log("create wholesale price error", error);
-
+		console.error("Create wholesale price error:", error);
 		throw error;
 	}
 };
@@ -83,6 +69,7 @@ const findAll = async (payload) => {
 
 		const { count, rows } = await WholesalePricesModel.findAndCountAll({
 			where,
+			distinct: true,
 			limit: limit,
 			offset: _offset,
 			order: [[order, sort]],
@@ -123,7 +110,7 @@ const findAll = async (payload) => {
 
 const findById = async (id) => {
 	try {
-		return await CategoryModel.findOne({
+		return await WholesalePricesModel.findOne({
 			where: {
 				id,
 			},
@@ -135,8 +122,53 @@ const findById = async (id) => {
 
 const update = async (payload, id) => {
 	try {
-		return await CategoryModel.update({ ...payload }, { where: { id } });
+		const { groups, products, ...rest } = payload;
+
+		//#region [Cập nhật bảng WholesalePricesModel]
+		await WholesalePricesModel.update(rest, { where: { id } });
+		//#endregion
+
+		//#region [Xóa toàn bộ mapping cũ]
+		await WholesalePriceMappingModel.destroy({
+			where: { price_id: id },
+		});
+		//#endregion
+
+		//#region [Tạo lại mapping mới]
+		const newMappings = [
+			...(products?.length > 0 && (!groups || groups.length === 0)
+				? products.map((product) => ({
+						product_id: product.id,
+						group_id: null,
+						price_id: id,
+				  }))
+				: []),
+			...(groups?.length > 0 && (!products || products.length === 0)
+				? groups.map((group) => ({
+						product_id: null,
+						group_id: group.id,
+						price_id: id,
+				  }))
+				: []),
+			...(products?.length > 0 && groups?.length > 0
+				? products.flatMap((product) =>
+						groups.map((group) => ({
+							product_id: product.id,
+							group_id: group.id,
+							price_id: id,
+						}))
+				  )
+				: []),
+		];
+
+		if (newMappings.length > 0) {
+			await WholesalePriceMappingModel.bulkCreate(newMappings);
+		}
+		//#endregion
+
+		return { message: "Wholesale price updated successfully" };
 	} catch (error) {
+		console.error("Update error:", error);
 		throw error;
 	}
 };

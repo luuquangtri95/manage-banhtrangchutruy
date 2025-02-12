@@ -192,7 +192,9 @@ function WholesalePrice(props) {
 		}));
 	};
 
-	const handlePageChange = () => {};
+	const handlePageChange = (newPage) => {
+		setFilters((prev) => ({ ...prev, page: newPage }));
+	};
 
 	const handlePopupSubmit = async () => {
 		let hasError = false;
@@ -276,7 +278,25 @@ function WholesalePrice(props) {
 		setPopupData(item);
 	};
 
-	const handleClone = async () => {};
+	const handleClone = async (oldItem) => {
+		try {
+			const _newItem = {
+				name: oldItem.name + " clone",
+				min_quantity: oldItem.min_quantity,
+				price: oldItem.price,
+			};
+
+			const res = await WholesalePriceApi.create(_newItem);
+
+			if (res.metadata.id) {
+				toast.success(`Clone ${res.metadata.name} success !`);
+			}
+		} catch (error) {
+			console.log("error", error);
+		} finally {
+			fetchWholesalePrices();
+		}
+	};
 
 	const handleConfirmDelete = (price) => {
 		setWholesalePriceDelete(price);
@@ -339,7 +359,7 @@ function WholesalePrice(props) {
 						className="flex gap-2 border rounded-md p-2 hover:bg-[#ffe9cf] transition-all"
 						onClick={handleCreate}>
 						<Icon type="icon-create" />
-						<p>{t("common.create_new_product")}</p>
+						<p>{t("manage_wholesale.price.create_new_price")}</p>
 					</button>
 				</div>
 
@@ -353,11 +373,11 @@ function WholesalePrice(props) {
 					<thead>
 						<tr>
 							{[
-								"Name",
-								"Min quantity",
-								"Price",
-								"Ref products",
-								"Ref groups",
+								"manage_wholesale.price.name",
+								"manage_wholesale.price.min_quantity",
+								"manage_wholesale.price.price",
+								"manage_wholesale.price.ref_product",
+								"manage_wholesale.price.ref_group",
 								"common.created_date",
 								"common.actions",
 							].map((header, idx) => (

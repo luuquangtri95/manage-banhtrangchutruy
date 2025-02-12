@@ -284,7 +284,7 @@ function CreateGroupPage(props) {
 						className="flex gap-2 border rounded-md p-2 hover:bg-[#ffe9cf] transition-all"
 						onClick={handleCreate}>
 						<Icon type="icon-create" />
-						<p>{"Create new group"}</p>
+						<p>{t("manage_wholesale.group.create_new_group")}</p>
 					</button>
 				</div>
 
@@ -297,18 +297,19 @@ function CreateGroupPage(props) {
 				<table className="w-full table-fixed text-left">
 					<thead>
 						<tr>
-							{["Group Name", "Assign User", "Created At", "common.actions"].map(
-								(header, idx) => (
-									<th
-										key={idx}
-										className="p-4 border-b border-slate-200 bg-[#ffe9cf]"
-										style={{ width: `${100 / 6}%` }}>
-										<p className="text-sm font-normal leading-none">
-											{t(header)}
-										</p>
-									</th>
-								)
-							)}
+							{[
+								"manage_wholesale.group.group_name",
+								"manage_wholesale.group.assign_user",
+								"common.created_date",
+								"common.actions",
+							].map((header, idx) => (
+								<th
+									key={idx}
+									className="p-4 border-b border-slate-200 bg-[#ffe9cf]"
+									style={{ width: `${100 / 6}%` }}>
+									<p className="text-sm font-normal leading-none">{t(header)}</p>
+								</th>
+							))}
 						</tr>
 					</thead>
 					<tbody>{renderGroups()}</tbody>

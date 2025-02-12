@@ -100,6 +100,21 @@
       "phone": "Số điện thoại"
     }
   },
+  "manage_wholesale":{
+    "group": {
+      "create_new_group": "Tạo nhóm mới",
+      "group_name": "Tên nhóm",
+      "assign_user": "Chỉ định người dùng"
+    },
+    "price":{
+      "create_new_price": "Tạo giá sỉ mới",
+      "name": "Tên giá sỉ",
+      "min_quantity": "Số lượng tối thiểu",
+      "price":"Giá sỉ áp dụng",
+      "ref_group": "Nhóm áp dụng",
+      "ref_product": "Sản phẩm áp dụng"
+    }
+  },
   "common": {
     "welcome_message": "Chào mừng tài khoản <b>{{email}}</b> đến với <b>Chú Truý Food</b>",
     "actions": "Hành động",
