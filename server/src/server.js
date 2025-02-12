@@ -13,7 +13,7 @@ import { env } from "~/config/enviroment";
 import "~/models";
 import { APIs_V1 } from "~/routes/v1";
 import { APIs_V2 } from "~/routes/v2";
-import imageUploadedQueue from "./backgroundJobs/queues/imageUploadQueue";
+// import imageUploadedQueue from "./backgroundJobs/queues/imageUploadQueue";
 
 const START_SERVER = () => {
 	// Init Express App
@@ -23,18 +23,18 @@ const START_SERVER = () => {
 	 * BULL BOARD
 	 */
 
-	const serverAdapter = new ExpressAdapter();
-	serverAdapter.setBasePath("/bull-board");
+	// const serverAdapter = new ExpressAdapter();
+	// serverAdapter.setBasePath("/bull-board");
 
-	createBullBoard({
-		queues: [new BullMQAdapter(imageUploadedQueue)],
-		serverAdapter: serverAdapter,
-	});
+	// createBullBoard({
+	// 	queues: [new BullMQAdapter(imageUploadedQueue)],
+	// 	serverAdapter: serverAdapter,
+	// });
 
 	const app = express();
 
 	// admin bull board
-	app.use("/bull-board", serverAdapter.getRouter());
+	// app.use("/bull-board", serverAdapter.getRouter());
 
 	// Fix Cache from disk from ExpressJS
 	app.use((req, res, next) => {
