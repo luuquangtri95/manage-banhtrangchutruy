@@ -51,6 +51,7 @@ const START_SERVER = () => {
 	app.use(cors(corsOptions));
 
 	// Enable req.body json data
+	app.use(express.urlencoded({ extended: false }));
 	app.use(express.json());
 
 	// Use Route APIs V1

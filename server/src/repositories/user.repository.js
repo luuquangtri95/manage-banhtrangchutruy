@@ -1,4 +1,5 @@
 import { Op } from "sequelize";
+import { ProductModel } from "~/models/product.model";
 import { RoleModel } from "~/models/role.model";
 import { UserModel } from "~/models/user.model";
 import { WholesaleGroupModel } from "~/models/wholesale_groups.model";
@@ -84,6 +85,14 @@ const findById = async (id) => {
 							model: WholesalePricesModel,
 							as: "wholesalePrices",
 							through: { attributes: [] },
+
+							include: [
+								{
+									model: ProductModel,
+									as: "products",
+									through: { attributes: [] },
+								},
+							],
 						},
 					],
 				},
