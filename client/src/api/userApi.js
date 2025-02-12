@@ -32,9 +32,14 @@ const UserApi = {
     return await authorizedAxiosInstance.get(url);
   },
   update: async (data) => {
-    console.log("data", data);
     const url = `/dashboards/users/${data.id}`;
     return await authorizedAxiosInstance.put(url, data);
+  },
+  updateWithTypeUpload: async (id, data) => {
+    const url = `/dashboards/users/uploads/${id}`;
+    return await authorizedAxiosInstance.put(url, data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
   },
   delete: async (userId) => {
     const url = `/dashboards/users/${userId}`;

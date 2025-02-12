@@ -56,8 +56,6 @@ const login = async (req, res) => {
       role: user.roles.name,
     };
 
-    console.log("_userInfo", _userInfo);
-
     // generate token (access and refresh) for client
     const accessToken = await JwtProvider.generateToken(
       _userInfo,
@@ -217,8 +215,18 @@ const create = async (req, res) => {
 };
 
 const update = async (req, res) => {
-  console.log("vo controller");
+  try {
+    console.log("req.body", req.body);
+    const metadata = await UserService.update(req);
+    res
+      .status(StatusCodes.OK)
+      .json({ message: "update user success !", metadata });
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+  }
+};
 
+const updateAvatar = async (req, res) => {
   try {
     const metadata = await UserService.update(req);
     res
@@ -240,8 +248,7 @@ const findAll = async (req, res) => {
 };
 
 const findById = async (req, res) => {
-  console.log("Vo controller");
-
+  console.log("res", req.body);
   try {
     const metadata = await UserService.findById(req);
 
@@ -270,5 +277,6 @@ export const userControllers = {
   update,
   findAll,
   findById,
+  updateAvatar,
   delete: _delete,
 };

@@ -54,10 +54,11 @@ Router.route("/users/register").post(userControllers.register);
 Router.route("/users/create").post(userControllers.create);
 Router.route("/users").get(userControllers.findAll);
 Router.route("/users/:userId").get(userControllers.findById);
-Router.route("/users/:userId").put(
-	upload.single("avatar"),
-	CloudinaryMiddleware.uploadFile,
-	userControllers.update
+Router.route("/users/:userId").put(userControllers.update);
+Router.route("/users/uploads/:userId").put(
+  upload.single("avatar"),
+  CloudinaryMiddleware.uploadFile,
+  userControllers.updateAvatar
 );
 Router.route("/users/:userId").delete(userControllers.delete);
 //#endregion
@@ -91,17 +92,25 @@ Router.route("/categories/:categoryId").delete(
 //#region [WHOLESALE GROUP]
 Router.route("/wholesale-groups/create").post(WholesaleGroupController.create);
 Router.route("/wholesale-groups").get(WholesaleGroupController.findAll);
-Router.route("/wholesale-groups/:groupId").get(WholesaleGroupController.findById);
+Router.route("/wholesale-groups/:groupId").get(
+  WholesaleGroupController.findById
+);
 Router.route("/wholesale-groups/:groupId").put(WholesaleGroupController.update);
-Router.route("/wholesale-groups/:groupId").delete(WholesaleGroupController.delete);
+Router.route("/wholesale-groups/:groupId").delete(
+  WholesaleGroupController.delete
+);
 //#endregion
 
 //#region [WHOLESALE PRICE]
 Router.route("/wholesale-prices/create").post(WholesalePriceController.create);
 Router.route("/wholesale-prices").get(WholesalePriceController.findAll);
-Router.route("/wholesale-prices/:priceId").get(WholesalePriceController.findById);
+Router.route("/wholesale-prices/:priceId").get(
+  WholesalePriceController.findById
+);
 Router.route("/wholesale-prices/:priceId").put(WholesalePriceController.update);
-Router.route("/wholesale-prices/:priceId").delete(WholesalePriceController.delete);
+Router.route("/wholesale-prices/:priceId").delete(
+  WholesalePriceController.delete
+);
 //#endregion
 
 //#region [PARTNERS]

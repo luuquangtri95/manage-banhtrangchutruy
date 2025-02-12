@@ -57,6 +57,21 @@ const update = async (req) => {
   }
 };
 
+const updateAvatar = async (req) => {
+  try {
+    const payload = req.body;
+    const avatarUrl = req.avatarUrl;
+    const { userId } = req.params;
+
+    return await UserRepository.update(
+      { ...payload, avatar: avatarUrl },
+      userId
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
 const _delete = async (req) => {
   try {
     const { userId } = req.params;
@@ -72,5 +87,6 @@ export const UserService = {
   findAll,
   findById,
   update,
+  updateAvatar,
   delete: _delete,
 };

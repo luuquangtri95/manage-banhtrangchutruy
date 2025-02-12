@@ -13,8 +13,13 @@ const create = async (payload) => {
 };
 
 const update = async (payload, id) => {
-  console.log("payload", payload);
-  console.log("__id", id);
+  try {
+    return await UserModel.update({ ...payload }, { where: { id } });
+  } catch (error) {
+    throw error;
+  }
+};
+const updateAvatar = async (payload, id) => {
   try {
     return await UserModel.update({ ...payload }, { where: { id } });
   } catch (error) {
@@ -121,5 +126,6 @@ export const UserRepository = {
   findAll,
   update,
   findById,
+  updateAvatar,
   delete: _delete,
 };
