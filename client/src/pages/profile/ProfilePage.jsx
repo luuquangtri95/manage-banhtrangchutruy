@@ -30,27 +30,27 @@ const INIT_FORMDATA = {
     value: "",
     type: "text",
     error: "",
-    // validate: (value) => {
-    //   if (!value.trim()) return "order_page.validate.address_is_required";
-    //   return "";
-    // },
+    validate: (value) => {
+      if (!value.trim()) return "order_page.validate.address_is_required";
+      return "";
+    },
     disabled: false,
   },
   phone: {
     value: "",
     type: "number",
     error: "",
-    // validate: (value) => {
-    //   const regex = /^(0|\+84)[3|5|7|8|9][0-9]{8}$/;
+    validate: (value) => {
+      const regex = /^(0|\+84)[3|5|7|8|9][0-9]{8}$/;
 
-    //   if (!value.toString().trim())
-    //     return "order_page.validate.phone_is_required";
-    //   if (!regex.test(value)) {
-    //     return "order_page.validate.phone_invalid";
-    //   }
+      if (!value.toString().trim())
+        return "order_page.validate.phone_is_required";
+      if (!regex.test(value)) {
+        return "order_page.validate.phone_invalid";
+      }
 
-    //   return "";
-    // },
+      return "";
+    },
     disabled: false,
   },
 };
@@ -59,7 +59,8 @@ function ProfilePage(props) {
   const [formData, setFormData] = useState(INIT_FORMDATA);
   const [popupProfile, setPopupProfile] = useState(null);
   const [uploadImage, setImageUpload] = useState(null);
-  const [permisions, setPermissions] = useState([]);
+  const [filters, setFilters] = useState({});
+  const [currentUser, setCurrentUser] = useState(null);
 
   const { userInfo } = useContext(DashboardContext);
 
@@ -68,23 +69,37 @@ function ProfilePage(props) {
 
   useEffect(() => {
     fetchProfile();
-  }, [popupProfile]);
+  }, []);
 
-  const fetchProfile = async () => {
-    try {
-      const res = await UserApi.findById(userInfo.id);
-      console.log("res", res.metadata);
+  console.log("currentUser", currentUser);
 
+  useEffect(() => {
+    if (currentUser) {
+      console.log("currentUser useEffect", currentUser);
       setFormData((prev) => {
-        const updatedFormData = { ...formData };
+        const updatedFormData = { ...prev };
         Object.keys(updatedFormData).forEach((key) => {
           updatedFormData[key] = {
             ...prev[key],
-            value: res.metadata[key] || "",
+            value: currentUser[key],
           };
         });
+        console.log("updatedFormData", updatedFormData);
         return updatedFormData;
       });
+    }
+  }, [currentUser]);
+
+  const fetchProfile = async () => {
+    try {
+      const _userInfo = userInfo
+        ? userInfo
+        : JSON.parse(localStorage.getItem("userInfo"));
+
+      if (_userInfo) {
+        const res = await UserApi.findById(_userInfo.id);
+        setCurrentUser(res.metadata);
+      }
     } catch (error) {
       console.log("fetchProfile error", error);
       toast.error("Failed to fetch Profile");
@@ -129,19 +144,19 @@ function ProfilePage(props) {
     setFormData(newFormData);
     if (hasError) return;
 
+    const formattedData = Object.keys(formData).reduce((acc, key) => {
+      acc[key] = formData[key].value;
+      return acc;
+    }, {});
+
     try {
-      const res = await UserApi.update(userInfo.id);
+      const res = await UserApi.update({ id: userInfo.id, ...formattedData });
       console.log("res update", res);
-      setFormData((prev) => {
-        const updatedFormData = { ...formData };
-        Object.keys(updatedFormData).forEach((key) => {
-          updatedFormData[key] = {
-            ...prev,
-            value: res.metadata[key] || "",
-          };
-        });
-        return updatedFormData;
-      });
+      toast.success(res.message);
+      setCurrentUser({ ...currentUser, ...formattedData });
+      setPopupProfile(null);
+      fetchProfile();
+      return res;
     } catch (error) {
       console.log("handlePopupSubmit error", error);
     }

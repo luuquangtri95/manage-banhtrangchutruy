@@ -33,6 +33,8 @@ const findAll = async (req) => {
 };
 
 const findById = async (req) => {
+  console.log("zo Service");
+
   try {
     const { userId } = req.params;
 
@@ -43,13 +45,12 @@ const findById = async (req) => {
 };
 
 const update = async (req) => {
-  console.log("vay con day");
-
+  console.log("vo service");
   try {
     const payload = req.body;
-    const { permissionId } = req.params;
+    const { userId } = req.params;
 
-    return await UserRepository.update(payload, permissionId);
+    return await UserRepository.update(payload, userId);
   } catch (error) {
     throw error;
   }
@@ -57,9 +58,9 @@ const update = async (req) => {
 
 const _delete = async (req) => {
   try {
-    const { permissionId } = req.params;
+    const { userId } = req.params;
 
-    return await UserRepository.delete(permissionId);
+    return await UserRepository.delete(userId);
   } catch (error) {
     throw error;
   }

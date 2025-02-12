@@ -12,8 +12,8 @@ const create = async (payload) => {
 };
 
 const update = async (payload, id) => {
-  console.log("va day nua");
-
+  console.log("payload", payload);
+  console.log("__id", id);
   try {
     return await UserModel.update({ ...payload }, { where: { id } });
   } catch (error) {
@@ -77,12 +77,16 @@ const findAll = async (payload) => {
 };
 
 const findById = async (id) => {
+  console.log("zo repository");
+
   try {
-    return await UserModel.findOne({
+    const user = await UserModel.findOne({
       where: {
         id,
       },
     });
+    console.log("user repo", user);
+    return user;
   } catch (error) {
     throw error;
   }

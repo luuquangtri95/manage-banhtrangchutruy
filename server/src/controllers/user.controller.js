@@ -217,10 +217,10 @@ const create = async (req, res) => {
 };
 
 const update = async (req, res) => {
-  console.log("vo day chua");
+  console.log("vo controller");
+
   try {
     const metadata = await UserService.update(req);
-
     res
       .status(StatusCodes.OK)
       .json({ message: "update user success !", metadata });
@@ -240,6 +240,8 @@ const findAll = async (req, res) => {
 };
 
 const findById = async (req, res) => {
+  console.log("Vo controller");
+
   try {
     const metadata = await UserService.findById(req);
 
