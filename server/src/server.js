@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 
-import { BullMQAdapter } from "@bull-board/api/bullMQAdapter";
-import { ExpressAdapter } from "@bull-board/express";
-import { createBullBoard } from "@bull-board/api";
+// import { BullMQAdapter } from "@bull-board/api/bullMQAdapter";
+// import { ExpressAdapter } from "@bull-board/express";
+// import { createBullBoard } from "@bull-board/api";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
@@ -13,11 +13,13 @@ import { env } from "~/config/enviroment";
 import "~/models";
 import { APIs_V1 } from "~/routes/v1";
 import { APIs_V2 } from "~/routes/v2";
+import appRootPath from "app-root-path";
 // import imageUploadedQueue from "./backgroundJobs/queues/imageUploadQueue";
 
 const START_SERVER = () => {
 	// Init Express App
-	const frontendPath = path.join(__dirname, "../../../client/dist");
+	const rootDir = appRootPath.path;
+	const frontendPath = path.resolve(rootDir, "../client/dist");
 
 	/**
 	 * BULL BOARD
