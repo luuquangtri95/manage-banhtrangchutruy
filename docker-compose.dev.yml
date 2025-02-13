@@ -11,7 +11,7 @@ services:
       - ./client:/app
       - /app/node_modules
     environment:
-      - VITE_API_URL=http://localhost:8017
+      - VITE_API_URL=${VITE_API_URL}
     depends_on:
       - server
 
@@ -24,14 +24,14 @@ services:
     environment:
       - NODE_ENV=development
       - DB_HOST=db
-      - DB_PORT=5433
-      - DB_NAME=anvatchutruy_db
-      - DB_USER=luuquangtri
-      - DB_PASSWORD=123456tri
-      - PORT=8017  # Port trong container
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - PORT=${PORT}  # Port trong container
       - HOST=0.0.0.0
     env_file:
-      - path: "./server/.env"
+      - ./server/.env
     volumes:
       - ./server:/app
       - /app/node_modules
@@ -42,9 +42,11 @@ services:
   db:
     image: postgres:14
     environment:
-      - POSTGRES_DB=anvatchutruy_db
-      - POSTGRES_USER=luuquangtri
-      - POSTGRES_PASSWORD=123456tri
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    env_file:
+      - ./server/.env
     ports:
       - "5433:5432"
     volumes:
