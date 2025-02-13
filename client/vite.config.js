@@ -1,6 +1,5 @@
-import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
-import path from "path";
+import { defineConfig } from "vite";
 
 export default defineConfig(({ mode }) => {
 	// Đường dẫn thư mục gốc (root)
@@ -12,6 +11,7 @@ export default defineConfig(({ mode }) => {
 		define: {
 			// "process.env.VITE_API_URL": JSON.stringify(env.VITE_API_URL),
 		},
+		envDir: "../",
 		server: {
 			host: true, // Cần thiết để Vite hoạt động trong Docker
 			// port: parseInt(env.VITE_PORT) || 5173,
