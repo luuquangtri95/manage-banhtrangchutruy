@@ -1,0 +1,13 @@
+{
+  "name": "webapp_banhtrangchutruy",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docker:dev:run": "docker-compose -f docker-compose.dev.yml up --build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
