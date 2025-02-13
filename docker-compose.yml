@@ -1,15 +1,38 @@
 version: '3.8'
 
 services:
-  server:
-    build: ./server
+  client:
+    build: 
+      context: "./client"
     ports:
-      - "8017:8000"
+      - "5173:5173"  # Port cho Vite dev server
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8017
+    depends_on:
+      - server
+
+  server:
+    build:
+      context: "./server"
+    ports:
+      - "8017:8017"  # Map port 8017 ra ngoài
     environment:
       - NODE_ENV=development
       - DB_HOST=db
+      - DB_PORT=5433
+      - DB_NAME=anvatchutruy_db
+      - DB_USER=luuquangtri
+      - DB_PASSWORD=123456tri
+      - PORT=8017  # Port trong container
+      - HOST=0.0.0.0
     env_file:
-      - ./server/.env
+      - path: "./server/.env"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
     depends_on:
       - db
     restart: always
@@ -17,9 +40,11 @@ services:
   db:
     image: postgres:14
     environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=anvatchutruy_db
+      - POSTGRES_USER=luuquangtri
+      - POSTGRES_PASSWORD=123456tri
+    ports:
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
