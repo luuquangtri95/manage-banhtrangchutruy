@@ -4,7 +4,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "docker:dev:run": "docker-compose -f docker-compose.dev.yml up --build"
+    "docker:dev:run": "docker-compose -f docker-compose.dev.yml up --build",
+    "install:client": "cd client && npm install",
+    "install:server": "cd server && npm install",
+    "install:all:deps": "npm run install:client && npm run install:server"
   },
   "keywords": [],
   "author": "",
