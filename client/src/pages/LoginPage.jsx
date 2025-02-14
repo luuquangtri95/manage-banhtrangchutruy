@@ -85,8 +85,9 @@ function LoginPage(props) {
 								</span>
 							</h3>
 							<p className="text-[11px] lg:text-[14px] text-center lg:text-left">
-								"Chất lượng hàng đầu nha mấy shop ơi 🤣 !!! Em nói không với hàng
-								kém chất lượng ạ"
+								"Chú Truý Food ngoài bánh tráng còn rất nhiều mặt hàng giá sỉ chất
+								lượng cao - mục tiêu xây dựng sản phẩm ngon chất lượng với giá tốt
+								nhất dành cho đối tác"
 							</p>
 							<br />
 						</div>

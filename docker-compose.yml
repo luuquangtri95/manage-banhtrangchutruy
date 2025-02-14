@@ -21,37 +21,11 @@ services:
       dockerfile: Dockerfile.prod
     environment:
       - NODE_ENV=production
-      - DB_HOST=db  # Đảm bảo server kết nối bằng đúng tên service của DB
       - HOST=0.0.0.0
     env_file:
-      - .env
+      - .env.production
     networks:
       - app-network
-    depends_on:
-      db:
-        condition: service_healthy  # Chờ DB sẵn sàng trước khi chạy server
-
-  db:
-    image: postgres:14
-    environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-    ports:
-      - "5433:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - app-network
-    healthcheck:  # Thêm healthcheck để đảm bảo DB sẵn sàng
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-
-volumes:
-  postgres_data: 
 
 networks:
   app-network:

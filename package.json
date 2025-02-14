@@ -9,7 +9,8 @@
     "seeder:run:all":"cd server && npm run seeder:run:all",
     "install:client": "cd client && npm install",
     "install:server": "cd server && npm install",
-    "install:all:deps": "npm run install:client && npm run install:server"
+    "install:all:deps": "npm run install:client && npm run install:server",
+    "view:config:prod:env" : "docker compose config"
   },
   "keywords": [],
   "author": "",
