@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import UserApi from "../api/userApi";
 
 let authorizedAxiosInstance = axios.create({
-	baseURL: `${import.meta.env.VITE_API_URL}/v1`,
+	baseURL: `${import.meta.env.VITE_API_URL}/api/v1`,
 });
 
 //#region [Thời gian chờ tối đa của 1 request: 10p]

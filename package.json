@@ -10,7 +10,8 @@
     "install:client": "cd client && npm install",
     "install:server": "cd server && npm install",
     "install:all:deps": "npm run install:client && npm run install:server",
-    "view:config:prod:env" : "docker compose config"
+    "view:config:prod:env" : "docker compose config",
+    "build:client": "cd client && npm run build"
   },
   "keywords": [],
   "author": "",

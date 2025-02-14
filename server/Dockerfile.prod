@@ -20,6 +20,4 @@ RUN npm run build
 # Remove devDependencies
 RUN npm prune --production
 
-EXPOSE 8017
-
 CMD ["npm", "run", "production"]

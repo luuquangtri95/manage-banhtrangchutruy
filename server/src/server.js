@@ -57,8 +57,8 @@ const START_SERVER = () => {
 	app.use(express.json());
 
 	// Use Route APIs V1
-	app.use("/v1", APIs_V1);
-	app.use("/v2", APIs_V2);
+	app.use("/api/v1", APIs_V1);
+	app.use("/api/v2", APIs_V2);
 
 	// Serve frontend
 	if (env.NODE_ENV === "production") {
