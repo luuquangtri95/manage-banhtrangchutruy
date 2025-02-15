@@ -296,11 +296,15 @@ function OrderPage() {
 	const handleChangeQuantityProductPicker = (e, currentProduct) => {
 		const { value } = e.target;
 
-		const originQuantity = productsCategories.find((_item) =>
+		const findItemCategories = productsCategories.find((_item) =>
 			_item.options.some((__item) => __item.value === currentProduct.value)
-		).options[0].quantity;
+		);
 
-		if (value > originQuantity) {
+		const findOriginQuantity = findItemCategories.options.find(
+			(_item) => _item.value === currentProduct.value
+		).quantity;
+
+		if (value > findOriginQuantity) {
 			toast.error(
 				"Số lượng vượt quá tồn kho thực tế của sản phẩm, vui lòng giảm số lượng phù hợp"
 			);
@@ -800,9 +804,14 @@ function OrderPage() {
 										onChange={() => {}}
 										label={t("order_page.order_picker.inventory")}
 										value={
-											productsCategories.find((_i) =>
-												_i.options.some((__i) => __i.value === item.value)
-											)?.options?.[0]?.quantity
+											productsCategories
+												.find((_i) =>
+													_i.options.some(
+														(__i) => __i.value === item.value
+													)
+												)
+												.options.find((_item) => _item.value === item.value)
+												.quantity
 										}
 										type="number"
 										disabled
