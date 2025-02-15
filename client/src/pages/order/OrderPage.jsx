@@ -155,8 +155,9 @@ function OrderPage() {
 		if (userInfo) {
 			setFormData((prev) => ({
 				...prev,
-				fullname: { ...prev.fullname, value: userInfo.username },
-				phone: { ...prev.phone, value: userInfo.phone },
+				fullname: { ...prev.fullname, value: userInfo.username || "" },
+				phone: { ...prev.phone, value: userInfo.phone || "" },
+				address: { ...prev.address, value: userInfo.address || "" },
 			}));
 		}
 	}, [popupData]);
