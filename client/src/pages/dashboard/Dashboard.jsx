@@ -218,7 +218,7 @@ function Dashboard() {
 												</div>
 											</div>
 
-											{isWholesaleOpen && (
+											{!isCollapse && isWholesaleOpen && (
 												<div className="pl-6 mt-1">
 													{item.subMenu.map((subItem) => (
 														<NavLink
