@@ -50,6 +50,9 @@ const login = async (req, res) => {
 
 		const _userInfo = {
 			id: user.id,
+			username: user.username,
+			phone: user.phone,
+			address: user.address,
 			email: email,
 			role: user.roles.name,
 		};
@@ -154,8 +157,6 @@ const refreshToken = async (req, res) => {
 
 const register = async (req, res) => {
 	try {
-		const { username, email, password } = req.body;
-
 		const userCount = await UserModel.count();
 
 		const roleName = userCount === 0 ? "admin" : "user";
@@ -166,7 +167,7 @@ const register = async (req, res) => {
 		}
 
 		const newUser = await sequelizeConnectionString.transaction(async (transaction) => {
-			const user = await UserModel.create({ username, email, password }, { transaction });
+			const user = await UserModel.create({ ...req.body }, { transaction });
 
 			await user.addRole(role, { transaction });
 

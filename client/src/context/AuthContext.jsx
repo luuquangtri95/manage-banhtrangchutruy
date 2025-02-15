@@ -1,6 +1,7 @@
 import { createContext, useState } from "react";
 import UserApi from "../api/userApi";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 export const AuthContext = createContext();
 
@@ -31,8 +32,39 @@ export const AuthProvider = ({ children }) => {
 		navigate("/login");
 	};
 
+	const handleRegister = async (registerData) => {
+		try {
+			await UserApi.register(registerData);
+
+			const loginData = {
+				email: registerData.email,
+				password: registerData.password,
+			};
+
+			const loginResponse = await UserApi.login(loginData);
+
+			delete loginResponse.accessToken;
+			delete loginResponse.refreshToken;
+
+			localStorage.setItem("userInfo", JSON.stringify(loginResponse));
+			setUserInfo(loginResponse);
+
+			toast.success("Đăng ký thành công, đang chuyển hướng...");
+
+			navigate(`/dashboard/orders`);
+		} catch (error) {
+			toast.error("Có lỗi xảy ra trong quá trình đăng ký.");
+		}
+	};
+
 	return (
-		<AuthContext.Provider value={{ onLogin: handleLogin, userInfo, onLogout: handleLogout }}>
+		<AuthContext.Provider
+			value={{
+				onLogin: handleLogin,
+				userInfo,
+				onLogout: handleLogout,
+				onRegister: handleRegister,
+			}}>
 			{children}
 		</AuthContext.Provider>
 	);

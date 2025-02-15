@@ -133,7 +133,6 @@ function OrderPage() {
 				label: _item.name,
 				quantity: _item.quantity,
 			}));
-
 			setOriginProduct(products || []);
 
 			setFormData((prev) => {
@@ -150,6 +149,15 @@ function OrderPage() {
 				});
 				return updatedFormData;
 			});
+		}
+
+		const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+		if (userInfo) {
+			setFormData((prev) => ({
+				...prev,
+				fullname: { ...prev.fullname, value: userInfo.username },
+				phone: { ...prev.phone, value: userInfo.phone },
+			}));
 		}
 	}, [popupData]);
 
@@ -339,6 +347,7 @@ function OrderPage() {
 
 			return initData;
 		});
+
 		setPopupData(null);
 	};
 
