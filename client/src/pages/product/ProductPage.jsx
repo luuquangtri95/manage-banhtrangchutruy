@@ -11,6 +11,7 @@ import { formatDateWithIntl } from "../../helpers/convertDate";
 import { formatPrice } from "../../helpers/formatPrice";
 import usePageLoading from "../../hooks/usePageLoading";
 import ProductFilterForm from "./components/ProductFilterForm/ProductFilterForm";
+import Badge from "../../components/Badge";
 
 const INIT_FORMDATA = {
 	name: {
@@ -286,7 +287,12 @@ function ProductsPage() {
 				<td className="p-4 py-5 font-semibold text-sm text-slate-800">{product.name}</td>
 				<td className="p-4 py-5 text-sm text-slate-500">{formatPrice(product.price)}</td>
 				<td className="p-4 py-5 text-sm text-slate-500">{product.quantity}</td>
-				<td className="p-4 py-5 text-sm text-slate-500">{product.status}</td>
+				<td className="p-4 py-5 text-sm text-slate-500">
+					<Badge
+						type="active"
+						value={product.status}
+					/>
+				</td>
 				<td className="p-4 py-5 text-sm text-slate-500">
 					{product.categories.map((_cate) => (
 						<div key={_cate.id}>{_cate.name}</div>
