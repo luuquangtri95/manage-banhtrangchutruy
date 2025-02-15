@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "docker:dev:run": "docker-compose -f docker-compose.dev.yml up --build",
-    "docker:prod:run": "docker-compose -f docker-compose.yml up --build",
+    "docker:prod:run": "docker-compose up --build",
     "seeder:run:all":"cd server && npm run seeder:run:all",
     "install:client": "cd client && npm install",
     "install:server": "cd server && npm install",
