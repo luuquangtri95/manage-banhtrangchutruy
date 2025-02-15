@@ -143,9 +143,7 @@ function LoginPage() {
 						<div>
 							<h3 className="text-[14px] font-bold text-center lg:text-[24px] lg:text-left">
 								<span className="bg-gradient-to-b from-orange-300 to-slate-500 bg-clip-text text-transparent">
-									{isLogin
-										? "Chào mừng bạn đến với Chú Truý Food! (Đăng nhập)"
-										: "Chào mừng bạn đến với Chú Truý Food! (Đăng ký)"}
+									Chào mừng bạn đến với Chú Truý Food!
 								</span>
 							</h3>
 							<p className="text-[11px] lg:text-[14px] text-center lg:text-left">
@@ -221,10 +219,18 @@ function LoginPage() {
 									<button
 										type="button"
 										onClick={handleToggleMode}
-										className="text-[14px] p-[8px] bg-[#eee] rounded-md flex justify-center w-full">
-										{isLogin
-											? "Chưa có tài khoản? Đăng ký"
-											: "Đã có tài khoản? Đăng nhập"}
+										className="text-[14px] p-[8px] rounded-md flex justify-center w-full">
+										{isLogin ? (
+											<p>
+												Chưa có tài khoản ?{" "}
+												<span className="underline "> Đăng ký</span>
+											</p>
+										) : (
+											<p>
+												Đã có tài khoản ?{" "}
+												<span className="underline"> Đăng Nhập</span>
+											</p>
+										)}
 									</button>
 								</div>
 							</form>
