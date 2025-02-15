@@ -353,7 +353,7 @@ function OrderPage() {
 	const handleDeleteOrder = async () => {
 		if (!orderDelete) return;
 
-		if (orderDelete.status === "success" && !userInfo?.role !== "admin") {
+		if (orderDelete.status === "success" && userInfo?.role !== "admin") {
 			toast.error(
 				"Đơn hàng đã hoàn tất, bạn không thể xoá đơn hàng này !, vui lòng liên hệ admin"
 			);
