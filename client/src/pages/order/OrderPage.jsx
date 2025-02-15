@@ -353,7 +353,7 @@ function OrderPage() {
 	const handleDeleteOrder = async () => {
 		if (!orderDelete) return;
 
-		if (orderDelete.status === "success" && !userInfo.role !== "admin") {
+		if (orderDelete.status === "success" && !userInfo?.role !== "admin") {
 			toast.error(
 				"Đơn hàng đã hoàn tất, bạn không thể xoá đơn hàng này !, vui lòng liên hệ admin"
 			);
@@ -520,7 +520,7 @@ function OrderPage() {
 				</td>
 				<td className="p-4 py-5">
 					<div className="flex items-center gap-2 flex-wrap">
-						{userInfo.role === "admin" && (
+						{userInfo?.role === "admin" && (
 							<div className="relative">
 								<button
 									className=" border p-2 rounded-md"
@@ -534,7 +534,7 @@ function OrderPage() {
 										<div
 											className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
 												order.status === "success" &&
-												userInfo.role !== "admin" &&
+												userInfo?.role !== "admin" &&
 												"pointer-events-none opacity-50"
 											}`}
 											onClick={() => handleEdit(order)}>
@@ -544,7 +544,7 @@ function OrderPage() {
 											<p>Edit order</p>
 										</div>
 
-										{userInfo.role === "admin" && (
+										{userInfo?.role === "admin" && (
 											<div
 												className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
 													order.status === "success" &&
@@ -560,7 +560,7 @@ function OrderPage() {
 											</div>
 										)}
 
-										{userInfo.role === "admin" && (
+										{userInfo?.role === "admin" && (
 											<div
 												className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
 													order.status === "pending" &&
@@ -579,7 +579,7 @@ function OrderPage() {
 										<div
 											className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
 												order.status === "success" &&
-												userInfo.role !== "admin" &&
+												userInfo?.role !== "admin" &&
 												"pointer-events-none opacity-50"
 											}`}
 											onClick={() => handleConfirmDelete(order)}>
@@ -593,7 +593,7 @@ function OrderPage() {
 							</div>
 						)}
 
-						{order.status !== "success" && userInfo.role !== "admin" && (
+						{order.status !== "success" && userInfo?.role !== "admin" && (
 							<div className="relative">
 								<button
 									className=" border p-2 rounded-md"
@@ -613,7 +613,7 @@ function OrderPage() {
 											<p>Edit order</p>
 										</div>
 
-										{userInfo.role === "admin" && (
+										{userInfo?.role === "admin" && (
 											<div
 												className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
 													order.status === "success" &&
@@ -629,7 +629,7 @@ function OrderPage() {
 											</div>
 										)}
 
-										{userInfo.role === "admin" && (
+										{userInfo?.role === "admin" && (
 											<div
 												className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
 													order.status === "pending" &&
@@ -658,7 +658,7 @@ function OrderPage() {
 							</div>
 						)}
 
-						{order.status === "success" && userInfo.role !== "admin" && (
+						{order.status === "success" && userInfo?.role !== "admin" && (
 							<p className="text-[14px]">No action</p>
 						)}
 					</div>
@@ -734,7 +734,7 @@ function OrderPage() {
 					className={`flex gap-2 flex-wrap w-full ${
 						popupData &&
 						formData.status.value === "success" &&
-						userInfo.role !== "admin"
+						userInfo?.role !== "admin"
 							? "pointer-events-none opacity-50"
 							: ""
 					}`}>
@@ -761,7 +761,7 @@ function OrderPage() {
 										field.disabled ||
 										(popoverData &&
 											formData.status.value === "success" &&
-											userInfo.role !== "admin")
+											userInfo?.role !== "admin")
 									}
 								/>
 							</div>
@@ -787,7 +787,7 @@ function OrderPage() {
 							className={`flex items-end gap-3 ${
 								popoverData &&
 								formData.status.value === "success" &&
-								userInfo.role !== "admin" &&
+								userInfo?.role !== "admin" &&
 								"pointer-events-none"
 							}`}>
 							<div className=" flex-1 flex gap-2 text-sm items-start">
@@ -836,7 +836,7 @@ function OrderPage() {
 								className={`mb-4 border p-[6px] border-[#ccc] rounded-md hover:border-[#fe3d3d] ${
 									popoverData &&
 									formData.status.value === "success" &&
-									userInfo.role !== "admin" &&
+									userInfo?.role !== "admin" &&
 									"pointer-events-none opacity-[0.4]"
 								}`}
 								onClick={() => handleRemoveProductPicked(item)}>
