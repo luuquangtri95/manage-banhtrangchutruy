@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   nginx:
-    image: luuvuquangtri95/webapp_banhtrangchutruy_client:latest
+    image: luuquangtri95/webapp_banhtrangchutruy_client:latest
     # build:
       # context: "./client"
       # dockerfile: Dockerfile.prod
@@ -19,7 +19,7 @@ services:
       - app-network
 
   server:
-    image: luuvuquangtri95/webapp_banhtrangchutruy_server:latest
+    image: luuquangtri95/webapp_banhtrangchutruy_server:latest
     # build:
     #   context: "./server"
     #   dockerfile: Dockerfile.prod
