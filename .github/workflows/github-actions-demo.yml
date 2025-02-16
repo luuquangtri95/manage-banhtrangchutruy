@@ -24,15 +24,19 @@ jobs:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Build và push image
-      - name: Build and push Docker image
+      - name: Build & Push Client
         uses: docker/build-push-action@v3
         with:
-          context: .
-          file: ./Dockerfile
+          context: ./client
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/webapp_banhtrangchutruy_client:latest
           push: true
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/webapp_banhtrangchutruy:latest
-          # Có thể thêm :v1.0.0,... nếu muốn versioning
+
+      - name: Build & Push Server
+        uses: docker/build-push-action@v3
+        with:
+          context: ./server
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/webapp_banhtrangchutruy_server:latest
+          push: true
 
   deploy:
     needs: build-and-push
