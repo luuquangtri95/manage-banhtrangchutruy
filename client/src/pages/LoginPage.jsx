@@ -158,7 +158,7 @@ function LoginPage() {
 							<form onSubmit={handleSubmit}>
 								{/* Email */}
 								<FormField
-									label="Email"
+									label="Email (*)"
 									name="email"
 									type="email"
 									value={userInfo.email.value}
@@ -168,7 +168,7 @@ function LoginPage() {
 
 								{/* Mật khẩu */}
 								<FormField
-									label="Mật khẩu"
+									label="Mật khẩu (*)"
 									name="password"
 									type="password"
 									value={userInfo.password.value}
@@ -180,7 +180,7 @@ function LoginPage() {
 								{!isLogin && (
 									<>
 										<FormField
-											label="Xác nhận mật khẩu"
+											label="Xác nhận mật khẩu (*)"
 											name="confirmPassword"
 											type="password"
 											value={userInfo.confirmPassword.value}
@@ -189,7 +189,7 @@ function LoginPage() {
 										/>
 
 										<FormField
-											label="Họ và tên"
+											label="Họ và tên (*)"
 											name="username"
 											type="text"
 											value={userInfo.username.value}
@@ -198,7 +198,7 @@ function LoginPage() {
 										/>
 
 										<FormField
-											label="Số điện thoại"
+											label="Số điện thoại (*)"
 											name="phone"
 											type="text"
 											value={userInfo.phone.value}

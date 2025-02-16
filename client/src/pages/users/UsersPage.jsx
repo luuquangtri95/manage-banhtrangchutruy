@@ -6,6 +6,7 @@ import FormField from "../../components/FormField";
 import Icon from "../../components/Icon/Icon";
 import Popup from "../../components/Popup";
 import { formatDateWithIntl } from "../../helpers/convertDate";
+import Badge from "../../components/Badge";
 
 const INIT_FORMDATA = {
 	username: {
@@ -27,30 +28,11 @@ const INIT_FORMDATA = {
 			return "";
 		},
 	},
-	password: {
-		value: "",
-		type: "password",
-		error: "",
-		validate: (value) => {
-			if (!value.trim()) return "Xác nhận mật khẩu không được để trống.";
-			if (value.length < 5) return "Password phải từ 6 ký tự";
-		},
-	},
-	confirmPassword: {
-		value: "",
-		type: "password",
-		error: "",
-		validate: (value, formData) => {
-			if (!value.trim()) return "Xác nhận mật khẩu không được để trống.";
-			if (value !== formData.password.value) return "Mật khẩu xác nhận không khớp.";
-			return "";
-		},
-	},
 };
 
 const DEFAULT_PAGINATION = {
 	page: 1,
-	limit: 10,
+	limit: 8,
 	total_page: 10,
 	total_item: 10,
 };
@@ -61,7 +43,7 @@ function UsersPage() {
 	const [users, setUsers] = useState([]);
 	const [formData, setFormData] = useState(INIT_FORMDATA);
 	const [loading, setLoading] = useState(false);
-	const [filters, setFilters] = useState({ page: 1, limit: 10, searchTerm: "" });
+	const [filters, setFilters] = useState({ page: 1, limit: 8, searchTerm: "" });
 	const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
 	const { t } = useTranslation();
 
@@ -69,10 +51,33 @@ function UsersPage() {
 		fetchUsers();
 	}, [filters]);
 
+	useEffect(() => {
+		if (popupData) {
+			const updateFormData = JSON.parse(JSON.stringify(formData));
+
+			Object.keys(popupData).forEach((key) => {
+				if (key in updateFormData) {
+					updateFormData[key] = { ...updateFormData[key], value: popupData[key] };
+				}
+			});
+
+			setFormData(updateFormData);
+		}
+	}, [popupData]);
+
 	const fetchUsers = async () => {
 		try {
 			setLoading(true);
 			const res = await UserApi.findAll(filters);
+
+			if (filters.page > res.metadata.pagination.total_page) {
+				setFilters((prev) => ({
+					...prev,
+					page: res.metadata.pagination.total_page || 1,
+				}));
+
+				return;
+			}
 
 			setUsers(res.metadata.result);
 			setPagination(res.metadata.pagination);
@@ -209,7 +214,20 @@ function UsersPage() {
 				<td className="p-4 py-5 font-semibold text-sm text-slate-800">{user.username}</td>
 				<td className="p-4 py-5 text-sm text-slate-500">{user.email}</td>
 				<td className="p-4 py-5 text-sm text-slate-500">
-					{user.isActive ? "Active" : "Disable"}
+					{user.roles[0].name.toUpperCase()}
+				</td>
+				<td className="p-4 py-5 text-sm text-slate-500">
+					{user.isActive ? (
+						<Badge
+							value="Active"
+							type="active"
+						/>
+					) : (
+						<Badge
+							value="Disable"
+							type="pending"
+						/>
+					)}
 				</td>
 				<td className="p-4 py-5 text-sm text-slate-500">
 					{formatDateWithIntl(user.createdAt)}
@@ -236,12 +254,12 @@ function UsersPage() {
 		<div className="mt-3 p-1">
 			<div className="flex justify-between">
 				<div className="w-full flex justify-between items-center mb-3 mt-1">
-					<button
+					{/* <button
 						className="flex gap-2 border rounded-md p-2 hover:bg-main transition-all"
 						onClick={handleCreate}>
 						<Icon type="icon-create" />
 						<p>{t("common.create_new_user")}</p>
-					</button>
+					</button> */}
 				</div>
 
 				<div className="w-[300px] max-w-sm  relative">
@@ -256,6 +274,7 @@ function UsersPage() {
 							{[
 								"user_page.table.username",
 								"Email",
+								"Role",
 								"common.status",
 								"common.created_date",
 								"common.actions",
@@ -272,23 +291,29 @@ function UsersPage() {
 					<tbody>{loading ? renderSkeleton() : renderUsers()}</tbody>
 				</table>
 
-				<div className="flex justify-between items-center px-4 py-3">
-					<div className="text-sm text-slate-500">
-						Showing {pagination.page} of {pagination.total_page}
+				{users.length ? (
+					<div className="flex justify-between items-center px-4 py-3">
+						<div className="text-sm text-slate-500">
+							{/* Showing {pagination.page} of {pagination.total_page} */}
+						</div>
+						<div className="flex space-x-1">
+							{Array.from({ length: pagination.total_page }, (_, i) => (
+								<button
+									key={i}
+									className={`px-3 py-1 text-sm border rounded-md ${
+										pagination.page === i + 1 ? "bg-main" : "bg-white"
+									}`}
+									onClick={() => handlePageChange(i + 1)}>
+									{i + 1}
+								</button>
+							))}
+						</div>
 					</div>
-					<div className="flex space-x-1">
-						{Array.from({ length: pagination.total_page }, (_, i) => (
-							<button
-								key={i}
-								className={`px-3 py-1 text-sm border rounded-md ${
-									pagination.page === i + 1 ? "bg-main" : "bg-white"
-								}`}
-								onClick={() => handlePageChange(i + 1)}>
-								{i + 1}
-							</button>
-						))}
+				) : (
+					<div className="flex justify-center items-center px-4 py-3 text-[#ccc] text-[14px]">
+						No users
 					</div>
-				</div>
+				)}
 			</div>
 
 			<Popup
@@ -314,7 +339,7 @@ function UsersPage() {
 				onClose={handleCancelDelete}
 				onSubmit={handleDeleteProduct}>
 				<p>
-					Bạn có chắc chắn muốn xóa sản phẩm <b>{userDelete?.name}</b> không?
+					Bạn có chắc chắn muốn xóa sản phẩm <b>{userDelete?.email}</b> không?
 				</p>
 			</Popup>
 		</div>

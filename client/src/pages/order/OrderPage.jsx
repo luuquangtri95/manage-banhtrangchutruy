@@ -183,6 +183,15 @@ function OrderPage() {
 			showLoading();
 			const res = await OrderApi.findAll(filters);
 
+			if (filters.page > res.metadata.pagination.total_page) {
+				setFilters((prev) => ({
+					...prev,
+					page: res.metadata.pagination.total_page || 1,
+				}));
+
+				return;
+			}
+
 			setOrders(res.metadata.result);
 			setPagination(res.metadata.pagination);
 		} catch (error) {
@@ -714,23 +723,29 @@ function OrderPage() {
 					<tbody>{renderOrders()}</tbody>
 				</table>
 
-				<div className="flex justify-between items-center px-4 py-3">
-					<div className="text-sm text-slate-500">
-						Showing {pagination.page} of {pagination.total_page}
+				{orders.length > 0 ? (
+					<div className="flex justify-between items-center px-4 py-3">
+						<div className="text-sm text-slate-500">
+							Showing {pagination.page} of {pagination.total_page}
+						</div>
+						<div className="flex space-x-1">
+							{Array.from({ length: pagination.total_page }, (_, i) => (
+								<button
+									key={i}
+									className={`px-3 py-1 text-sm border rounded-md ${
+										pagination.page === i + 1 ? "bg-main" : "bg-white"
+									}`}
+									onClick={() => handlePageChange(i + 1)}>
+									{i + 1}
+								</button>
+							))}
+						</div>
 					</div>
-					<div className="flex space-x-1">
-						{Array.from({ length: pagination.total_page }, (_, i) => (
-							<button
-								key={i}
-								className={`px-3 py-1 text-sm border rounded-md ${
-									pagination.page === i + 1 ? "bg-main" : "bg-white"
-								}`}
-								onClick={() => handlePageChange(i + 1)}>
-								{i + 1}
-							</button>
-						))}
+				) : (
+					<div className="flex justify-center items-center px-4 py-3 text-[#ccc] text-[14px]">
+						No order
 					</div>
-				</div>
+				)}
 			</div>
 
 			<Popup

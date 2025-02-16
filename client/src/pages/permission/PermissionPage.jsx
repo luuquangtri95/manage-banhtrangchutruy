@@ -61,6 +61,15 @@ function PermissionPage(props) {
 			setLoading(true);
 			const res = await PermissionApi.findAll(filters);
 
+			if (filters.page > res.metadata.pagination.total_page) {
+				setFilters((prev) => ({
+					...prev,
+					page: res.metadata.pagination.total_page || 1,
+				}));
+
+				return;
+			}
+
 			setPermissions(res.metadata.result);
 			setPagination(res.metadata.pagination);
 		} catch (error) {

@@ -41,7 +41,7 @@ function CategoryPage() {
 	const [categoryDelete, setCategoryDelete] = useState(null);
 	const [categories, setCategories] = useState([]);
 	const [formData, setFormData] = useState(INIT_FORMDATA);
-	const [filters, setFilters] = useState({ page: 1, limit: 8, searchTerm: "" });
+	const [filters, setFilters] = useState({ page: 1, limit: 5, searchTerm: "" });
 	const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
 	const { t } = useTranslation();
 	const { isLoading, showLoading, hideLoading } = usePageLoading();
@@ -68,6 +68,15 @@ function CategoryPage() {
 		try {
 			showLoading();
 			const res = await CategoryApi.findAll(filters);
+
+			if (filters.page > res.metadata.pagination.total_page) {
+				setFilters((prev) => ({
+					...prev,
+					page: res.metadata.pagination.total_page || 1,
+				}));
+
+				return;
+			}
 
 			setCategories(res.metadata.result);
 			setPagination(res.metadata.pagination);
@@ -290,23 +299,29 @@ function CategoryPage() {
 					<tbody>{renderCatgories()}</tbody>
 				</table>
 
-				<div className="flex justify-between items-center px-4 py-3">
-					<div className="text-sm text-slate-500">
-						Showing {pagination.page} of {pagination.total_page}
+				{categories.length ? (
+					<div className="flex justify-between items-center px-4 py-3">
+						<div className="text-sm text-slate-500">
+							Showing {pagination.page} of {pagination.total_page}
+						</div>
+						<div className="flex space-x-1">
+							{Array.from({ length: pagination.total_page }, (_, i) => (
+								<button
+									key={i}
+									className={`px-3 py-1 text-sm border rounded-md ${
+										pagination.page === i + 1 ? "bg-main" : "bg-white"
+									}`}
+									onClick={() => handlePageChange(i + 1)}>
+									{i + 1}
+								</button>
+							))}
+						</div>
 					</div>
-					<div className="flex space-x-1">
-						{Array.from({ length: pagination.total_page }, (_, i) => (
-							<button
-								key={i}
-								className={`px-3 py-1 text-sm border rounded-md ${
-									pagination.page === i + 1 ? "bg-main" : "bg-white"
-								}`}
-								onClick={() => handlePageChange(i + 1)}>
-								{i + 1}
-							</button>
-						))}
+				) : (
+					<div className="flex justify-center items-center px-4 py-3 text-[#ccc] text-[14px]">
+						No categories
 					</div>
-				</div>
+				)}
 			</div>
 
 			<Popup

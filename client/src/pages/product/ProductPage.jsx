@@ -59,7 +59,7 @@ function ProductsPage() {
 	const [products, setProducts] = useState([]);
 	const [formData, setFormData] = useState(INIT_FORMDATA);
 	const [categories, setCategories] = useState(INIT_CATEGORIES);
-	const [filters, setFilters] = useState({ page: 1, limit: 8, searchTerm: "" });
+	const [filters, setFilters] = useState({ page: 1, limit: 5, searchTerm: "" });
 	const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
 	const { t } = useTranslation();
 	const { isLoading, showLoading, hideLoading } = usePageLoading();
@@ -82,8 +82,6 @@ function ProductsPage() {
 			setFormData((prev) => {
 				const updatedFormData = { ...prev };
 
-				console.log("updatedFormData", updatedFormData);
-
 				Object.keys(updatedFormData).forEach((key) => {
 					if (popupData[key] !== undefined && key !== "category") {
 						updatedFormData[key].value = popupData[key];
@@ -99,6 +97,14 @@ function ProductsPage() {
 			showLoading();
 			const res = await ProductApi.findAll(filters);
 
+			if (filters.page > res.metadata.pagination.total_page) {
+				setFilters((prev) => ({
+					...prev,
+					page: res.metadata.pagination.total_page || 1,
+				}));
+
+				return;
+			}
 			setProducts(res.metadata.result);
 			setPagination(res.metadata.pagination);
 		} catch (error) {
@@ -367,23 +373,27 @@ function ProductsPage() {
 					<tbody>{renderProducts()}</tbody>
 				</table>
 
-				<div className="flex justify-between items-center px-4 py-3">
-					<div className="text-sm text-slate-500">
-						Showing {pagination.page} of {pagination.total_page}
+				{products.length ? (
+					<div className="flex justify-between items-center px-4 py-3">
+						<div className="text-sm text-slate-500"></div>
+						<div className="flex space-x-1">
+							{Array.from({ length: pagination.total_page }, (_, i) => (
+								<button
+									key={i}
+									className={`px-3 py-1 text-sm border rounded-md ${
+										pagination.page === i + 1 ? "bg-main" : "bg-white"
+									}`}
+									onClick={() => handlePageChange(i + 1)}>
+									{i + 1}
+								</button>
+							))}
+						</div>
 					</div>
-					<div className="flex space-x-1">
-						{Array.from({ length: pagination.total_page }, (_, i) => (
-							<button
-								key={i}
-								className={`px-3 py-1 text-sm border rounded-md ${
-									pagination.page === i + 1 ? "bg-main" : "bg-white"
-								}`}
-								onClick={() => handlePageChange(i + 1)}>
-								{i + 1}
-							</button>
-						))}
+				) : (
+					<div className="flex justify-center items-center px-4 py-3 text-[#ccc] text-[14px]">
+						No product
 					</div>
-				</div>
+				)}
 			</div>
 
 			<Popup

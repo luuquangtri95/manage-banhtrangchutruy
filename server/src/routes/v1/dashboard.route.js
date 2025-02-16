@@ -54,12 +54,16 @@ Router.route("/users/register").post(userControllers.register);
 Router.route("/users/create").post(userControllers.create);
 Router.route("/users").get(userControllers.findAll);
 Router.route("/users/:userId").get(userControllers.findById);
-Router.route("/users/:userId").put(
+Router.route("/users/:userId").put(userControllers.update);
+Router.route("/users/:userId").delete(userControllers.delete);
+//#endregion
+
+//#region [PROFILE]
+Router.route("/profile/:profileId").post(
 	upload.single("avatar"),
 	CloudinaryMiddleware.uploadFile,
-	userControllers.update
+	(req, res) => {}
 );
-Router.route("/users/:userId").delete(userControllers.delete);
 //#endregion
 
 //#region [CATEGORIES]
