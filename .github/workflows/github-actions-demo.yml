@@ -26,6 +26,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./client
+          file: ./client/Dockerfile.prod
           tags: ${{ vars.DOCKERHUB_USERNAME }}/webapp_banhtrangchutruy_client:latest
           push: true
 
@@ -34,6 +35,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./server
+          file: ./server/Dockerfile.prod
           tags: ${{ vars.DOCKERHUB_USERNAME }}/webapp_banhtrangchutruy_server:latest
           push: true
 
