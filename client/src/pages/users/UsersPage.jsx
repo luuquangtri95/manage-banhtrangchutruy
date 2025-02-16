@@ -114,7 +114,7 @@ function UsersPage() {
 
 		try {
 			await UserApi.delete(userDelete.id);
-			toast.success(`Product "${userDelete.name}" deleted successfully`);
+			toast.success(`Product "${userDelete.email}" deleted successfully`);
 			fetchUsers();
 		} catch (error) {
 			console.log("handleDeleteProduct error", error);
@@ -175,11 +175,11 @@ function UsersPage() {
 				const res = await UserApi.create(formattedData);
 				console.log(res);
 
-				// toast.success("Product created successfully");
+				toast.success("Product created successfully");
 			}
 		} catch (error) {
 			console.log("handlePopupSubmit error", error);
-			// toast.error("Failed to submit product");
+			toast.error("Failed to submit product");
 		} finally {
 			setPopupData(null);
 			setFormData(INIT_FORMDATA);
