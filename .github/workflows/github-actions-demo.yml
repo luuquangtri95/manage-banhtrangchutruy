@@ -27,6 +27,8 @@ jobs:
         with:
           context: ./client
           file: ./client/Dockerfile.prod
+          build-args: |
+            VITE_API_URL= ${{ vars.VITE_API_URL }}
           tags: ${{ vars.DOCKERHUB_USERNAME }}/webapp_banhtrangchutruy_client:latest
           push: true
 
