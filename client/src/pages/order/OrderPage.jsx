@@ -681,7 +681,7 @@ function OrderPage() {
 			<div className="flex justify-between">
 				<div className="w-full flex justify-between items-center mb-3 mt-1">
 					<button
-						className="flex gap-2 border rounded-md p-2 hover:bg-[#ffe9cf] transition-all"
+						className="flex gap-2 border rounded-md p-2 hover:bg-main transition-all"
 						onClick={handleCreate}>
 						<Icon type="icon-create" />
 						<p>{t("order_page.button.create_new_order")}</p>
@@ -703,7 +703,7 @@ function OrderPage() {
 							].map((header, index) => (
 								<th
 									key={index}
-									className="p-4 border-b border-slate-200 bg-[#ffe9cf]">
+									className="p-4 border-b border-slate-200 bg-main">
 									<p className="text-sm font-normal leading-none">{t(header)}</p>
 								</th>
 							))}
@@ -723,7 +723,7 @@ function OrderPage() {
 							<button
 								key={i}
 								className={`px-3 py-1 text-sm border rounded-md ${
-									pagination.page === i + 1 ? "bg-[#ffe9cf]" : "bg-white"
+									pagination.page === i + 1 ? "bg-main" : "bg-white"
 								}`}
 								onClick={() => handlePageChange(i + 1)}>
 								{i + 1}

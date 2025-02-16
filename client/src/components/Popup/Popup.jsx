@@ -46,7 +46,7 @@ const Popup = ({
 
 					<button
 						onClick={onSubmit}
-						className="px-2 py-2 text-[16px] bg-[#ffe9cf] text-black rounded-md ">
+						className="px-2 py-2 text-[16px] bg-main text-black rounded-md ">
 						Submit
 					</button>
 				</div>

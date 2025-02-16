@@ -174,11 +174,11 @@ function Dashboard() {
 											`p-3 rounded-md flex items-center gap-2 transition-all duration-200 ${
 												isCollapse && !renderContent
 													? isActive
-														? "bg-[#ffe9cf]"
+														? "bg-main"
 														: "hover:text-gray-500"
 													: isActive
-													? "bg-[#ffe9cf]"
-													: "hover:bg-[#f5e6cf]"
+													? "bg-main"
+													: "hover:bg-main-hover"
 											}`
 										}>
 										<Icon type={item.icon} />
@@ -196,8 +196,8 @@ function Dashboard() {
 										<div key={item.label}>
 											<div
 												className={`min-h-[45px] px-3 rounded-md flex items-center justify-between w-full 
-													transition-all duration-200 hover:bg-[#f5e6cf] 
-													${isWholesaleOpen ? "bg-[#ffe9cf]" : ""}
+													transition-all duration-200 hover:bg-main-hover 
+													${isWholesaleOpen ? "bg-main" : ""}
 												`}
 												onClick={toggleWholesaleMenu}>
 												<div className="flex gap-2">
@@ -227,8 +227,8 @@ function Dashboard() {
 															className={({ isActive }) =>
 																`p-2 rounded-md flex items-center gap-2 transition-all duration-200 ${
 																	isActive
-																		? "bg-[#ffe9cf]"
-																		: "hover:bg-[#f5e6cf]"
+																		? "bg-main"
+																		: "hover:bg-main-hover"
 																}`
 															}>
 															<Icon type={subItem.icon} />
@@ -248,7 +248,7 @@ function Dashboard() {
 											to={item.path}
 											className={({ isActive }) =>
 												`p-3 rounded-md flex items-center gap-2 transition-all duration-200 ${
-													isActive ? "bg-[#ffe9cf]" : "hover:bg-[#f5e6cf]"
+													isActive ? "bg-main" : "hover:bg-main-hover"
 												}`
 											}>
 											<Icon type={item.icon} />
@@ -268,11 +268,11 @@ function Dashboard() {
 										`p-3 rounded-md flex items-center gap-2 transition-all duration-200 ${
 											isCollapse && !renderContent
 												? isActive
-													? "bg-[#ffe9cf]"
+													? "bg-main"
 													: "hover:text-gray-500"
 												: isActive
-												? "bg-[#ffe9cf]"
-												: "hover:bg-[#f5e6cf]"
+												? "bg-main"
+												: "hover:bg-main-hover"
 										}`
 									}>
 									<Icon type={_item.icon} />
@@ -285,7 +285,7 @@ function Dashboard() {
 				{/* Content */}
 				<div className="flex-1 bg-[#fafafa] relative">
 					{/* Top Bar */}
-					<div className="top-bar h-[60px] bg-[#ffe9cf] p-2 border-b-2 border-[#000]">
+					<div className="top-bar h-[60px] bg-main p-2 border-b-2 border-[#000]">
 						<div className="flex justify-between items-center h-full">
 							<div onClick={() => setIsShowPopover(!isShowPopover)}>
 								<img

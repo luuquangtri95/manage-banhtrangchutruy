@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 function Layout() {
 	return (
 		<div className="header">
-			<div className="top-bar h-[50px] bg-[#ffe9cf] p-2">
+			<div className="top-bar h-[50px] bg-main p-2">
 				<div className="flex justify-between items-center h-full">
 					<div>
 						<img

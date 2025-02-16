@@ -67,7 +67,7 @@ function ViewWholesalePriceUser(props) {
 											(header, idx) => (
 												<th
 													key={idx}
-													className="p-4 border-b border-slate-200 bg-[#ffe9cf]"
+													className="p-4 border-b border-slate-200 bg-main"
 													style={{ width: `${100 / 6}%` }}>
 													<p className="text-sm font-normal leading-none">
 														{t(header)}

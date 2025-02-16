@@ -6,7 +6,12 @@ export default {
 		"./node_modules/react-tailwindcss-select/dist/index.esm.js",
 	],
 	theme: {
-		extend: {},
+		extend: {
+			colors: {
+				main: "#ffe9cf",
+				["main-hover"]: "#f5e6cf",
+			},
+		},
 	},
 	plugins: [],
 };
