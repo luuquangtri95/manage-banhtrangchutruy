@@ -201,12 +201,18 @@ function Dashboard() {
 												`}
 												onClick={toggleWholesaleMenu}>
 												<div className="flex gap-2">
-													<Icon type={item.icon} />
-													{!isCollapse && <p>{t(item.label)}</p>}
-												</div>
+													<Icon
+														type={item.icon}
+														width={isCollapse ? "20px" : "25px"}
+														height={isCollapse ? "20px" : "25px"}
+													/>
 
+													{!isCollapse && renderContent && (
+														<p>{t(item.label)}</p>
+													)}
+												</div>
 												<div>
-													{!isCollapse && (
+													{!isCollapse && renderContent && (
 														<Icon
 															type={
 																isWholesaleOpen
@@ -248,11 +254,17 @@ function Dashboard() {
 											to={item.path}
 											className={({ isActive }) =>
 												`p-3 rounded-md flex items-center gap-2 transition-all duration-200 ${
-													isActive ? "bg-main" : "hover:bg-main-hover"
+													isCollapse && !renderContent
+														? isActive
+															? "bg-main"
+															: "hover:text-gray-500"
+														: isActive
+														? "bg-main"
+														: "hover:bg-main-hover"
 												}`
 											}>
 											<Icon type={item.icon} />
-											{!isCollapse && <p>{t(item.label)}</p>}
+											{!isCollapse && renderContent && <p>{t(item.label)}</p>}
 										</NavLink>
 									);
 								}

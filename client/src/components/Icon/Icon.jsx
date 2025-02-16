@@ -1,4 +1,4 @@
-function Icon({ type }) {
+function Icon({ type, width = "20px", height = "20px" }) {
 	const renderIconWithType = () => {
 		switch (type) {
 			case "arrow-right":
@@ -120,8 +120,8 @@ c2.098-1.39,3.357-3.737,3.357-6.254C347.118,315.421,345.856,313.073,343.759,311.
 				return (
 					<svg
 						fill="#000000"
-						width="25px"
-						height="25px"
+						width={width}
+						height={height}
 						viewBox="0 0 59.998 59.998"
 						id="Capa_1"
 						version="1.1"
