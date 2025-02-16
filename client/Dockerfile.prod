@@ -1,16 +1,16 @@
-# Stage 1: Build client (ví dụ dùng Node.js)
-FROM node:18-alpine
+# Stage 1: Build client (React Vite)
+FROM node:18-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build 
+RUN npm run build
 
 # Stage 2: Build image nginx
 FROM nginx:alpine
-# Copy file build từ stage builder vào thư mục nginx
+# Copy file build từ stage builder vào thư mục phục vụ của nginx
 COPY --from=builder /app/dist /usr/share/nginx/html
-# Copy file cấu hình nginx nếu cần, ví dụ:
+# Copy file cấu hình nginx (đảm bảo file này nằm trong context build)
 COPY ./production/production.default.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
