@@ -97,16 +97,19 @@ function ProductsPage() {
 			showLoading();
 			const res = await ProductApi.findAll(filters);
 
-			if (filters.page > res.metadata.pagination.total_page) {
-				setFilters((prev) => ({
-					...prev,
-					page: res.metadata.pagination.total_page || 1,
-				}));
-
-				return;
-			}
 			setProducts(res.metadata.result);
 			setPagination(res.metadata.pagination);
+
+			const totalPage = res.metadata.pagination.total_page;
+
+			if (totalPage === 0 && filters.page !== 1) {
+				setFilters((prev) => ({ ...prev, page: 1 }));
+			} else if (totalPage > 0 && filters.page > totalPage && filters.page !== totalPage) {
+				setFilters((prev) => ({
+					...prev,
+					page: totalPage,
+				}));
+			}
 		} catch (error) {
 			console.log("fetchProducts error", error);
 			toast.error("Failed to fetch products");

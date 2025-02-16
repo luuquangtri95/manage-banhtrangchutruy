@@ -110,16 +110,16 @@ function WholesalePrice(props) {
 	const fetchWholesalePrices = async () => {
 		try {
 			const res = await WholesalePriceApi.findAll(filters);
+			const totalPage = res.metadata.pagination.total_page;
 
-			if (filters.page > res.metadata.pagination.total_page) {
+			if (totalPage === 0 && filters.page !== 1) {
+				setFilters((prev) => ({ ...prev, page: 1 }));
+			} else if (totalPage > 0 && filters.page > totalPage && filters.page !== totalPage) {
 				setFilters((prev) => ({
 					...prev,
-					page: res.metadata.pagination.total_page || 1,
+					page: totalPage,
 				}));
-
-				return;
 			}
-
 			setWholesalePrices(res.metadata.result);
 			setPagination(res.metadata.pagination);
 		} catch (error) {
