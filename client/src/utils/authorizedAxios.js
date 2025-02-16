@@ -2,6 +2,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import UserApi from "../api/userApi";
 
+console.log("import.meta.env.VITE_API_URL", import.meta.env.VITE_API_URL);
+
 let authorizedAxiosInstance = axios.create({
 	baseURL: `${import.meta.env.VITE_API_URL}/api/v1`,
 });
