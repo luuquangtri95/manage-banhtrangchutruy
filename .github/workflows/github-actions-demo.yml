@@ -76,5 +76,7 @@ jobs:
             # 4. build client
             npm run build:client
 
+            docker compose down
+
             # 5. Khởi chạy container (hoặc cập nhật nếu đã có)
             docker compose up -d --build
