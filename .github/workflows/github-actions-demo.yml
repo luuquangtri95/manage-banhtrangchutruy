@@ -7,6 +7,7 @@ on:
 jobs:
   login:
     runs-on: ubuntu-latest
+    environment: Production #env production trên githunb
     steps:
       - name: Check if DOCKERHUB_USERNAME is set
         run: |
