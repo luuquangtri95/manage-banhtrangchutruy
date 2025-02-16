@@ -2,28 +2,26 @@ name: Build and Deploy Docker
 
 on:
   push:
-    branches: [ "master" ]  # Hoặc "master" tùy repo
+    branches: [ "master" ]  # Hoặc "main" tùy theo nhánh bạn dùng
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    environment: production #chọn env trên github
+    environment: production  # Nếu bạn dùng Environment-level, nhớ tạo "production" trong repo Settings
     steps:
-      # Lấy code về
       - name: Check out code
         uses: actions/checkout@v3
 
-      # Thiết lập buildx để build Docker
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # Đăng nhập Docker Hub (dùng token hoặc password)
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # Build & Push Client Image
       - name: Build & Push Client
         uses: docker/build-push-action@v3
         with:
@@ -31,6 +29,7 @@ jobs:
           tags: ${{ vars.DOCKERHUB_USERNAME }}/webapp_banhtrangchutruy_client:latest
           push: true
 
+      # Build & Push Server Image
       - name: Build & Push Server
         uses: docker/build-push-action@v3
         with:
@@ -41,11 +40,11 @@ jobs:
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - name: Check out code
         uses: actions/checkout@v3
 
-      # (Tùy chọn) Copy docker-compose.yml lên server
       - name: Copy docker-compose.yml to server
         uses: appleboy/scp-action@v0.1.5
         with:
@@ -53,9 +52,8 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "docker-compose.yml"
-          target: "/var/www/chutruyfood"  # thư mục trên server
+          target: "/var/www/chutruyfood"  # Nơi lưu file trên server
 
-      # SSH vào server, pull image, chạy docker-compose
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.8
         with:
@@ -63,17 +61,15 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            # 1. Đăng nhập Docker Hub trên server
+            # 1. Đăng nhập Docker Hub
             docker login -u ${{ vars.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
 
-            # 2. Pull image mới
-            docker pull ${{ vars.DOCKERHUB_USERNAME }}/webapp_banhtrangchutruy:latest
+            # 2. Pull 2 image mới
+            docker pull ${{ vars.DOCKERHUB_USERNAME }}/webapp_banhtrangchutruy_client:latest
+            docker pull ${{ vars.DOCKERHUB_USERNAME }}/webapp_banhtrangchutruy_server:latest
 
             # 3. Vào thư mục chứa docker-compose.yml
             cd /var/www/chutruyfood
 
-            #4. build client
-            npm run build:client
-
-            # 5. Chạy docker-compose để khởi động container
-            docker-compose up -d --build
+            # 4. Khởi chạy container (hoặc cập nhật nếu đã có)
+            docker-compose up -d
