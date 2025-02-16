@@ -8,6 +8,15 @@ jobs:
   login:
     runs-on: ubuntu-latest
     steps:
+      - name: Check if DOCKERHUB_USERNAME is set
+        run: |
+          if [ -z "${{ vars.DOCKERHUB_USERNAME }}" ]; then
+            echo "DOCKERHUB_USERNAME is NOT set or empty"
+            exit 1
+          else
+            echo "DOCKERHUB_USERNAME is set (but masked)"
+          fi
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
