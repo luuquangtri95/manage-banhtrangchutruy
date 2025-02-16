@@ -73,8 +73,12 @@ jobs:
             # 3. Vào thư mục chứa docker-compose.yml
             cd /var/www/chutruyfood
 
-            # 4. build client
-            npm run build:client
+            #4 pull code
+            git checkout .
+            git pull
+
+            # # 4. build client
+            # npm run build:client
 
             docker compose down
 
