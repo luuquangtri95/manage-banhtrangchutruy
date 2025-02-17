@@ -296,7 +296,13 @@ function ProductsPage() {
 				<td className="p-4 py-5 font-semibold text-sm text-slate-800">{product.name}</td>
 				<td className="p-4 py-5 text-sm text-slate-500">{formatPrice(product.price)}</td>
 				<td className="p-4 py-5 text-sm text-slate-500">
-					{product.quantity === 0 ? "Out of stock" : product.quantity}
+					{product.quantity === 0 ? (
+						<Badge
+							value={t("product_page.table.out_of_stock")}
+							type="draft"></Badge>
+					) : (
+						product.quantity
+					)}
 				</td>
 				<td className="p-4 py-5 text-sm text-slate-500">
 					<Badge

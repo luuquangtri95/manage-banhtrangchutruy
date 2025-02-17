@@ -62,7 +62,8 @@
       "product_name": "Tên sản phẩm",
       "price": "Giá",
       "quantity": "Số lượng",
-      "category": "Danh mục"
+      "category": "Danh mục",
+      "out_of_stock": "Hết hàng"
     },
     "popup": {
       "name": "Tên sản phẩm",

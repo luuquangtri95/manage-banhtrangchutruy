@@ -62,7 +62,8 @@
       "product_name": "Product Name",
       "price": "Price",
       "quantity": "Quantity",
-      "category": "Category"
+      "category": "Category",
+      "out_of_stock": "Out Of Stock"
     },
     "popup": {
       "name": "Product Name",
