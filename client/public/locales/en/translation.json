@@ -143,7 +143,7 @@
       "price_required": "Price is required",
       "price_min": "Price must be at least 1000",
       "quantity_required": "Quantity is required",
-      "quantity_min": "Quantity must be at least 10",
+      "quantity_min": "Quantity must be at least 1",
       "email_required": "Email is required",
       "email_invalid": "Invalid email format",
       "password_required": "Password is required",

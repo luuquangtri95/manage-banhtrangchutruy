@@ -149,7 +149,7 @@
     "price_required": "Giá là bắt buộc",
     "price_min": "Giá phải lớn hơn hoặc bằng 1000",
     "quantity_required": "Số lượng là bắt buộc",
-    "quantity_min": "Số lượng phải ít nhất 10",
+    "quantity_min": "Số lượng phải ít nhất 1",
     "email_required": "Email là bắt buộc",
     "email_invalid": "Email không hợp lệ",
     "password_required": "Mật khẩu là bắt buộc",

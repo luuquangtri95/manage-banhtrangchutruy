@@ -36,7 +36,7 @@ const INIT_FORMDATA = {
 		type: "number",
 		error: "",
 		validate: (value) => {
-			if (value === 0 || value < 10) return "validate.quantity_min";
+			if (value === 0 || value < 1) return "validate.quantity_min";
 		},
 	},
 };
