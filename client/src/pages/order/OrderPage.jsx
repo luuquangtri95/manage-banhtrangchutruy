@@ -146,6 +146,10 @@ function OrderPage() {
 					if (key === "delivery_date") {
 						updatedFormData[key].value = convertISOToDate(popupData[key]);
 					}
+
+					if (key === "phone") {
+						updatedFormData[key].value = `0${popupData[key]}`;
+					}
 				});
 				return updatedFormData;
 			});
@@ -476,7 +480,7 @@ function OrderPage() {
 						<span className="font-medium">
 							{t("order_page.table.phone").toUpperCase()} :
 						</span>
-						<span className="font-medium text-[#2563EB]">{order.phone}</span>
+						<span className="font-medium text-[#2563EB]">0{order.phone}</span>
 					</div>
 					<div className="p-4 py-1 text-sm text-slate-800">
 						<div className="flex items-center gap-1">
