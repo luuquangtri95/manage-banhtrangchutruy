@@ -336,6 +336,7 @@ function OrderPage() {
 				fullname: userInfo.username || "",
 				address: userInfo.address || "",
 				phone: userInfo.phone || "",
+				status: "pending",
 			});
 		}
 	};
