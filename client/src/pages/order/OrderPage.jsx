@@ -730,7 +730,7 @@ function OrderPage() {
 				{orders.length > 0 ? (
 					<div className="flex justify-between items-center px-4 py-3">
 						<div className="text-sm text-slate-500">
-							Showing {pagination.page} of {pagination.total_page}
+							{/* Showing {pagination.page} of {pagination.total_page} */}
 						</div>
 						<div className="flex space-x-1">
 							{Array.from({ length: pagination.total_page }, (_, i) => (
