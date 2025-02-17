@@ -150,19 +150,6 @@ function OrderPage() {
 				return updatedFormData;
 			});
 		}
-
-		const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-		if (userInfo) {
-			setFormData((prev) => ({
-				...prev,
-				fullname: { ...prev.fullname, value: userInfo.username || "" },
-				phone: { ...prev.phone, value: userInfo.phone || "" },
-				address: {
-					...prev.address,
-					value: prev.address.value || userInfo.address || "",
-				},
-			}));
-		}
 	}, [popupData]);
 
 	useEffect(() => {
@@ -341,7 +328,16 @@ function OrderPage() {
 	};
 
 	const handleCreate = () => {
-		setPopupData({ title: "", fullname: "", address: "", phone: "" });
+		const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+		if (!popupData && userInfo) {
+			setPopupData({
+				title: "",
+				fullname: userInfo.username || "",
+				address: userInfo.address || "",
+				phone: userInfo.phone || "",
+			});
+		}
 	};
 
 	const handleRemoveProductPicked = (itemPicked) => {
