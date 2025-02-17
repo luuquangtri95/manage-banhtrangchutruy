@@ -86,17 +86,14 @@ function LoginPage() {
 		return { newFields, hasError };
 	};
 
-	// Submit form
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		// Validate
 		const { newFields, hasError } = validateAllFields(userInfo);
 		setUserInfo(newFields);
 
 		if (hasError) return;
 
-		// Lấy dữ liệu gửi đi
 		const submittedData = Object.keys(newFields).reduce((acc, key) => {
 			acc[key] = newFields[key].value;
 			return acc;
@@ -106,7 +103,6 @@ function LoginPage() {
 			delete submittedData.confirmPassword;
 		}
 
-		// Tuỳ theo chế độ mà gọi onLogin hay onRegister
 		if (isLogin) {
 			onLogin(submittedData);
 		} else {
@@ -124,7 +120,6 @@ function LoginPage() {
 
 	return (
 		<div className="flex flex-col lg:flex-row xl:flex-row lg:relative">
-			{/* Cột chứa logo */}
 			<div className="w-full h-[15vh] bg-gradient-to-r from-slate-900 to-slate-700 relative mt-[60px] lg:h-[100vh] lg:w-[50%] lg:mt-0">
 				<div className="absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] ">
 					<img
@@ -135,7 +130,6 @@ function LoginPage() {
 					/>
 				</div>
 			</div>
-			{/* Cột chứa form */}
 			<div className="flex-1">
 				<div className="h-[100%] lg:h-[100vh] lg:relative">
 					<div className="absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] w-full p-4 mt-4 xs:w-[300px] sm:w-[450px] sm:mt-4 md:w-[450px] ">
@@ -154,7 +148,6 @@ function LoginPage() {
 						</div>
 						<div>
 							<form onSubmit={handleSubmit}>
-								{/* Email */}
 								<FormField
 									label="Email (*)"
 									name="email"
@@ -164,7 +157,6 @@ function LoginPage() {
 									error={userInfo.email.error}
 								/>
 
-								{/* Mật khẩu */}
 								<FormField
 									label="Mật khẩu (*)"
 									name="password"
@@ -174,7 +166,6 @@ function LoginPage() {
 									error={userInfo.password.error}
 								/>
 
-								{/* Nếu là chế độ đăng ký => Hiển thị thêm confirmPassword, fullName, phoneNumber */}
 								{!isLogin && (
 									<>
 										<FormField
@@ -213,7 +204,6 @@ function LoginPage() {
 										{isLogin ? "Đăng nhập" : "Đăng ký"}
 									</button>
 
-									{/* Nút chuyển chế độ */}
 									<button
 										type="button"
 										onClick={handleToggleMode}
