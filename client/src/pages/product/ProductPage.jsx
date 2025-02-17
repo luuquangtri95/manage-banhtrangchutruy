@@ -295,7 +295,9 @@ function ProductsPage() {
 				className="hover:bg-slate-50 border-b border-slate-200">
 				<td className="p-4 py-5 font-semibold text-sm text-slate-800">{product.name}</td>
 				<td className="p-4 py-5 text-sm text-slate-500">{formatPrice(product.price)}</td>
-				<td className="p-4 py-5 text-sm text-slate-500">{product.quantity}</td>
+				<td className="p-4 py-5 text-sm text-slate-500">
+					{product.quantity === 0 ? "Out of stock" : product.quantity}
+				</td>
 				<td className="p-4 py-5 text-sm text-slate-500">
 					<Badge
 						type="active"

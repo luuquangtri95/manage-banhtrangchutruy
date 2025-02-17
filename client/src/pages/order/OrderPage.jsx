@@ -308,9 +308,9 @@ function OrderPage() {
 			_item.options.some((__item) => __item.value === currentProduct.value)
 		);
 
-		const findOriginQuantity = findItemCategories.options.find(
-			(_item) => _item.value === currentProduct.value
-		).quantity;
+		const findOriginQuantity =
+			findItemCategories?.options?.find((_item) => _item.value === currentProduct.value)
+				.quantity || 1;
 
 		if (value > findOriginQuantity) {
 			toast.error(
@@ -830,13 +830,14 @@ function OrderPage() {
 										label={t("order_page.order_picker.inventory")}
 										value={
 											productsCategories
-												.find((_i) =>
+												?.find((_i) =>
 													_i.options.some(
 														(__i) => __i.value === item.value
 													)
 												)
-												.options.find((_item) => _item.value === item.value)
-												.quantity
+												?.options.find(
+													(_item) => _item.value === item.value
+												)?.quantity || 1
 										}
 										type="number"
 										disabled
