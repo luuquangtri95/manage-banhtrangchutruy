@@ -157,7 +157,10 @@ function OrderPage() {
 				...prev,
 				fullname: { ...prev.fullname, value: userInfo.username || "" },
 				phone: { ...prev.phone, value: userInfo.phone || "" },
-				address: { ...prev.address, value: userInfo.address || "" },
+				address: {
+					...prev.address,
+					value: prev.address.value || userInfo.address || "",
+				},
 			}));
 		}
 	}, [popupData]);
