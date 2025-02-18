@@ -2,7 +2,7 @@ name: Build and Deploy Docker
 
 on:
   push:
-    branches: [ "master" ]  # Hoặc "main" tùy theo nhánh bạn dùng
+    branches: [ "master" ]  
 
 jobs:
   build-and-push:
@@ -56,7 +56,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "docker-compose.yml"
-          target: "/var/www/chutruyfood"  # Nơi lưu file trên server
+          target: "/var/www/chutruyfood"
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.8
@@ -82,7 +82,8 @@ jobs:
             # # 4. build client
             # npm run build:client
 
+            # 4 stop tất cả compose đang chạy
             docker compose down
 
-            # 5. Khởi chạy container (hoặc cập nhật nếu đã có)
+            # 5. Khởi chạy lại container
             docker compose up -d --build
