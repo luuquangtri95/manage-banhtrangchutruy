@@ -14,6 +14,24 @@ function Icon({ type, width = "20px", height = "20px" }) {
 					</svg>
 				);
 
+			case "arrow-left":
+				return (
+					<svg
+						width="35px"
+						height="35px"
+						viewBox="0 0 24 24"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg">
+						<path
+							d="M15 7L10 12L15 17"
+							stroke="#000000"
+							strokeWidth="1.5"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+						/>
+					</svg>
+				);
+
 			case "hambuger-menu":
 				return (
 					<svg

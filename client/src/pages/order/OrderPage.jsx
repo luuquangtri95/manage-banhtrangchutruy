@@ -11,6 +11,7 @@ import Popup from "../../components/Popup";
 import { formatDateWithIntl } from "../../helpers/convertDate";
 import usePageLoading from "../../hooks/usePageLoading";
 import { DashboardContext } from "../dashboard/Dashboard";
+import useDetectDevice from "../../hooks/useDetectDevice";
 
 const INIT_FORMDATA = {
 	title: {
@@ -118,6 +119,7 @@ function OrderPage() {
 	const { isLoading, showLoading, hideLoading } = usePageLoading();
 	const { userInfo } = useContext(DashboardContext);
 	const [popoverData, setPopoverData] = useState(null);
+	const width = useDetectDevice();
 
 	const popoverRef = useRef(null);
 
@@ -690,203 +692,242 @@ function OrderPage() {
 		));
 
 	return (
-		<div className="mt-3 p-1">
-			<div className="flex justify-between">
-				<div className="w-full flex justify-between items-center mb-3 mt-1">
-					<button
-						className="flex gap-2 border rounded-md p-2 hover:bg-main transition-all"
-						onClick={handleCreate}>
-						<Icon type="icon-create" />
-						<p>{t("order_page.button.create_new_order")}</p>
-					</button>
-				</div>
-			</div>
-			<div className="relative flex flex-col w-full h-full text-gray-700 bg-white shadow-md rounded-lg">
-				<table className="w-full text-left">
-					<thead>
-						<tr>
-							{[
-								"order_page.table.order_title",
-								"order_page.table.email",
-								"order_page.table.products",
-								"order_page.table.delivery_date",
-								"order_page.table.status",
-								"common.created_date",
-								"common.actions",
-							].map((header, index) => (
-								<th
-									key={index}
-									className="p-4 border-b border-slate-200 bg-main">
-									<p className="text-sm font-normal leading-none">{t(header)}</p>
-								</th>
-							))}
-						</tr>
-					</thead>
-
-					{/* <tbody>{loading ? renderSkeleton() : renderOrders()}</tbody> */}
-					<tbody>{renderOrders()}</tbody>
-				</table>
-
-				{orders.length > 0 ? (
-					<div className="flex justify-between items-center px-4 py-3">
-						<div className="text-sm text-slate-500">
-							{/* Showing {pagination.page} of {pagination.total_page} */}
-						</div>
-						<div className="flex space-x-1">
-							{Array.from({ length: pagination.total_page }, (_, i) => (
-								<button
-									key={i}
-									className={`px-3 py-1 text-sm border rounded-md ${
-										pagination.page === i + 1 ? "bg-main" : "bg-white"
-									}`}
-									onClick={() => handlePageChange(i + 1)}>
-									{i + 1}
-								</button>
-							))}
-						</div>
-					</div>
-				) : (
-					<div className="flex justify-center items-center px-4 py-3 text-[#ccc] text-[14px]">
-						No order
-					</div>
-				)}
-			</div>
-
-			<Popup
-				title="Tạo đơn hàng"
-				width="max-w-6xl"
-				minHeight="min-h-[400px]"
-				isOpen={popupData}
-				onSubmit={handlePopupSubmit}
-				onClose={handleClosePopup}>
-				<div
-					className={`flex gap-2 flex-wrap w-full ${
-						popupData &&
-						formData.status.value === "success" &&
-						userInfo?.role !== "admin"
-							? "pointer-events-none opacity-50"
-							: ""
-					}`}>
-					{Object.keys(formData).map((key) => {
-						const field = formData[key];
-
-						return (
-							<div
-								className="w-[calc(50%-4px)]"
-								key={key}>
-								<FormField
-									label={t(`order_page.popup.${key}`)}
-									value={
-										key === "delivery_date"
-											? convertISOToDate(field.value)
-											: field.value
-									}
-									type={field.type}
-									error={t(`${field.error}`)}
-									options={field.options || []}
-									onChange={(e) => handleFormChange(key, e.target.value)}
-									className="h-[38px] text-sm"
-									disabled={
-										field.disabled ||
-										(popoverData &&
-											formData.status.value === "success" &&
-											userInfo?.role !== "admin")
-									}
-								/>
-							</div>
-						);
-					})}
-				</div>
-				<div className="mb-4">
-					<label className="block text-sm font-medium text-gray-700 mb-1">
-						{t("order_page.popup.product")}
-					</label>
-					<Select
-						isMultiple
-						value={originProduct}
-						onChange={handleChangeProduct}
-						options={productsCategories}
-					/>
-				</div>
-
-				{originProduct?.map((item) => {
-					return (
-						<div
-							key={item.value}
-							className={`flex items-end gap-3 ${
-								popoverData &&
-								formData.status.value === "success" &&
-								userInfo?.role !== "admin" &&
-								"pointer-events-none"
-							}`}>
-							<div className=" flex-1 flex gap-2 text-sm items-start">
-								<FormField
-									label={t("order_page.order_picker.name")}
-									value={item?.label}
-									type="text"
-									onChange={() => {}}
-									className="cursor-not-allowed"
-									disabled
-								/>
-								<div className="w-[150px]">
-									<FormField
-										onChange={() => {}}
-										label={t("order_page.order_picker.inventory")}
-										value={
-											productsCategories
-												?.find((_i) =>
-													_i.options.some(
-														(__i) => __i.value === item.value
-													)
-												)
-												?.options.find(
-													(_item) => _item.value === item.value
-												)?.quantity || 1
-										}
-										type="number"
-										disabled
-									/>
-								</div>
-								<div className="w-[150px]">
-									<FormField
-										label={t("order_page.order_picker.quantity")}
-										value={item.quantity}
-										type="number"
-										disabled={
-											productsCategories.find((_i) =>
-												_i.options.some((__i) => __i.value === item.value)
-											)?.options[0]?.quantity === 0
-										}
-										onChange={(e) => handleChangeQuantityProductPicker(e, item)}
-									/>
-								</div>
-							</div>
-
+		<>
+			{/* DESKTOP */}
+			{width > 768 && (
+				<div className="mt-3 p-1">
+					<div className="flex justify-between">
+						<div className="w-full flex justify-between items-center mb-3 mt-1">
 							<button
-								className={`mb-4 border p-[6px] border-[#ccc] rounded-md hover:border-[#fe3d3d] ${
-									popoverData &&
-									formData.status.value === "success" &&
-									userInfo?.role !== "admin" &&
-									"pointer-events-none opacity-[0.4]"
-								}`}
-								onClick={() => handleRemoveProductPicked(item)}>
-								<Icon type="icon-delete" />
+								className="flex gap-2 border rounded-md p-2 hover:bg-main transition-all"
+								onClick={handleCreate}>
+								<Icon type="icon-create" />
+								<p>{t("order_page.button.create_new_order")}</p>
 							</button>
 						</div>
-					);
-				})}
-			</Popup>
+					</div>
+					<div className="relative flex flex-col w-full h-full text-gray-700 bg-white shadow-md rounded-lg">
+						<table className="w-full text-left">
+							<thead>
+								<tr>
+									{[
+										"order_page.table.order_title",
+										"order_page.table.email",
+										"order_page.table.products",
+										"order_page.table.delivery_date",
+										"order_page.table.status",
+										"common.created_date",
+										"common.actions",
+									].map((header, index) => (
+										<th
+											key={index}
+											className="p-4 border-b border-slate-200 bg-main">
+											<p className="text-sm font-normal leading-none">
+												{t(header)}
+											</p>
+										</th>
+									))}
+								</tr>
+							</thead>
 
-			<Popup
-				isOpen={!!orderDelete}
-				title={t("common.confirm_delete")}
-				onClose={handleCancelDelete}
-				onSubmit={handleDeleteOrder}>
-				<p>
-					Bạn có chắc chắn muốn xóa đơn hàng <b>{orderDelete?.title}</b> không?
-				</p>
-			</Popup>
-		</div>
+							{/* <tbody>{loading ? renderSkeleton() : renderOrders()}</tbody> */}
+							<tbody>{renderOrders()}</tbody>
+						</table>
+
+						{orders.length > 0 ? (
+							<div className="flex justify-between items-center px-4 py-3">
+								<div className="text-sm text-slate-500">
+									{/* Showing {pagination.page} of {pagination.total_page} */}
+								</div>
+								<div className="flex space-x-1">
+									{Array.from({ length: pagination.total_page }, (_, i) => (
+										<button
+											key={i}
+											className={`px-3 py-1 text-sm border rounded-md ${
+												pagination.page === i + 1 ? "bg-main" : "bg-white"
+											}`}
+											onClick={() => handlePageChange(i + 1)}>
+											{i + 1}
+										</button>
+									))}
+								</div>
+							</div>
+						) : (
+							<div className="flex justify-center items-center px-4 py-3 text-[#ccc] text-[14px]">
+								No order
+							</div>
+						)}
+					</div>
+
+					<Popup
+						title="Tạo đơn hàng"
+						width="max-w-6xl"
+						minHeight="min-h-[400px]"
+						isOpen={popupData}
+						onSubmit={handlePopupSubmit}
+						onClose={handleClosePopup}>
+						<div
+							className={`flex gap-2 flex-wrap w-full ${
+								popupData &&
+								formData.status.value === "success" &&
+								userInfo?.role !== "admin"
+									? "pointer-events-none opacity-50"
+									: ""
+							}`}>
+							{Object.keys(formData).map((key) => {
+								const field = formData[key];
+
+								return (
+									<div
+										className="w-[calc(50%-4px)]"
+										key={key}>
+										<FormField
+											label={t(`order_page.popup.${key}`)}
+											value={
+												key === "delivery_date"
+													? convertISOToDate(field.value)
+													: field.value
+											}
+											type={field.type}
+											error={t(`${field.error}`)}
+											options={field.options || []}
+											onChange={(e) => handleFormChange(key, e.target.value)}
+											className="h-[38px] text-sm"
+											disabled={
+												field.disabled ||
+												(popoverData &&
+													formData.status.value === "success" &&
+													userInfo?.role !== "admin")
+											}
+										/>
+									</div>
+								);
+							})}
+						</div>
+						<div className="mb-4">
+							<label className="block text-sm font-medium text-gray-700 mb-1">
+								{t("order_page.popup.product")}
+							</label>
+							<Select
+								isMultiple
+								value={originProduct}
+								onChange={handleChangeProduct}
+								options={productsCategories}
+							/>
+						</div>
+
+						{originProduct?.map((item) => {
+							return (
+								<div
+									key={item.value}
+									className={`flex items-end gap-3 ${
+										popoverData &&
+										formData.status.value === "success" &&
+										userInfo?.role !== "admin" &&
+										"pointer-events-none"
+									}`}>
+									<div className=" flex-1 flex gap-2 text-sm items-start">
+										<FormField
+											label={t("order_page.order_picker.name")}
+											value={item?.label}
+											type="text"
+											onChange={() => {}}
+											className="cursor-not-allowed"
+											disabled
+										/>
+										<div className="w-[150px]">
+											<FormField
+												onChange={() => {}}
+												label={t("order_page.order_picker.inventory")}
+												value={
+													productsCategories
+														?.find((_i) =>
+															_i.options.some(
+																(__i) => __i.value === item.value
+															)
+														)
+														?.options.find(
+															(_item) => _item.value === item.value
+														)?.quantity || 1
+												}
+												type="number"
+												disabled
+											/>
+										</div>
+										<div className="w-[150px]">
+											<FormField
+												label={t("order_page.order_picker.quantity")}
+												value={item.quantity}
+												type="number"
+												disabled={
+													productsCategories.find((_i) =>
+														_i.options.some(
+															(__i) => __i.value === item.value
+														)
+													)?.options[0]?.quantity === 0
+												}
+												onChange={(e) =>
+													handleChangeQuantityProductPicker(e, item)
+												}
+											/>
+										</div>
+									</div>
+
+									<button
+										className={`mb-4 border p-[6px] border-[#ccc] rounded-md hover:border-[#fe3d3d] ${
+											popoverData &&
+											formData.status.value === "success" &&
+											userInfo?.role !== "admin" &&
+											"pointer-events-none opacity-[0.4]"
+										}`}
+										onClick={() => handleRemoveProductPicked(item)}>
+										<Icon type="icon-delete" />
+									</button>
+								</div>
+							);
+						})}
+					</Popup>
+
+					<Popup
+						isOpen={!!orderDelete}
+						title={t("common.confirm_delete")}
+						onClose={handleCancelDelete}
+						onSubmit={handleDeleteOrder}>
+						<p>
+							Bạn có chắc chắn muốn xóa đơn hàng <b>{orderDelete?.title}</b> không?
+						</p>
+					</Popup>
+				</div>
+			)}
+
+			{/* MOBILE */}
+			{width < 768 && (
+				<div className="p-4">
+					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
+						{orders.map((_item) => {
+							return (
+								<div
+									key={_item.id}
+									className="bg-[#fff] shadow-md space-y-2 p-2 rounded-lg text-[14px]">
+									<div className="flex items-center space-x-2 ">
+										<div>{_item.title}</div>
+										<div>{formatDateWithIntl(_item.delivery_date)}</div>
+									</div>
+
+									<div>
+										<ul className="list-disc ml-4">
+											{_item.data_json.item.map((_p) => {
+												return <li key={_p.id}>{_p.name}</li>;
+											})}
+										</ul>
+									</div>
+								</div>
+							);
+						})}
+					</div>
+				</div>
+			)}
+		</>
 	);
 }
 

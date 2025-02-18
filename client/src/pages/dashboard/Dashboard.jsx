@@ -442,7 +442,12 @@ function Dashboard() {
 							<div className="h-full flex item-center ">
 								{/* logo */}
 								<div className="flex-1">
-									<p>LOGO</p>
+									<img
+										src={Logo}
+										alt="Logo"
+										className="rounded-full"
+										width={50}
+									/>
 								</div>
 								<div className="flex gap-3 items-center">
 									{/* flag */}
@@ -486,14 +491,14 @@ function Dashboard() {
 									</div>
 
 									{/* nav */}
-									<div className="">
+									<div className="h-full w-[35px] flex justify-center items-center">
 										<button
 											onClick={() => handleToggleNavMobile()}
 											className="">
 											<Icon
 												type={
 													isToggleNavMobile
-														? "arrow-right"
+														? "icon-close"
 														: "hambuger-menu"
 												}
 											/>
