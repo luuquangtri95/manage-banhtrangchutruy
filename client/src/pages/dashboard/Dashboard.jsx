@@ -7,6 +7,7 @@ import LogoVietnam from "../../assets/vietnam.png";
 import Icon from "../../components/Icon/Icon";
 import { AuthContext } from "../../context/AuthContext";
 import authorizedAxiosInstance from "../../utils/authorizedAxios";
+import useDetectDevice from "../../hooks/useDetectDevice";
 
 export const DashboardContext = createContext(null);
 
@@ -69,6 +70,11 @@ function Dashboard() {
 	const [language, setLanguage] = useState(getValidLanguage());
 	const [isOpen, setIsOpen] = useState(false);
 	const [isWholesaleOpen, setIsWholesaleOpen] = useState(false);
+	const width = useDetectDevice();
+
+	//#region [STATE MOBILE]
+	const [isToggleNavMobile, setIsToggleNavMobile] = useState(false);
+	//#endregion
 
 	const currentElmRef = useRef(null);
 	const flagEleRef = useRef(null);
@@ -99,13 +105,13 @@ function Dashboard() {
 	}, []);
 
 	useEffect(() => {
-		if (isCollapse) {
+		if (isCollapse || isToggleNavMobile) {
 			setRenderContent(false);
 		} else {
 			const timer = setTimeout(() => setRenderContent(true), 100);
 			return () => clearTimeout(timer);
 		}
-	}, [isCollapse]);
+	}, [isCollapse, isToggleNavMobile]);
 
 	useEffect(() => {
 		const handleClosePopupOutside = (event) => {
@@ -143,115 +149,154 @@ function Dashboard() {
 		setIsWholesaleOpen((prev) => !prev);
 	};
 
+	//#region [MOBILE]
+	const handleToggleNavMobile = () => {
+		setIsToggleNavMobile(!isToggleNavMobile);
+	};
+	//#endregion
+
 	return (
-		<div className="h-[100vh] flex flex-col">
-			{/* Main Layout */}
-			<div className="flex flex-1">
-				{/* Sidebar */}
-				<div
-					className={`shadow-lg ${
-						isCollapse ? "w-[60px]" : "w-[250px]"
-					} p-2 transition-all`}>
-					<div className={`${isCollapse ? "flex justify-center" : ""} `}>
-						<button
-							onClick={handleCollapse}
-							className={`mb-3 ${isCollapse ? "px-[20px]" : ""}`}>
-							<Icon type={isCollapse ? "arrow-right" : "hambuger-menu"} />
-						</button>
-					</div>
+		<>
+			{/* DESKTOP */}
+			{width > 768 && (
+				<div className="h-[100vh] flex flex-col">
+					{/* Main Layout */}
+					<div className="flex flex-1">
+						{/* Sidebar */}
+						<div
+							className={`shadow-lg ${
+								isCollapse ? "w-[60px]" : "w-[250px]"
+							} p-2 transition-all`}>
+							<div className={`${isCollapse ? "flex justify-center" : ""} `}>
+								<button
+									onClick={handleCollapse}
+									className={`mb-3 ${isCollapse ? "px-[20px]" : ""}`}>
+									<Icon type={isCollapse ? "arrow-right" : "hambuger-menu"} />
+								</button>
+							</div>
 
-					<div className="divider w-full h-[1px] bg-[#eee] mb-3"></div>
+							<div className="divider w-full h-[1px] bg-[#eee] mb-3"></div>
 
-					{/* Navigation Links */}
-					<div className="mt-2 flex flex-col">
-						<div className="mt-2 flex flex-col">
-							{MENU_ITEMS.map((item) => {
-								return (
-									<NavLink
-										key={item.path}
-										to={item.path}
-										className={({ isActive }) =>
-											`p-3 rounded-md flex items-center gap-2 transition-all duration-200 ${
-												isCollapse && !renderContent
-													? isActive
-														? "bg-main"
-														: "hover:text-gray-500"
-													: isActive
-													? "bg-main"
-													: "hover:bg-main-hover"
-											}`
-										}>
-										<Icon type={item.icon} />
-										{!isCollapse && renderContent && <p>{t(item.label)}</p>}
-									</NavLink>
-								);
-							})}
-						</div>
+							{/* Navigation Links */}
+							<div className="mt-2 flex flex-col">
+								<div className="mt-2 flex flex-col">
+									{MENU_ITEMS.map((item) => {
+										return (
+											<NavLink
+												key={item.path}
+												to={item.path}
+												className={({ isActive }) =>
+													`p-3 rounded-md flex items-center gap-2 transition-all duration-200 ${
+														isCollapse && !renderContent
+															? isActive
+																? "bg-main"
+																: "hover:text-gray-500"
+															: isActive
+															? "bg-main"
+															: "hover:bg-main-hover"
+													}`
+												}>
+												<Icon type={item.icon} />
+												{!isCollapse && renderContent && (
+													<p>{t(item.label)}</p>
+												)}
+											</NavLink>
+										);
+									})}
+								</div>
 
-						{/* ADMIN MENU */}
-						{userInfo?.role === "admin" &&
-							ADMIN_MENU_ITEMS.map((item) => {
-								if (item.subMenu) {
-									return (
-										<div key={item.label}>
-											<div
-												className={`min-h-[45px] px-3 rounded-md flex items-center justify-between w-full 
+								{/* ADMIN MENU */}
+								{userInfo?.role === "admin" &&
+									ADMIN_MENU_ITEMS.map((item) => {
+										if (item.subMenu) {
+											return (
+												<div key={item.label}>
+													<div
+														className={`min-h-[45px] px-3 rounded-md flex items-center justify-between w-full 
 													transition-all duration-200 hover:bg-main-hover 
 													${isWholesaleOpen ? "bg-main" : ""}
 												`}
-												onClick={toggleWholesaleMenu}>
-												<div className="flex gap-2">
-													<Icon
-														type={item.icon}
-														width={isCollapse ? "20px" : "25px"}
-														height={isCollapse ? "20px" : "25px"}
-													/>
+														onClick={toggleWholesaleMenu}>
+														<div className="flex gap-2">
+															<Icon
+																type={item.icon}
+																width={isCollapse ? "20px" : "25px"}
+																height={
+																	isCollapse ? "20px" : "25px"
+																}
+															/>
 
+															{!isCollapse && renderContent && (
+																<p>{t(item.label)}</p>
+															)}
+														</div>
+														<div>
+															{!isCollapse && renderContent && (
+																<Icon
+																	type={
+																		isWholesaleOpen
+																			? "arrow-down-light"
+																			: "arrow-right"
+																	}
+																/>
+															)}
+														</div>
+													</div>
+
+													{!isCollapse && isWholesaleOpen && (
+														<div className="pl-6 mt-1">
+															{item.subMenu.map((subItem) => (
+																<NavLink
+																	key={subItem.path}
+																	to={subItem.path}
+																	className={({ isActive }) =>
+																		`p-2 rounded-md flex items-center gap-2 transition-all duration-200 ${
+																			isActive
+																				? "bg-main"
+																				: "hover:bg-main-hover"
+																		}`
+																	}>
+																	<Icon type={subItem.icon} />
+																	{!isCollapse && (
+																		<p>{t(subItem.label)}</p>
+																	)}
+																</NavLink>
+															))}
+														</div>
+													)}
+												</div>
+											);
+										} else {
+											return (
+												<NavLink
+													key={item.path}
+													to={item.path}
+													className={({ isActive }) =>
+														`p-3 rounded-md flex items-center gap-2 transition-all duration-200 ${
+															isCollapse && !renderContent
+																? isActive
+																	? "bg-main"
+																	: "hover:text-gray-500"
+																: isActive
+																? "bg-main"
+																: "hover:bg-main-hover"
+														}`
+													}>
+													<Icon type={item.icon} />
 													{!isCollapse && renderContent && (
 														<p>{t(item.label)}</p>
 													)}
-												</div>
-												<div>
-													{!isCollapse && renderContent && (
-														<Icon
-															type={
-																isWholesaleOpen
-																	? "arrow-down-light"
-																	: "arrow-right"
-															}
-														/>
-													)}
-												</div>
-											</div>
+												</NavLink>
+											);
+										}
+									})}
 
-											{!isCollapse && isWholesaleOpen && (
-												<div className="pl-6 mt-1">
-													{item.subMenu.map((subItem) => (
-														<NavLink
-															key={subItem.path}
-															to={subItem.path}
-															className={({ isActive }) =>
-																`p-2 rounded-md flex items-center gap-2 transition-all duration-200 ${
-																	isActive
-																		? "bg-main"
-																		: "hover:bg-main-hover"
-																}`
-															}>
-															<Icon type={subItem.icon} />
-															{!isCollapse && (
-																<p>{t(subItem.label)}</p>
-															)}
-														</NavLink>
-													))}
-												</div>
-											)}
-										</div>
-									);
-								} else {
-									return (
+								{/* USER MENU */}
+								{userInfo?.role !== "admin" &&
+									USER_MENU_ITEMS.map((_item) => (
 										<NavLink
-											key={item.path}
-											to={item.path}
+											key={_item.path}
+											to={_item.path}
 											className={({ isActive }) =>
 												`p-3 rounded-md flex items-center gap-2 transition-all duration-200 ${
 													isCollapse && !renderContent
@@ -263,145 +308,386 @@ function Dashboard() {
 														: "hover:bg-main-hover"
 												}`
 											}>
-											<Icon type={item.icon} />
-											{!isCollapse && renderContent && <p>{t(item.label)}</p>}
+											<Icon type={_item.icon} />
+											{!isCollapse && renderContent && (
+												<p>{t(_item.label)}</p>
+											)}
 										</NavLink>
-									);
-								}
-							})}
+									))}
+							</div>
+						</div>
 
-						{/* USER MENU */}
-						{userInfo?.role !== "admin" &&
-							USER_MENU_ITEMS.map((_item) => (
-								<NavLink
-									key={_item.path}
-									to={_item.path}
-									className={({ isActive }) =>
-										`p-3 rounded-md flex items-center gap-2 transition-all duration-200 ${
-											isCollapse && !renderContent
-												? isActive
-													? "bg-main"
-													: "hover:text-gray-500"
-												: isActive
-												? "bg-main"
-												: "hover:bg-main-hover"
-										}`
-									}>
-									<Icon type={_item.icon} />
-									{!isCollapse && renderContent && <p>{t(_item.label)}</p>}
-								</NavLink>
-							))}
+						{/* Content */}
+						<div className="flex-1 bg-[#fafafa] relative">
+							{/* Top Bar */}
+							<div className="top-bar h-[60px] bg-main p-2 border-b-2 border-[#000]">
+								<div className="flex justify-between items-center h-full">
+									<div onClick={() => setIsShowPopover(!isShowPopover)}>
+										<img
+											src={Logo}
+											alt="Logo"
+											className="rounded-full"
+											width={50}
+										/>
+									</div>
+
+									<div className="flex gap-2 items-center">
+										<div className="flex gap-2">
+											<div className="relative">
+												<div
+													className="cursor-pointer"
+													onClick={togglePopover}
+													ref={flagEleRef}>
+													<img
+														src={LANGUAGES[language].flag}
+														alt=""
+														width="25"
+													/>
+												</div>
+
+												{isOpen && (
+													<div className="absolute bg-white shadow-2xl w-[130px] h-auto z-10 top-[40px] right-0 rounded-md border border-[#ccc]">
+														<div className="flex flex-col">
+															{Object.keys(LANGUAGES).map((lang) => (
+																<div
+																	key={lang}
+																	className="flex items-center gap-2 p-2 cursor-pointer hover:bg-gray-200"
+																	onClick={() =>
+																		handleChangeLang(lang)
+																	}>
+																	<img
+																		src={LANGUAGES[lang].flag}
+																		alt=""
+																		width="25"
+																	/>
+																	<p>{LANGUAGES[lang].name}</p>
+																</div>
+															))}
+														</div>
+													</div>
+												)}
+											</div>
+										</div>
+										<div
+											onClick={() => setIsShowPopover(!isShowPopover)}
+											ref={currentElmRef}
+											className="avatar relative border border-[#ccc] w-[35px] h-[35px] rounded-full bg-[#eee] flex justify-center items-center">
+											<div className="cursor-pointer">
+												<Icon type="icon-user" />
+											</div>
+
+											{isShowPopover && (
+												<div className="absolute bg-[#fff] shadow-2xl w-[210px] h-auto z-10 top-[40px] right-0 rounded-xl border border-[#ccc]">
+													<ul className="rounded-xl overflow-hidden">
+														<li
+															className="cursor-pointer px-[11px] py-[13px] hover:bg-[#ccc]"
+															onClick={() =>
+																navigate("/dashboard/profile")
+															}>
+															<div className="flex gap-2 items-center ">
+																<Icon type="icon-change-info" />
+																<p className="text-[16px]">
+																	{t("common.my_profile")}
+																</p>
+															</div>
+														</li>
+														<li className="w-full h-[1px] bg-[#ccc]"></li>
+														<li
+															className="cursor-pointer  px-[11px] py-[13px] hover:bg-[#ccc]"
+															onClick={onLogout}>
+															<div className="flex gap-2 items-center ">
+																<Icon type="icon-logout" />
+																<p className="text-[16px]">
+																	{t("common.logout")}
+																</p>
+															</div>
+														</li>
+													</ul>
+												</div>
+											)}
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div className="px-4">
+								<div className="my-3">
+									<p
+										className="text-[24px] font-thin"
+										dangerouslySetInnerHTML={{
+											__html: t("common.welcome_message", {
+												email: userInfo?.email,
+											}),
+										}}
+									/>
+
+									<div className="border w-[80px] h-[2px] border-[#ff771c]"></div>
+								</div>
+
+								<DashboardContext.Provider value={{ userInfo }}>
+									<Outlet />
+								</DashboardContext.Provider>
+							</div>
+						</div>
 					</div>
 				</div>
+			)}
 
-				{/* Content */}
-				<div className="flex-1 bg-[#fafafa] relative">
-					{/* Top Bar */}
-					<div className="top-bar h-[60px] bg-main p-2 border-b-2 border-[#000]">
-						<div className="flex justify-between items-center h-full">
-							<div onClick={() => setIsShowPopover(!isShowPopover)}>
-								<img
-									src={Logo}
-									alt="Logo"
-									className="rounded-full"
-									width={50}
-								/>
-							</div>
-
-							<div className="flex gap-2 items-center">
-								<div className="flex gap-2">
-									<div className="relative">
-										<div
-											className="cursor-pointer"
-											onClick={togglePopover}
-											ref={flagEleRef}>
-											<img
-												src={LANGUAGES[language].flag}
-												alt=""
-												width="25"
-											/>
-										</div>
-
-										{isOpen && (
-											<div className="absolute bg-white shadow-2xl w-[130px] h-auto z-10 top-[40px] right-0 rounded-md border border-[#ccc]">
-												<div className="flex flex-col">
-													{Object.keys(LANGUAGES).map((lang) => (
-														<div
-															key={lang}
-															className="flex items-center gap-2 p-2 cursor-pointer hover:bg-gray-200"
-															onClick={() => handleChangeLang(lang)}>
-															<img
-																src={LANGUAGES[lang].flag}
-																alt=""
-																width="25"
-															/>
-															<p>{LANGUAGES[lang].name}</p>
-														</div>
-													))}
+			{/* MOBILE */}
+			{width < 768 && (
+				<div>
+					{/* topbar */}
+					<div className="">
+						<div className="h-[60px] w-full bg-main p-2">
+							<div className="h-full flex item-center ">
+								{/* logo */}
+								<div className="flex-1">
+									<p>LOGO</p>
+								</div>
+								<div className="flex gap-3 items-center">
+									{/* flag */}
+									<div className="flex gap-2 items-center">
+										<div className="flex gap-2">
+											<div className="relative">
+												<div
+													className="cursor-pointer"
+													onClick={togglePopover}
+													ref={flagEleRef}>
+													<img
+														src={LANGUAGES[language].flag}
+														alt=""
+														width="25"
+													/>
 												</div>
+
+												{isOpen && (
+													<div className="absolute bg-white shadow-2xl w-[130px] h-auto z-10 top-[40px] right-0 rounded-md border border-[#ccc]">
+														<div className="flex flex-col">
+															{Object.keys(LANGUAGES).map((lang) => (
+																<div
+																	key={lang}
+																	className="flex items-center gap-2 p-2 cursor-pointer hover:bg-gray-200"
+																	onClick={() =>
+																		handleChangeLang(lang)
+																	}>
+																	<img
+																		src={LANGUAGES[lang].flag}
+																		alt=""
+																		width="25"
+																	/>
+																	<p>{LANGUAGES[lang].name}</p>
+																</div>
+															))}
+														</div>
+													</div>
+												)}
 											</div>
-										)}
-									</div>
-								</div>
-								<div
-									onClick={() => setIsShowPopover(!isShowPopover)}
-									ref={currentElmRef}
-									className="avatar relative border border-[#ccc] w-[35px] h-[35px] rounded-full bg-[#eee] flex justify-center items-center">
-									<div className="cursor-pointer">
-										<Icon type="icon-user" />
+										</div>
 									</div>
 
-									{isShowPopover && (
-										<div className="absolute bg-[#fff] shadow-2xl w-[210px] h-auto z-10 top-[40px] right-0 rounded-xl border border-[#ccc]">
-											<ul className="rounded-xl overflow-hidden">
-												<li
-													className="cursor-pointer px-[11px] py-[13px] hover:bg-[#ccc]"
-													onClick={() => navigate("/dashboard/profile")}>
-													<div className="flex gap-2 items-center ">
-														<Icon type="icon-change-info" />
-														<p className="text-[16px]">
-															{t("common.my_profile")}
-														</p>
-													</div>
-												</li>
-												<li className="w-full h-[1px] bg-[#ccc]"></li>
-												<li
-													className="cursor-pointer  px-[11px] py-[13px] hover:bg-[#ccc]"
-													onClick={onLogout}>
-													<div className="flex gap-2 items-center ">
-														<Icon type="icon-logout" />
-														<p className="text-[16px]">
-															{t("common.logout")}
-														</p>
-													</div>
-												</li>
-											</ul>
+									{/* nav */}
+									<div className="">
+										<button
+											onClick={() => handleToggleNavMobile()}
+											className="">
+											<Icon
+												type={
+													isToggleNavMobile
+														? "arrow-right"
+														: "hambuger-menu"
+												}
+											/>
+										</button>
+
+										{/* nav mobile */}
+										<div
+											className={`h-[100vh] bg-[#fff] shadow-md fixed overflow-hidden z-10  transition-all top-0 left-0 ${
+												isToggleNavMobile ? "w-[250px]" : "w-[0px]"
+											} sm:w-[300px]`}>
+											<div className="p-2 text-[14px]">
+												{MENU_ITEMS.map((item) => {
+													return (
+														<NavLink
+															key={item.path}
+															to={item.path}
+															className={({ isActive }) =>
+																`p-3 rounded-md flex items-center gap-2 transition-all duration-200 ${
+																	isToggleNavMobile &&
+																	!renderContent
+																		? isActive
+																			? "bg-main"
+																			: "hover:text-gray-500"
+																		: isActive
+																		? "bg-main"
+																		: "hover:bg-main-hover"
+																}`
+															}>
+															<Icon type={item.icon} />
+															{isToggleNavMobile &&
+																!renderContent && (
+																	<p>{t(item.label)}</p>
+																)}
+														</NavLink>
+													);
+												})}
+												{/* ADMNIN MENU */}
+												{userInfo?.role === "admin" &&
+													ADMIN_MENU_ITEMS.map((item) => {
+														if (item.subMenu) {
+															return (
+																<div key={item.label}>
+																	<div
+																		className={`
+																		min-h-[45px] px-3 rounded-md flex items-center justify-between w-full 
+																		transition-all duration-200 hover:bg-main-hover 
+																		}
+																	`}
+																		onClick={
+																			toggleWholesaleMenu
+																		}>
+																		<div className="flex gap-2">
+																			<Icon
+																				type={item.icon}
+																				width={
+																					isToggleNavMobile &&
+																					renderContent
+																						? "20px"
+																						: "25px"
+																				}
+																				height={
+																					isToggleNavMobile &&
+																					renderContent
+																						? "20px"
+																						: "25px"
+																				}
+																			/>
+
+																			{isToggleNavMobile &&
+																				!renderContent && (
+																					<p>
+																						{t(
+																							item.label
+																						)}
+																					</p>
+																				)}
+																		</div>
+																		<div>
+																			<Icon
+																				type={
+																					isWholesaleOpen
+																						? "arrow-down-light"
+																						: "arrow-right"
+																				}
+																			/>
+																		</div>
+																	</div>
+
+																	{isToggleNavMobile &&
+																		isWholesaleOpen && (
+																			<div className="pl-6 mt-1">
+																				{item.subMenu.map(
+																					(subItem) => (
+																						<NavLink
+																							key={
+																								subItem.path
+																							}
+																							to={
+																								subItem.path
+																							}
+																							className={({
+																								isActive,
+																							}) =>
+																								`p-2 rounded-md flex items-center gap-2 transition-all duration-200 ${
+																									isActive
+																										? "bg-main"
+																										: "hover:bg-main-hover"
+																								}`
+																							}>
+																							<Icon
+																								type={
+																									subItem.icon
+																								}
+																							/>
+																							<p>
+																								{t(
+																									subItem.label
+																								)}
+																							</p>
+																						</NavLink>
+																					)
+																				)}
+																			</div>
+																		)}
+																</div>
+															);
+														} else {
+															return (
+																<NavLink
+																	key={item.path}
+																	to={item.path}
+																	className={({ isActive }) =>
+																		`p-3 rounded-md flex items-center gap-2 transition-all duration-200 ${
+																			isToggleNavMobile &&
+																			!renderContent
+																				? isActive
+																					? "bg-main"
+																					: "hover:text-gray-500"
+																				: isActive
+																				? "bg-main"
+																				: "hover:bg-main-hover"
+																		}`
+																	}>
+																	<Icon type={item.icon} />
+
+																	{isToggleNavMobile &&
+																		!renderContent && (
+																			<p>{t(item.label)}</p>
+																		)}
+																</NavLink>
+															);
+														}
+													})}
+												{/* USER MENU */}
+												{userInfo?.role !== "admin" &&
+													USER_MENU_ITEMS.map((_item) => (
+														<NavLink
+															key={_item.path}
+															to={_item.path}
+															className={({ isActive }) =>
+																`p-3 rounded-md flex items-center gap-2 transition-all duration-200 ${
+																	isToggleNavMobile &&
+																	!renderContent
+																		? isActive
+																			? "bg-main"
+																			: "hover:text-gray-500"
+																		: isActive
+																		? "bg-main"
+																		: "hover:bg-main-hover"
+																}`
+															}>
+															<Icon type={_item.icon} />
+
+															{isToggleNavMobile &&
+																!renderContent && (
+																	<p>{t(_item.label)}</p>
+																)}
+														</NavLink>
+													))}
+											</div>
 										</div>
-									)}
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
 
-					<div className="px-4">
-						<div className="my-3">
-							<p
-								className="text-[24px] font-thin"
-								dangerouslySetInnerHTML={{
-									__html: t("common.welcome_message", { email: userInfo?.email }),
-								}}
-							/>
-
-							<div className="border w-[80px] h-[2px] border-[#ff771c]"></div>
-						</div>
-
+						{/* content */}
 						<DashboardContext.Provider value={{ userInfo }}>
 							<Outlet />
 						</DashboardContext.Provider>
 					</div>
 				</div>
-			</div>
-		</div>
+			)}
+		</>
 	);
 }
 
