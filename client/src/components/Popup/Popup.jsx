@@ -1,6 +1,6 @@
 import { createPortal } from "react-dom";
-import Icon from "../Icon/Icon";
 import { useTranslation } from "react-i18next";
+import Icon from "../Icon/Icon";
 
 const Popup = ({
 	isOpen,
@@ -17,7 +17,7 @@ const Popup = ({
 
 	return createPortal(
 		<div
-			className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity ${
+			className={`fixed p-4 inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity ${
 				isOpen ? "opacity-100" : "opacity-0"
 			}`}>
 			<div
@@ -33,7 +33,7 @@ const Popup = ({
 					</button>
 				</div>
 
-				<div className={`mb-4 overflow-auto h-auto ${minHeight} max-h-[800px] p-3`}>
+				<div className={`mb-4 overflow-y-scroll h-auto ${minHeight} max-h-[800px] p-3`}>
 					{children}
 				</div>
 

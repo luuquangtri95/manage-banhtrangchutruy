@@ -47,7 +47,7 @@ const INIT_FORMDATA = {
 	},
 	phone: {
 		value: "",
-		type: "number",
+		type: "text",
 		error: "",
 		disabled: false,
 		validate: (value) => {
@@ -150,7 +150,10 @@ function OrderPage() {
 					}
 
 					if (key === "phone") {
-						updatedFormData[key].value = `0${popupData[key]}`;
+						updatedFormData[key].value =
+							typeof popupData[key] === "number"
+								? String("0" + popupData[key])
+								: popupData[key];
 					}
 				});
 				return updatedFormData;
@@ -452,13 +455,13 @@ function OrderPage() {
 							<span className="font-medium">
 								{t("order_page.table.order_title").toUpperCase()} :
 							</span>
-							<div className="flex items-center gap-1">
+							<div className="flex items-center gap-1 relative">
 								<span className="font-medium text-[#2563EB]">
 									{order.title.length > 15
 										? order.title.slice(0, 15) + "..."
 										: order.title}
 								</span>
-								<div className="relative group">
+								<div className=" group">
 									<Icon type="icon-info" />
 
 									<div className="absolute flex items-center p-2 w-auto h-[30px] rounded-md top-[-35px] bg-[#eee] shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300">
@@ -495,20 +498,26 @@ function OrderPage() {
 										? order.address.slice(0, 15) + "..."
 										: order.address}
 								</span>
-								<div className="relative group">
+								<div className=" group">
 									<Icon type="icon-info" />
 
-									<div className="absolute flex items-center p-2 w-auto h-[30px] rounded-md top-[-35px] bg-[#eee] shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300">
+									<div className="absolute flex items-center p-2 h-[30px] min-w-[100px] z-10 max-w-full rounded-md top-[-35px] bg-[#eee] shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300">
 										{order.address}
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</td>
-				<td className="p-4 py-1 text-sm text-slate-500">
-					<span className="font-medium">{order?.users?.email}</span>
-					<div className="border w-[50px] h-[2px] border-[#2563EB]"></div>
+					<div className="p-4 py-1 text-sm text-slate-800">
+						<div className="flex items-center gap-1">
+							<span className="font-medium">EMAIL :</span>
+							<div className="flex items-center gap-1">
+								<span className="font-medium text-[#2563EB]">
+									{order?.users?.email}
+								</span>
+							</div>
+						</div>
+					</div>
 				</td>
 				<td className="p-4 py-1 text-sm text-slate-500">
 					<ul className="list-disc">
@@ -712,7 +721,6 @@ function OrderPage() {
 								<tr>
 									{[
 										"order_page.table.order_title",
-										"order_page.table.email",
 										"order_page.table.products",
 										"order_page.table.delivery_date",
 										"order_page.table.status",

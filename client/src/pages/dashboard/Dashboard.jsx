@@ -436,7 +436,7 @@ function Dashboard() {
 										className="text-[24px] font-thin"
 										dangerouslySetInnerHTML={{
 											__html: t("common.welcome_message", {
-												email: userInfo?.email,
+												email: userInfo?.username || userInfo?.email,
 											}),
 										}}
 									/>
