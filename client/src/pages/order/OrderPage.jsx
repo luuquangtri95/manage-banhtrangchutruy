@@ -908,18 +908,183 @@ function OrderPage() {
 							return (
 								<div
 									key={_item.id}
-									className="bg-[#fff] shadow-md space-y-2 p-2 rounded-lg text-[14px]">
-									<div className="flex items-center space-x-2 ">
-										<div>{_item.title}</div>
-										<div>{formatDateWithIntl(_item.delivery_date)}</div>
+									className="bg-[#fff] shadow-md space-y-2 p-2 rounded-lg text-[14px] flex justify-between items-center">
+									<div className="flex flex-col">
+										<div className="flex items-center space-x-2 ">
+											<div>{_item.title}</div>
+											<div>{formatDateWithIntl(_item.delivery_date)}</div>
+										</div>
+										<div>
+											<ul className="list-disc ml-4">
+												{_item.data_json.item.map((_p) => {
+													return <li key={_p.id}>{_p.name}</li>;
+												})}
+											</ul>
+										</div>
 									</div>
 
-									<div>
-										<ul className="list-disc ml-4">
-											{_item.data_json.item.map((_p) => {
-												return <li key={_p.id}>{_p.name}</li>;
-											})}
-										</ul>
+									<div className="flex items-center gap-2 flex-wrap text-[12px]">
+										{userInfo?.role === "admin" && (
+											<div className="relative">
+												<button
+													className="p-1 rounded-md"
+													onClick={() => handlePopoverChange(_item)}>
+													<Icon type="icon-dot-menu" />
+												</button>
+												{popoverData?.id === _item.id && (
+													<div
+														ref={popoverRef}
+														className="absolute w-[200px] h-auto max-h-[186px] bg-white top-[-70px] left-[-210px] rounded-md flex flex-col justify-center gap-1 p-2 shadow-lg">
+														<div
+															className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
+																_item.status === "success" &&
+																userInfo?.role !== "admin" &&
+																"pointer-events-none opacity-50"
+															}`}
+															onClick={() => handleEdit(_item)}>
+															<button className="border p-1 rounded-md">
+																<Icon type="icon-edit" />
+															</button>
+															<p>Edit order</p>
+														</div>
+
+														{userInfo?.role === "admin" && (
+															<div
+																className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
+																	_item.status === "success" &&
+																	"pointer-events-none opacity-[0.4]"
+																}`}
+																onClick={() =>
+																	handleChangeStatus(
+																		_item,
+																		"success"
+																	)
+																}>
+																<button className="border p-1 rounded-md">
+																	<Icon type="icon-success" />
+																</button>
+																<p>Complete Order</p>
+															</div>
+														)}
+
+														{userInfo?.role === "admin" && (
+															<div
+																className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
+																	_item.status === "pending" &&
+																	"pointer-events-none opacity-[0.4]"
+																}`}
+																onClick={() =>
+																	handleChangeStatus(
+																		_item,
+																		"pending"
+																	)
+																}>
+																<button className="border p-1 rounded-md">
+																	<Icon type="icon-pending" />
+																</button>
+																<p>Pending Order</p>
+															</div>
+														)}
+
+														<div
+															className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
+																_item.status === "success" &&
+																userInfo?.role !== "admin" &&
+																"pointer-events-none opacity-50"
+															}`}
+															onClick={() =>
+																handleConfirmDelete(_item)
+															}>
+															<button className="border p-1 rounded-md">
+																<Icon type="icon-delete" />
+															</button>
+															<p>Delete Order</p>
+														</div>
+													</div>
+												)}
+											</div>
+										)}
+
+										{_item.status !== "success" &&
+											userInfo?.role !== "admin" && (
+												<div className="relative">
+													<button
+														className=" border p-2 rounded-md"
+														onClick={() => handlePopoverChange(_item)}>
+														<Icon type="icon-dot-menu" />
+													</button>
+													{popoverData?.id === _item.id && (
+														<div
+															ref={popoverRef}
+															className="absolute w-[200px] h-auto max-h-[186px] bg-white top-[-70px] left-[-210px] rounded-md flex flex-col justify-center gap-1 p-2 shadow-lg">
+															<div
+																className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all`}
+																onClick={() => handleEdit(_item)}>
+																<button className="border p-2 rounded-md">
+																	<Icon type="icon-edit" />
+																</button>
+																<p>Edit order</p>
+															</div>
+
+															{userInfo?.role === "admin" && (
+																<div
+																	className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
+																		_item.status ===
+																			"success" &&
+																		"pointer-events-none opacity-[0.4]"
+																	}`}
+																	onClick={() =>
+																		handleChangeStatus(
+																			_item,
+																			"success"
+																		)
+																	}>
+																	<button className="border p-2 rounded-md">
+																		<Icon type="icon-success" />
+																	</button>
+																	<p>Complete Order</p>
+																</div>
+															)}
+
+															{userInfo?.role === "admin" && (
+																<div
+																	className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
+																		_item.status ===
+																			"pending" &&
+																		"pointer-events-none opacity-[0.4]"
+																	}`}
+																	onClick={() =>
+																		handleChangeStatus(
+																			_item,
+																			"pending"
+																		)
+																	}>
+																	<button className="border p-2 rounded-md">
+																		<Icon type="icon-pending" />
+																	</button>
+																	<p>Pending Order</p>
+																</div>
+															)}
+
+															<div
+																className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all`}
+																onClick={() =>
+																	handleConfirmDelete(_item)
+																}>
+																<button className="border p-2 rounded-md">
+																	<Icon type="icon-delete" />
+																</button>
+																<p>Delete Order</p>
+															</div>
+														</div>
+													)}
+												</div>
+											)}
+
+										{_item.status === "success" &&
+											userInfo?.role !== "admin" && (
+												<p className="text-[14px]">No action</p>
+											)}
 									</div>
 								</div>
 							);
