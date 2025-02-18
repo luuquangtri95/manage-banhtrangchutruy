@@ -1,18 +1,12 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
-import imagemin from "vite-plugin-imagemin";
 import Inspect from "vite-plugin-inspect";
 
 export default defineConfig(({ mode }) => {
 	return {
 		plugins: [
 			react(),
-			imagemin({
-				// Giảm kích thước hình ảnh
-				gifsicle: { optimizationLevel: 7 },
-				optipng: { optimizationLevel: 7 },
-				mozjpeg: { quality: 80 },
-			}),
+
 			Inspect(), // Phân tích build
 		],
 
