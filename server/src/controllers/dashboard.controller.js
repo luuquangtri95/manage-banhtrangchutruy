@@ -6,6 +6,9 @@ const access = async (req, res) => {
 			id: req.jwtDecoded.id,
 			email: req.jwtDecoded.email,
 			role: req.jwtDecoded.role,
+			username: req.jwtDecoded.username,
+			phone: req.jwtDecoded.phone,
+			address: req.jwtDecoded.address,
 		};
 
 		res.status(StatusCodes.OK).json(userInfo);

@@ -50,6 +50,13 @@ const ADMIN_MENU_ITEMS = [
 	},
 ];
 
+const NAV_MOBILE = [
+	{
+		label: "common.logout",
+		icon: "icon-logout",
+	},
+];
+
 const LANGUAGES = {
 	en: { flag: LogoEnglish, name: "English" },
 	vi: { flag: LogoVietnam, name: "Tiếng Việt" },
@@ -78,6 +85,7 @@ function Dashboard() {
 
 	const currentElmRef = useRef(null);
 	const flagEleRef = useRef(null);
+	const navMenuRef = useRef(null);
 	const navigate = useNavigate();
 	const location = useLocation();
 
@@ -114,17 +122,29 @@ function Dashboard() {
 	}, [isCollapse, isToggleNavMobile]);
 
 	useEffect(() => {
-		const handleClosePopupOutside = (event) => {
+		const handleClickOutside = (event) => {
+			event.stopPropagation();
 			const { target } = event;
-			if (!currentElmRef.current.contains(target)) {
+
+			// Đóng popover nếu click bên ngoài
+			if (currentElmRef?.current && !currentElmRef.current.contains(target)) {
 				setIsShowPopover(false);
+			}
+
+			if (target.classList.contains(".menu-mobile")) {
+				setIsToggleNavMobile((prev) => !prev);
+				return;
+			}
+
+			if (navMenuRef?.current && !navMenuRef.current.contains(target)) {
+				setIsToggleNavMobile(false);
 			}
 		};
 
-		window.addEventListener("click", handleClosePopupOutside);
+		window.addEventListener("click", handleClickOutside);
 
 		return () => {
-			window.removeEventListener("click", handleClosePopupOutside);
+			window.removeEventListener("click", handleClickOutside);
 		};
 	}, []);
 
@@ -493,8 +513,11 @@ function Dashboard() {
 									{/* nav */}
 									<div className="h-full w-[35px] flex justify-center items-center">
 										<button
-											onClick={() => handleToggleNavMobile()}
-											className="">
+											onClick={(e) => {
+												e.stopPropagation();
+												handleToggleNavMobile();
+											}}
+											className="menu-mobile">
 											<Icon
 												type={
 													isToggleNavMobile
@@ -506,10 +529,41 @@ function Dashboard() {
 
 										{/* nav mobile */}
 										<div
+											ref={navMenuRef}
 											className={`h-[100vh] bg-[#fff] shadow-md fixed overflow-hidden z-10  transition-all top-0 left-0 ${
 												isToggleNavMobile ? "w-[250px]" : "w-[0px]"
 											} sm:w-[300px]`}>
 											<div className="p-2 text-[14px]">
+												<div className="border border-[#ccc] mb-2 rounded-md">
+													<NavLink
+														to="/profile"
+														className={({ isActive }) =>
+															`p-3 rounded-md flex items-center gap-2 transition-all duration-200 ${
+																isToggleNavMobile && !renderContent
+																	? isActive
+																		? "bg-main"
+																		: "hover:text-gray-500"
+																	: isActive
+																	? "bg-main"
+																	: "hover:bg-main-hover"
+															}`
+														}>
+														<Icon
+															type="icon-user"
+															width="25px"
+															height="25px"
+														/>
+
+														{isToggleNavMobile && !renderContent && (
+															<p>
+																{userInfo?.username ||
+																	userInfo?.email}
+															</p>
+														)}
+													</NavLink>
+												</div>
+
+												{/* MENU ITEMS */}
 												{MENU_ITEMS.map((item) => {
 													return (
 														<NavLink
@@ -535,6 +589,7 @@ function Dashboard() {
 														</NavLink>
 													);
 												})}
+
 												{/* ADMNIN MENU */}
 												{userInfo?.role === "admin" &&
 													ADMIN_MENU_ITEMS.map((item) => {
@@ -678,6 +733,42 @@ function Dashboard() {
 																)}
 														</NavLink>
 													))}
+
+												{NAV_MOBILE.map((item, index) => {
+													return (
+														<div
+															key={index}
+															className={`
+																		min-h-[45px] px-3 rounded-md flex items-center justify-between w-full 
+																		transition-all duration-200 hover:bg-main-hover 
+																		}
+																	`}
+															onClick={() => onLogout()}>
+															<div className="flex gap-2">
+																<Icon
+																	type={item.icon}
+																	width={
+																		isToggleNavMobile &&
+																		renderContent
+																			? "20px"
+																			: "25px"
+																	}
+																	height={
+																		isToggleNavMobile &&
+																		renderContent
+																			? "20px"
+																			: "25px"
+																	}
+																/>
+
+																{isToggleNavMobile &&
+																	!renderContent && (
+																		<p>{t(item.label)}</p>
+																	)}
+															</div>
+														</div>
+													);
+												})}
 											</div>
 										</div>
 									</div>
