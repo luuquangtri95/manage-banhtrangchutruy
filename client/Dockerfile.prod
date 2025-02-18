@@ -5,15 +5,16 @@ WORKDIR /app
 ARG VITE_API_URL
 ENV VITE_API_URL=${VITE_API_URL}
 
-COPY package*.json ./
-
-RUN apt-get update && apt-get install -y \
+RUN apk add --no-cache \
   libpng-dev \
-  libjpeg-dev \
+  libjpeg-turbo-dev \
   gifsicle \
   autoconf \
   automake \
-  libtool
+  libtool \
+  bash
+
+COPY package*.json ./
 
 RUN npm install
 COPY . .
