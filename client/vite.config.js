@@ -9,7 +9,6 @@ export default defineConfig(({ mode }) => {
 			react(),
 			imagemin({
 				// Giảm kích thước hình ảnh
-				gifsicle: { optimizationLevel: 7 },
 				optipng: { optimizationLevel: 7 },
 				mozjpeg: { quality: 80 },
 			}),
