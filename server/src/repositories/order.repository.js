@@ -7,6 +7,8 @@ import { RoleModel } from "~/models/role.model";
 import axios from "axios";
 import { env } from "~/config/enviroment";
 
+console.log("env", env);
+
 const findById = async (id) => {
 	try {
 		return await OrderModel.findById({ where: { id }, raw: true });
@@ -171,6 +173,9 @@ const createWithTransaction = async (payload) => {
 				`📞 Số điện thoại: *0${newOrder.phone}*\n\n` +
 				`📦 *Danh sách sản phẩm:*\n${itemsList}\n\n` +
 				`📌 Hãy kiểm tra ngay!`;
+
+			console.log("env.TELEGRAM_BOT_TOKEN", env.TELEGRAM_BOT_TOKEN);
+			console.log("env.TELEGRAM_CHAT_ID", env.TELEGRAM_CHAT_ID);
 
 			axios
 				.post(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
