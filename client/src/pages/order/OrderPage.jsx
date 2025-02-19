@@ -981,7 +981,7 @@ function OrderPage() {
 			<Popup
 				title="Tạo đơn hàng"
 				width="max-w-6xl"
-				minHeight="min-h-[400px]"
+				minHeight={`${width > 768 ? "min-h-[400px]" : "min-h-[350px]"}`}
 				isOpen={popupData}
 				onSubmit={handlePopupSubmit}
 				onClose={handleClosePopup}>
