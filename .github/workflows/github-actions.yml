@@ -85,7 +85,10 @@ jobs:
             # 4 stop tất cả compose đang chạy
             docker compose down
 
-            # 5. Khởi chạy lại container
+            # 5 xoá tất cả images cũ
+            docker image prune -af
+
+            # 6. Khởi chạy lại container
             docker compose up -d --build
             
       - name: Send Telegram Notification
