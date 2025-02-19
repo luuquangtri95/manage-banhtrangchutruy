@@ -172,9 +172,6 @@ const createWithTransaction = async (payload) => {
 				`📦 *Danh sách sản phẩm:*\n${itemsList}\n\n` +
 				`📌 Hãy kiểm tra ngay!`;
 
-			console.log("env.TELEGRAM_BOT_TOKEN", env.TELEGRAM_BOT_TOKEN);
-			console.log("env.TELEGRAM_CHAT_ID", env.TELEGRAM_CHAT_ID);
-
 			axios
 				.post(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
 					chat_id: env.TELEGRAM_CHAT_ID,
