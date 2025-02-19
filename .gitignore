@@ -7,3 +7,4 @@ server/build
 .env.development
 server/uploads/tmp/*
 server/dump.rdb
+client/.vite_cache

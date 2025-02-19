@@ -4,6 +4,8 @@ import { ProductModel } from "~/models/product.model";
 import sequelizeConnectionString from "../config/database";
 import { UserModel } from "~/models/user.model";
 import { RoleModel } from "~/models/role.model";
+import axios from "axios";
+import { env } from "~/config/enviroment";
 
 const findById = async (id) => {
 	try {
@@ -157,6 +159,32 @@ const createWithTransaction = async (payload) => {
 		const newOrder = await OrderModel.create({ ...payload }, { transaction });
 
 		await transaction.commit();
+
+		// sent noti telegram
+		setTimeout(() => {
+			const itemsList = newOrder.data_json.item.map((item) => `- ${item.name}`).join("\n");
+
+			const message =
+				`🛒 *Đơn hàng mới!* 🛒\n\n` +
+				`🔹 Mã đơn: *${newOrder.id}*\n` +
+				`👤 Khách hàng: *${newOrder.fullname}*\n` +
+				`📞 Số điện thoại: *0${newOrder.phone}*\n\n` +
+				`📦 *Danh sách sản phẩm:*\n${itemsList}\n\n` +
+				`📌 Hãy kiểm tra ngay!`;
+
+			axios
+				.post(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+					chat_id: env.TELEGRAM_CHAT_ID,
+					text: message,
+					parse_mode: "Markdown",
+				})
+				.then((_) => {
+					console.log("send telegram !!!");
+				})
+				.catch((_err) => {
+					throw new Error("error send message !!");
+				});
+		}, 0);
 
 		return newOrder;
 	} catch (error) {

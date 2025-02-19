@@ -1,14 +1,9 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
-import Inspect from "vite-plugin-inspect";
 
 export default defineConfig(({ mode }) => {
 	return {
-		plugins: [
-			react(),
-
-			Inspect(), // Phân tích build
-		],
+		plugins: [react()],
 
 		define: {},
 
