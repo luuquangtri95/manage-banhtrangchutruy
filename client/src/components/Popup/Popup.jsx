@@ -1,6 +1,7 @@
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import Icon from "../Icon/Icon";
+import useDetectDevice from "../../hooks/useDetectDevice";
 
 const Popup = ({
 	isOpen,
@@ -12,18 +13,21 @@ const Popup = ({
 	minHeight = "",
 }) => {
 	const { t } = useTranslation();
+	const _detectWidth = useDetectDevice();
 
 	if (!isOpen) return null;
 
 	return createPortal(
 		<div
-			className={`fixed p-4 inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity ${
+			className={`fixed ${
+				_detectWidth > 768 ? "p-4" : "p-2"
+			} inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity ${
 				isOpen ? "opacity-100" : "opacity-0"
 			}`}>
 			<div
-				className={`bg-white rounded-lg shadow-lg w-full ${width} p-6 relative transition-transform ${
-					isOpen ? "scale-100" : "scale-95"
-				}`}>
+				className={`bg-white rounded-lg shadow-lg w-full ${width} ${
+					_detectWidth > 768 ? "p-6" : "p-2"
+				} relative transition-transform ${isOpen ? "scale-100" : "scale-95"}`}>
 				<div className="flex justify-between items-center mb-4">
 					<h2 className="text-lg font-medium">{title}</h2>
 					<button
@@ -33,7 +37,10 @@ const Popup = ({
 					</button>
 				</div>
 
-				<div className={`mb-4 overflow-y-scroll h-auto ${minHeight} max-h-[800px] p-3`}>
+				<div
+					className={`mb-4 overflow-y-scroll h-auto ${minHeight} ${
+						_detectWidth > 768 ? "max-h-[800px]" : "max-h-[600px]"
+					} p-3`}>
 					{children}
 				</div>
 

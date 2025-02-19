@@ -967,10 +967,10 @@ function OrderPage() {
 							})}
 						</div>
 					</div>
-					<div className="fixed w-full h-[50px] bg-main-hover bottom-0 shadow-lg flex justify-center">
-						<button
-							className="flex justify-center items-center gap-2"
-							onClick={handleCreate}>
+					<div
+						className="fixed w-full h-[50px] bg-main-hover bottom-0 shadow-lg flex justify-center"
+						onClick={handleCreate}>
+						<button className="flex justify-center items-center gap-2">
 							<Icon type="icon-create" />
 							Tạo đơn hàng
 						</button>
