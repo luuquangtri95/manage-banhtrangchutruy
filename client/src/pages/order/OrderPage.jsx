@@ -981,7 +981,7 @@ function OrderPage() {
 			<Popup
 				title="Tạo đơn hàng"
 				width="max-w-6xl"
-				minHeight={`${width > 768 ? "min-h-[400px]" : "min-h-[350px]"}`}
+				minHeight="min-h-[400px]"
 				isOpen={popupData}
 				onSubmit={handlePopupSubmit}
 				onClose={handleClosePopup}>
@@ -998,7 +998,7 @@ function OrderPage() {
 
 						return (
 							<div
-								className={`${width > 768 ? "w-[calc(50%-4px)]" : "w-full"} `}
+								className="w-[calc(50%-4px)]"
 								key={key}>
 								<FormField
 									label={t(`order_page.popup.${key}`)}
@@ -1045,7 +1045,7 @@ function OrderPage() {
 								userInfo?.role !== "admin" &&
 								"pointer-events-none"
 							}`}>
-							<div className=" flex-1 flex gap-2 text-sm items-start">
+							<div className="flex-1 flex gap-2 text-sm items-start">
 								<FormField
 									label={t("order_page.order_picker.name")}
 									value={item?.label}
