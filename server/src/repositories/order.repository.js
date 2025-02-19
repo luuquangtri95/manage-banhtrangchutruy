@@ -186,8 +186,12 @@ const createWithTransaction = async (payload) => {
 				.then((_) => {
 					console.log("send telegram !!!");
 				})
-				.catch((_err) => {
-					throw new Error("error send message telegram  !!");
+				.catch((err) => {
+					console.error(
+						"Error when sending Telegram:",
+						err.response?.data || err.message || err
+					);
+					// throw new Error("error send message telegram  !!");
 				});
 		}, 0);
 
