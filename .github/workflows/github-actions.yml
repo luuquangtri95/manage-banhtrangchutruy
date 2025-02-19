@@ -28,7 +28,7 @@ jobs:
           context: ./client
           file: ./client/Dockerfile.prod
           build-args: |
-            VITE_API_URL= ${{ vars.VITE_API_URL }}
+            VITE_API_URL=${{ vars.VITE_API_URL }}
           tags: ${{ vars.DOCKERHUB_USERNAME }}/webapp_banhtrangchutruy_client:latest
           push: true
 
@@ -39,8 +39,8 @@ jobs:
           context: ./server
           file: ./server/Dockerfile.prod
           build-args: |
-            TELEGRAM_BOT_TOKEN= ${{ secrets.TELEGRAM_BOT_TOKEN }}
-            TELEGRAM_CHAT_ID= ${{ secrets.TELEGRAM_CHAT_ID }}
+            TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}
+            TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
           tags: ${{ vars.DOCKERHUB_USERNAME }}/webapp_banhtrangchutruy_server:latest
           push: true
 
