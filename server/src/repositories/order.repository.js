@@ -164,7 +164,9 @@ const createWithTransaction = async (payload) => {
 
 		// sent noti telegram
 		setTimeout(() => {
-			const itemsList = newOrder.data_json.item.map((item) => `- ${item.name}`).join("\n");
+			const itemsList = newOrder.data_json.item
+				.map((item) => `- ${item.name} x ${item.quantity}`)
+				.join("\n");
 
 			const message =
 				`🛒 *Đơn hàng mới!* 🛒\n\n` +
