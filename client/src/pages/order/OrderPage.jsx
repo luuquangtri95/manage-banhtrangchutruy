@@ -121,6 +121,10 @@ function OrderPage() {
 	const [popoverData, setPopoverData] = useState(null);
 	const width = useDetectDevice();
 
+	//#region [MOBILE]
+	const [expanded, setExpanded] = useState(false);
+	//#endregion
+
 	const popoverRef = useRef(null);
 
 	useEffect(() => {
@@ -778,18 +782,62 @@ function OrderPage() {
 								return (
 									<div
 										key={_item.id}
-										className="bg-[#fff] shadow-md space-y-2 p-2 rounded-lg text-[14px] flex justify-between items-center">
+										className="bg-[#fff] border border-[#ccc] space-y-2 p-2 rounded-lg text-[14px] flex justify-between items-center">
 										<div className="flex flex-col">
+											<h2 className="font-bold">
+												Order Info:{" "}
+												{_item.title.length > 25
+													? _item.title.slice(0, 25) + "..."
+													: _item.title.slice(0, 25)}
+											</h2>
+											<div className="w-[60px] h-[2px] bg-[#2d1cee] mb-2"></div>
 											<div className="flex items-center space-x-2 ">
-												<div>{_item.title}</div>
-												<div>{formatDateWithIntl(_item.delivery_date)}</div>
+												<div className="bg-[#d5ebff] p-1 rounded-md">
+													{formatDateWithIntl(_item.delivery_date)}
+												</div>
+												<div
+													className={`${
+														["pending", "active"].includes(_item.status)
+															? "bg-[#d5ebff]"
+															: "bg-[#affebf]"
+													} p-1 rounded-md`}>
+													{t(`order_page.table.${_item.status}`)}
+												</div>
 											</div>
-											<div>
+											<div className="mt-2">
+												<p className="font-bold">Danh sách sản phẩm</p>
 												<ul className="list-disc ml-4">
-													{_item.data_json.item.map((_p) => {
-														return <li key={_p.id}>{_p.name}</li>;
-													})}
+													{expanded
+														? _item.data_json.item.map((_p) => {
+																return (
+																	<li key={_p.id}>
+																		{_p.name}{" "}
+																		<span className="font-bold">
+																			x{_p.quantity}
+																		</span>
+																	</li>
+																);
+														  })
+														: _item.data_json.item
+																.slice(0, 3)
+																.map((_p) => {
+																	return (
+																		<li key={_p.id}>
+																			{_p.name}{" "}
+																			<span className="font-bold">
+																				x{_p.quantity}
+																			</span>
+																		</li>
+																	);
+																})}
 												</ul>
+												{_item.data_json.item.length > 3 && (
+													<button
+														onClick={() => setExpanded(!expanded)}
+														className="text-blue-500 mt-2">
+														{expanded ? "Ẩn bớt" : "Xem thêm"}
+													</button>
+												)}
 											</div>
 										</div>
 
