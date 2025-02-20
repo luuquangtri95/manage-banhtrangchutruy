@@ -80,6 +80,8 @@ function FormField({
 				<input
 					type="date"
 					id={id || fieldId}
+					inputMode="numeric"
+					pattern="\d{4}-\d{2}-\d{2}"
 					name={name}
 					value={value}
 					placeholder={placeholder}
