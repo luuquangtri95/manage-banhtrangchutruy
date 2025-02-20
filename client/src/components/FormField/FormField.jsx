@@ -80,12 +80,9 @@ function FormField({
 				<input
 					type="date"
 					id={id || fieldId}
-					inputMode="numeric"
-					pattern="\d{4}-\d{2}-\d{2}"
-					lang="en"
 					name={name}
 					value={value}
-					placeholder="dd/mm/yyyy"
+					placeholder={placeholder}
 					onChange={onChange}
 					onFocus={handleFocus}
 					onBlur={handleBlur}
