@@ -85,7 +85,7 @@ function FormField({
 					lang="en"
 					name={name}
 					value={value}
-					placeholder={placeholder}
+					placeholder="dd/mm/yyyy"
 					onChange={onChange}
 					onFocus={handleFocus}
 					onBlur={handleBlur}
