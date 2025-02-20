@@ -82,6 +82,7 @@ function FormField({
 					id={id || fieldId}
 					inputMode="numeric"
 					pattern="\d{4}-\d{2}-\d{2}"
+					lang="en"
 					name={name}
 					value={value}
 					placeholder={placeholder}
