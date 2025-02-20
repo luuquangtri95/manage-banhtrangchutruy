@@ -12,6 +12,7 @@ import { formatDateWithIntl } from "../../helpers/convertDate";
 import usePageLoading from "../../hooks/usePageLoading";
 import { DashboardContext } from "../dashboard/Dashboard";
 import useDetectDevice from "../../hooks/useDetectDevice";
+import OrderNow from "../../assets/order-now.png";
 
 const INIT_FORMDATA = {
 	title: {
@@ -777,50 +778,43 @@ function OrderPage() {
 			{width < 768 && (
 				<>
 					<div className="p-4 h-screen pb-[50px]">
-						<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden pb-[70px]">
-							{orders.map((_item) => {
-								return (
-									<div
-										key={_item.id}
-										className="bg-[#fff] border border-[#ccc] space-y-2 p-2 rounded-lg text-[14px] flex justify-between items-center">
-										<div className="flex flex-col">
-											<h2 className="font-bold">
-												Order Info:{" "}
-												{_item.title.length > 25
-													? _item.title.slice(0, 25) + "..."
-													: _item.title.slice(0, 25)}
-											</h2>
-											<div className="w-[60px] h-[2px] bg-[#2d1cee] mb-2"></div>
-											<div className="flex items-center space-x-2 ">
-												<div className="bg-[#d5ebff] p-1 rounded-md">
-													{formatDateWithIntl(_item.delivery_date)}
+						{orders.length > 0 && (
+							<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden pb-[70px]">
+								{orders.map((_item) => {
+									return (
+										<div
+											key={_item.id}
+											className="bg-[#fff] border border-[#ccc] space-y-2 p-2 rounded-lg text-[14px] flex justify-between items-center">
+											<div className="flex flex-col">
+												<h2 className="font-bold">
+													{t("order_page.table.order_title")}:{" "}
+													{_item.title.length > 25
+														? _item.title.slice(0, 25) + "..."
+														: _item.title.slice(0, 25)}
+												</h2>
+												<div className="w-[60px] h-[2px] bg-[#2d1cee] mb-2"></div>
+												<div className="flex items-center space-x-2 ">
+													<div className="bg-[#d5ebff] p-1 rounded-md">
+														{formatDateWithIntl(_item.delivery_date)}
+													</div>
+													<div
+														className={`${
+															["pending", "active"].includes(
+																_item.status
+															)
+																? "bg-[#d5ebff]"
+																: "bg-[#affebf]"
+														} p-1 rounded-md`}>
+														{t(`order_page.table.${_item.status}`)}
+													</div>
 												</div>
-												<div
-													className={`${
-														["pending", "active"].includes(_item.status)
-															? "bg-[#d5ebff]"
-															: "bg-[#affebf]"
-													} p-1 rounded-md`}>
-													{t(`order_page.table.${_item.status}`)}
-												</div>
-											</div>
-											<div className="mt-2">
-												<p className="font-bold">Danh sách sản phẩm</p>
-												<ul className="list-disc ml-4">
-													{expanded
-														? _item.data_json.item.map((_p) => {
-																return (
-																	<li key={_p.id}>
-																		{_p.name}{" "}
-																		<span className="font-bold">
-																			x{_p.quantity}
-																		</span>
-																	</li>
-																);
-														  })
-														: _item.data_json.item
-																.slice(0, 3)
-																.map((_p) => {
+												<div className="mt-2">
+													<p className="font-bold">
+														{t("order_page.table.order_products")}
+													</p>
+													<ul className="list-disc ml-4">
+														{expanded
+															? _item.data_json.item.map((_p) => {
 																	return (
 																		<li key={_p.id}>
 																			{_p.name}{" "}
@@ -829,107 +823,37 @@ function OrderPage() {
 																			</span>
 																		</li>
 																	);
-																})}
-												</ul>
-												{_item.data_json.item.length > 3 && (
-													<button
-														onClick={() => setExpanded(!expanded)}
-														className="text-blue-500 mt-2">
-														{expanded ? "Ẩn bớt" : "Xem thêm"}
-													</button>
-												)}
-											</div>
-										</div>
-
-										<div className="flex items-center gap-2 flex-wrap text-[12px]">
-											{userInfo?.role === "admin" && (
-												<div className="relative">
-													<button
-														className="p-1 rounded-md"
-														onClick={() => handlePopoverChange(_item)}>
-														<Icon type="icon-dot-menu" />
-													</button>
-													{popoverData?.id === _item.id && (
-														<div
-															ref={popoverRef}
-															className="absolute w-[200px] h-auto max-h-[186px] bg-white top-[-70px] left-[-210px] rounded-md flex flex-col justify-center gap-1 p-2 shadow-lg">
-															<div
-																className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
-																	_item.status === "success" &&
-																	userInfo?.role !== "admin" &&
-																	"pointer-events-none opacity-50"
-																}`}
-																onClick={() => handleEdit(_item)}>
-																<button className="border p-1 rounded-md">
-																	<Icon type="icon-edit" />
-																</button>
-																<p>Edit order</p>
-															</div>
-
-															{userInfo?.role === "admin" && (
-																<div
-																	className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
-																		_item.status ===
-																			"success" &&
-																		"pointer-events-none opacity-[0.4]"
-																	}`}
-																	onClick={() =>
-																		handleChangeStatus(
-																			_item,
-																			"success"
-																		)
-																	}>
-																	<button className="border p-1 rounded-md">
-																		<Icon type="icon-success" />
-																	</button>
-																	<p>Complete Order</p>
-																</div>
-															)}
-
-															{userInfo?.role === "admin" && (
-																<div
-																	className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
-																		_item.status ===
-																			"pending" &&
-																		"pointer-events-none opacity-[0.4]"
-																	}`}
-																	onClick={() =>
-																		handleChangeStatus(
-																			_item,
-																			"pending"
-																		)
-																	}>
-																	<button className="border p-1 rounded-md">
-																		<Icon type="icon-pending" />
-																	</button>
-																	<p>Pending Order</p>
-																</div>
-															)}
-
-															<div
-																className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
-																	_item.status === "success" &&
-																	userInfo?.role !== "admin" &&
-																	"pointer-events-none opacity-50"
-																}`}
-																onClick={() =>
-																	handleConfirmDelete(_item)
-																}>
-																<button className="border p-1 rounded-md">
-																	<Icon type="icon-delete" />
-																</button>
-																<p>Delete Order</p>
-															</div>
-														</div>
+															  })
+															: _item.data_json.item
+																	.slice(0, 3)
+																	.map((_p) => {
+																		return (
+																			<li key={_p.id}>
+																				{_p.name}{" "}
+																				<span className="font-bold">
+																					x{_p.quantity}
+																				</span>
+																			</li>
+																		);
+																	})}
+													</ul>
+													{_item.data_json.item.length > 3 && (
+														<button
+															onClick={() => setExpanded(!expanded)}
+															className="text-blue-500 mt-2">
+															{expanded
+																? t("order_page.table.hide_less")
+																: t("order_page.table.see_more")}
+														</button>
 													)}
 												</div>
-											)}
+											</div>
 
-											{_item.status !== "success" &&
-												userInfo?.role !== "admin" && (
+											<div className="flex items-center gap-2 flex-wrap text-[12px]">
+												{userInfo?.role === "admin" && (
 													<div className="relative">
 														<button
-															className=" border p-2 rounded-md"
+															className="p-1 rounded-md"
 															onClick={() =>
 																handlePopoverChange(_item)
 															}>
@@ -940,11 +864,17 @@ function OrderPage() {
 																ref={popoverRef}
 																className="absolute w-[200px] h-auto max-h-[186px] bg-white top-[-70px] left-[-210px] rounded-md flex flex-col justify-center gap-1 p-2 shadow-lg">
 																<div
-																	className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all`}
+																	className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
+																		_item.status ===
+																			"success" &&
+																		userInfo?.role !==
+																			"admin" &&
+																		"pointer-events-none opacity-50"
+																	}`}
 																	onClick={() =>
 																		handleEdit(_item)
 																	}>
-																	<button className="border p-2 rounded-md">
+																	<button className="border p-1 rounded-md">
 																		<Icon type="icon-edit" />
 																	</button>
 																	<p>Edit order</p>
@@ -963,7 +893,7 @@ function OrderPage() {
 																				"success"
 																			)
 																		}>
-																		<button className="border p-2 rounded-md">
+																		<button className="border p-1 rounded-md">
 																			<Icon type="icon-success" />
 																		</button>
 																		<p>Complete Order</p>
@@ -983,7 +913,7 @@ function OrderPage() {
 																				"pending"
 																			)
 																		}>
-																		<button className="border p-2 rounded-md">
+																		<button className="border p-1 rounded-md">
 																			<Icon type="icon-pending" />
 																		</button>
 																		<p>Pending Order</p>
@@ -991,11 +921,17 @@ function OrderPage() {
 																)}
 
 																<div
-																	className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all`}
+																	className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
+																		_item.status ===
+																			"success" &&
+																		userInfo?.role !==
+																			"admin" &&
+																		"pointer-events-none opacity-50"
+																	}`}
 																	onClick={() =>
 																		handleConfirmDelete(_item)
 																	}>
-																	<button className="border p-2 rounded-md">
+																	<button className="border p-1 rounded-md">
 																		<Icon type="icon-delete" />
 																	</button>
 																	<p>Delete Order</p>
@@ -1005,15 +941,107 @@ function OrderPage() {
 													</div>
 												)}
 
-											{_item.status === "success" &&
-												userInfo?.role !== "admin" && (
-													<p className="text-[14px]">No action</p>
-												)}
+												{_item.status !== "success" &&
+													userInfo?.role !== "admin" && (
+														<div className="relative">
+															<button
+																className=" border p-2 rounded-md"
+																onClick={() =>
+																	handlePopoverChange(_item)
+																}>
+																<Icon type="icon-dot-menu" />
+															</button>
+															{popoverData?.id === _item.id && (
+																<div
+																	ref={popoverRef}
+																	className="absolute w-[200px] h-auto max-h-[186px] bg-white top-[-70px] left-[-210px] rounded-md flex flex-col justify-center gap-1 p-2 shadow-lg">
+																	<div
+																		className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all`}
+																		onClick={() =>
+																			handleEdit(_item)
+																		}>
+																		<button className="border p-2 rounded-md">
+																			<Icon type="icon-edit" />
+																		</button>
+																		<p>Edit order</p>
+																	</div>
+
+																	{userInfo?.role === "admin" && (
+																		<div
+																			className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
+																				_item.status ===
+																					"success" &&
+																				"pointer-events-none opacity-[0.4]"
+																			}`}
+																			onClick={() =>
+																				handleChangeStatus(
+																					_item,
+																					"success"
+																				)
+																			}>
+																			<button className="border p-2 rounded-md">
+																				<Icon type="icon-success" />
+																			</button>
+																			<p>Complete Order</p>
+																		</div>
+																	)}
+
+																	{userInfo?.role === "admin" && (
+																		<div
+																			className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all ${
+																				_item.status ===
+																					"pending" &&
+																				"pointer-events-none opacity-[0.4]"
+																			}`}
+																			onClick={() =>
+																				handleChangeStatus(
+																					_item,
+																					"pending"
+																				)
+																			}>
+																			<button className="border p-2 rounded-md">
+																				<Icon type="icon-pending" />
+																			</button>
+																			<p>Pending Order</p>
+																		</div>
+																	)}
+
+																	<div
+																		className={`cursor-pointer flex gap-2 items-center rounded-md hover:bg-[#ccc] hover:text-black transition-all`}
+																		onClick={() =>
+																			handleConfirmDelete(
+																				_item
+																			)
+																		}>
+																		<button className="border p-2 rounded-md">
+																			<Icon type="icon-delete" />
+																		</button>
+																		<p>Delete Order</p>
+																	</div>
+																</div>
+															)}
+														</div>
+													)}
+
+												{_item.status === "success" &&
+													userInfo?.role !== "admin" && (
+														<p className="text-[14px]">No action</p>
+													)}
+											</div>
 										</div>
-									</div>
-								);
-							})}
-						</div>
+									);
+								})}
+							</div>
+						)}
+
+						{orders.length <= 0 && (
+							<div className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] pointer-events-none">
+								<img
+									src={OrderNow}
+									alt=""
+								/>
+							</div>
+						)}
 					</div>
 					<div
 						className="fixed w-full h-[50px] bg-main-hover bottom-0 shadow-lg flex justify-center"

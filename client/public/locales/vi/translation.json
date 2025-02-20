@@ -19,6 +19,9 @@
       "create_new_order": "Tạo đơn đặt hàng mới"
     },
     "table": {
+      "hide_less": "Ẩn bớt",
+      "see_more": "Xem thêm",
+      "order_products":"Danh sách sản phẩm",
       "order_title": "Thông tin đơn hàng",
       "username": "Người đặt hàng",
       "email":"Email",

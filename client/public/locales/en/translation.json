@@ -19,6 +19,9 @@
       "create_new_order": "Create New Order"
     },
     "table": {
+      "hide_less": "Hide less",
+      "see_more": "See More",
+      "order_products":"Product List",
       "order_title": "Order Info",
       "username": "Username",
       "email":"Email",
