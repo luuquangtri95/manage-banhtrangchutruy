@@ -355,8 +355,6 @@ function OrderPage() {
 			return acc;
 		}, {});
 
-		console.log("originProduct", originProduct);
-
 		if (originProduct?.length) {
 			formattedData.data_json = {
 				item: originProduct?.map((_item) => ({
