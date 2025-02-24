@@ -834,7 +834,7 @@ function OrderPage() {
 										"order_page.table.order_title",
 										"order_page.table.products",
 										"order_page.table.delivery_date",
-										"Total Price",
+										"order_page.table.total_price",
 										"order_page.table.status",
 										"common.created_date",
 										"common.actions",
@@ -1272,7 +1272,7 @@ function OrderPage() {
 
 								<div className="w-[150px]">
 									<FormField
-										label={t("order_page.table.total_price")}
+										label={t("order_page.popup.total_price")}
 										value={item.price || item.retailPrice}
 										type="number"
 										disabled={

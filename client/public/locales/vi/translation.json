@@ -42,7 +42,8 @@
       "phone": "Số điện thoại",
       "status": "Trạng thái",
       "delivery_date": "Ngày giao hàng (*)",
-      "product": "Lựa chọn sản phẩm"
+      "product": "Lựa chọn sản phẩm",
+      "total_price": "Giá Tiền"
     },
     "validate":{
       "phone_invalid": "Số điện thoại phải format theo 0|+84 xxxx xxx",

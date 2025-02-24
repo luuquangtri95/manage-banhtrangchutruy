@@ -42,7 +42,8 @@
       "phone": "Phone",
       "status": "Status",
       "delivery_date": "Delivery Date (*)",
-      "product": "Product Picker"
+      "product": "Product Picker",
+      "total_price": "Price"
     },
     "validate":{
       "phone_invalid": "Phone format 0|+84 xxxx xxx",
