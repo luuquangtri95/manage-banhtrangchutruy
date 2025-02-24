@@ -13,6 +13,8 @@ import usePageLoading from "../../hooks/usePageLoading";
 import { DashboardContext } from "../dashboard/Dashboard";
 import useDetectDevice from "../../hooks/useDetectDevice";
 import OrderNow from "../../assets/order-now.png";
+import UserApi from "../../api/userApi";
+import { formatPrice } from "../../helpers/formatPrice";
 
 const INIT_FORMDATA = {
 	title: {
@@ -120,6 +122,8 @@ function OrderPage() {
 	const { isLoading, showLoading, hideLoading } = usePageLoading();
 	const { userInfo } = useContext(DashboardContext);
 	const [popoverData, setPopoverData] = useState(null);
+	const [userData, setUserData] = useState({});
+	const [wholesaleData, setWholesaleData] = useState([]);
 	const width = useDetectDevice();
 
 	//#region [MOBILE]
@@ -134,13 +138,31 @@ function OrderPage() {
 	}, [filters]);
 
 	useEffect(() => {
+		fetchUser();
+	}, []);
+
+	useEffect(() => {
 		if (popupData) {
-			const products = popupData?.data_json?.item?.map((_item) => ({
-				value: _item.id,
-				label: _item.name,
-				quantity: _item.quantity,
-			}));
-			setOriginProduct(products || []);
+			const products = popupData?.data_json?.item?.map((_item) => {
+				// Nếu _item không có retailPrice, tra cứu từ productsCategories
+				const retailPrice =
+					_item.retailPrice || getRetailPriceFromCategories(_item.id) || _item.price;
+				return {
+					value: _item.id,
+					label: _item.name,
+					quantity: _item.quantity,
+					retailPrice, // Giá bán lẻ gốc
+					price: _item.price, // Giá hiện tại có thể là giá sỉ hoặc retailPrice
+				};
+			});
+
+			// Nếu wholesaleData có dữ liệu, cập nhật giá sản phẩm dựa theo giá sỉ
+			const updatedProducts =
+				wholesaleData && wholesaleData.length
+					? updateProductPrices(products, wholesaleData)
+					: products;
+
+			setOriginProduct(updatedProducts);
 
 			setFormData((prev) => {
 				const updatedFormData = { ...prev };
@@ -164,7 +186,7 @@ function OrderPage() {
 				return updatedFormData;
 			});
 		}
-	}, [popupData]);
+	}, [popupData, wholesaleData, productsCategories]);
 
 	useEffect(() => {
 		const handleClickOutside = (e) => {
@@ -221,6 +243,7 @@ function OrderPage() {
 								value: item.id,
 								label: item.name,
 								quantity: item.quantity,
+								price: item.price,
 							};
 						})
 						.filter((_item) => _item.quantity > 0),
@@ -233,6 +256,74 @@ function OrderPage() {
 		} finally {
 			hideLoading();
 		}
+	};
+
+	const fetchUser = async () => {
+		try {
+			showLoading();
+
+			const _currentUser = userInfo ? userInfo : JSON.parse(localStorage.getItem("userInfo"));
+
+			let _originalProduct = JSON.parse(JSON.stringify(originProduct));
+
+			const res = await UserApi.findById(_currentUser.id);
+
+			let flatData = res.metadata?.wholesaleGroups?.flatMap((group) =>
+				group.wholesalePrices.map((price) => ({
+					id: price.id,
+					name: price.name,
+					price: price.price,
+					min_quantity: price.min_quantity,
+					products: price.products,
+					groupId: group.id,
+					groupName: group.name,
+				}))
+			);
+
+			setWholesaleData(flatData);
+
+			// Cập nhật lại giá cho originProduct dựa trên wholesaleData và số lượng
+			_originalProduct = updateProductPrices(_originalProduct, flatData);
+
+			console.log("_originalProduct", _originalProduct);
+
+			setOriginProduct(_originalProduct);
+			setUserData(res.metadata);
+		} catch (error) {
+			console.log("error", error);
+		} finally {
+			hideLoading();
+		}
+	};
+
+	const updateProductPrices = (products, wholesaleData) => {
+		return products?.map((product) => {
+			// Đảm bảo đã có retailPrice
+			const updatedProduct = {
+				...product,
+				retailPrice: product.retailPrice || product.price,
+			};
+
+			wholesaleData.forEach((ws) => {
+				if (ws.products.some((wsProd) => wsProd.id === product.value)) {
+					// Nếu số lượng đạt yêu cầu của giá sỉ, sử dụng giá sỉ; nếu không thì lấy giá bán lẻ
+					updatedProduct.price =
+						Number(updatedProduct.quantity) >= ws.min_quantity
+							? ws.price
+							: updatedProduct.retailPrice;
+				}
+			});
+
+			return updatedProduct;
+		});
+	};
+
+	const getRetailPriceFromCategories = (productId) => {
+		for (const category of productsCategories) {
+			const product = category.options.find((item) => item.value === productId);
+			if (product) return product.price;
+		}
+		return null;
 	};
 
 	const handleFormChange = (name, value) => {
@@ -275,6 +366,9 @@ function OrderPage() {
 					quantity: _item.quantity,
 				})),
 			};
+			formattedData.total_price = originProduct.reduce((sum, product) => {
+				return sum + Number(product.price) * Number(product.quantity);
+			}, 0);
 		} else {
 			toast.error("Không thể tạo order khi không có sản phẩm");
 			return;
@@ -309,10 +403,16 @@ function OrderPage() {
 
 		const newProducts = itemPicked.map((item) => ({
 			...item,
-			quantity: originProduct.find((p) => p.value === item.value)?.quantity || 1,
+			quantity: originProduct?.find((p) => p.value === item.value)?.quantity || 1,
+			// Lưu lại giá bán lẻ gốc
+			retailPrice: item.price,
 		}));
 
-		setOriginProduct(newProducts);
+		const updatedProducts = wholesaleData.length
+			? updateProductPrices(newProducts, wholesaleData)
+			: newProducts;
+
+		setOriginProduct(updatedProducts);
 	};
 
 	const handleChangeQuantityProductPicker = (e, currentProduct) => {
@@ -324,7 +424,7 @@ function OrderPage() {
 
 		const findOriginQuantity =
 			findItemCategories?.options?.find((_item) => _item.value === currentProduct.value)
-				.quantity || 1;
+				?.quantity || 1;
 
 		if (value > findOriginQuantity) {
 			toast.error(
@@ -334,11 +434,15 @@ function OrderPage() {
 		}
 
 		const _originProducts = JSON.parse(JSON.stringify(originProduct));
-
 		const index = _originProducts.findIndex((_item) => _item.value === currentProduct.value);
-
 		_originProducts[index].quantity = value;
-		setOriginProduct(_originProducts);
+
+		// Cập nhật giá sau khi thay đổi số lượng
+		const updatedProducts = wholesaleData.length
+			? updateProductPrices(_originProducts, wholesaleData)
+			: _originProducts;
+
+		setOriginProduct(updatedProducts);
 	};
 
 	const handleCreate = () => {
@@ -547,6 +651,11 @@ function OrderPage() {
 						type="active"
 						className="#003a5a"></Badge>
 				</td>
+
+				<td className="p-4 py-1 text-sm text-slate-500">
+					{formatPrice(order.total_price)}
+				</td>
+
 				<td className="p-4 py-1 text-sm text-slate-500">
 					<Badge
 						value={t(`order_page.table.${order.status}`)}
@@ -728,6 +837,7 @@ function OrderPage() {
 										"order_page.table.order_title",
 										"order_page.table.products",
 										"order_page.table.delivery_date",
+										"Total Price",
 										"order_page.table.status",
 										"common.created_date",
 										"common.actions",
@@ -1057,7 +1167,7 @@ function OrderPage() {
 			<Popup
 				title="Tạo đơn hàng"
 				width="max-w-6xl"
-				minHeight="min-h-[400px]"
+				minHeight="min-h-[500px]"
 				isOpen={popupData}
 				onSubmit={handlePopupSubmit}
 				onClose={handleClosePopup}>
@@ -1160,6 +1270,19 @@ function OrderPage() {
 											)?.options[0]?.quantity === 0
 										}
 										onChange={(e) => handleChangeQuantityProductPicker(e, item)}
+									/>
+								</div>
+
+								<div className="w-[150px]">
+									<FormField
+										label={t("order_page.table.total_price")}
+										value={item.price || item.retailPrice}
+										type="number"
+										disabled={
+											productsCategories.find((_i) =>
+												_i.options.some((__i) => __i.value === item.value)
+											)?.options[0]?.price
+										}
 									/>
 								</div>
 							</div>

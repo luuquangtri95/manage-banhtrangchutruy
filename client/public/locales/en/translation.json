@@ -32,7 +32,8 @@
       "address": "Address",
       "success": "Successfully Delivered",
       "pending": "Pending",
-      "active":"Active"
+      "active":"Active",
+      "total_price": "Total Price"
     },
     "popup":{
       "title": "Order Info",

@@ -32,7 +32,8 @@
       "address": "Địa chỉ",
       "success": "Giao thành công", 
       "pending": "Đang xử lý",
-      "active":"Xác nhận đơn hàng"
+      "active":"Xác nhận đơn hàng",
+      "total_price": "Tổng tiền"
     },
     "popup":{
       "title": "Tên đơn hàng",
