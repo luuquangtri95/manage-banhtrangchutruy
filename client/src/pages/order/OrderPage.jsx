@@ -144,19 +144,18 @@ function OrderPage() {
 	useEffect(() => {
 		if (popupData) {
 			const products = popupData?.data_json?.item?.map((_item) => {
-				// Nếu _item không có retailPrice, tra cứu từ productsCategories
-				const retailPrice =
-					_item.retailPrice || getRetailPriceFromCategories(_item.id) || _item.price;
+				// Nếu _item không có giá gốc, lấy giá gốc từ productsCategories
+				const fallbackPrice = getRetailPriceFromCategories(_item.id) || 0;
 				return {
 					value: _item.id,
 					label: _item.name,
 					quantity: _item.quantity,
-					retailPrice, // Giá bán lẻ gốc
-					price: _item.price, // Giá hiện tại có thể là giá sỉ hoặc retailPrice
+					retailPrice: _item.retailPrice || fallbackPrice,
+					price: _item.price || fallbackPrice,
 				};
 			});
 
-			// Nếu wholesaleData có dữ liệu, cập nhật giá sản phẩm dựa theo giá sỉ
+			// Nếu wholesaleData đã được add, cập nhật giá sản phẩm dựa theo giá sỉ
 			const updatedProducts =
 				wholesaleData && wholesaleData.length
 					? updateProductPrices(products, wholesaleData)
@@ -195,12 +194,10 @@ function OrderPage() {
 			}
 		};
 
-		// Chỉ gắn sự kiện nếu popoverData tồn tại (popover đang mở)
 		if (popoverData) {
 			document.addEventListener("mousedown", handleClickOutside);
 		}
 
-		// Cleanup khi component unmount hoặc popoverData thay đổi
 		return () => document.removeEventListener("mousedown", handleClickOutside);
 	}, [popoverData]);
 
@@ -357,6 +354,8 @@ function OrderPage() {
 			acc[key] = newFormData[key].value;
 			return acc;
 		}, {});
+
+		console.log("originProduct", originProduct);
 
 		if (originProduct?.length) {
 			formattedData.data_json = {
