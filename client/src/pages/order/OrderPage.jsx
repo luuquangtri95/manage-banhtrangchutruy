@@ -1164,7 +1164,7 @@ function OrderPage() {
 			<Popup
 				title="Tạo đơn hàng"
 				width="max-w-6xl"
-				minHeight="min-h-[500px]"
+				height="600px"
 				isOpen={popupData}
 				onSubmit={handlePopupSubmit}
 				onClose={handleClosePopup}>

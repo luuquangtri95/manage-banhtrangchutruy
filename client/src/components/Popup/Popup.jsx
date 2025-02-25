@@ -11,6 +11,7 @@ const Popup = ({
 	onSubmit,
 	width = "max-w-xl",
 	minHeight = "",
+	height = "auto",
 }) => {
 	const { t } = useTranslation();
 	const _detectWidth = useDetectDevice();
@@ -38,9 +39,9 @@ const Popup = ({
 				</div>
 
 				<div
-					className={`mb-4 overflow-y-scroll h-auto ${minHeight} ${
-						_detectWidth > 768 ? "max-h-[800px]" : "max-h-[500px]"
-					} p-3`}>
+					className={`mb-4 overflow-y-scroll ${
+						height === "auto" ? "h-auto" : `h-[${height}]`
+					} ${_detectWidth > 768 ? "max-h-[600px]" : "max-h-[500px]"} p-3`}>
 					{children}
 				</div>
 
