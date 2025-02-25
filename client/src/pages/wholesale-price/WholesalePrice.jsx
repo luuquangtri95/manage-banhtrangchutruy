@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import FormField from "../../components/FormField";
 import { formatDateWithIntl } from "../../helpers/convertDate";
 import { formatPrice } from "../../helpers/formatPrice";
+import CategoryApi from "../../api/categoryApi";
 
 const INIT_FORMDATA = {
 	name: {
@@ -68,12 +69,15 @@ function WholesalePrice(props) {
 	const [loading, setLoading] = useState(false);
 	const [filters, setFilters] = useState({ page: 1, limit: 8, searchTerm: "" });
 	const [popupData, setPopupData] = useState(null);
+	const [productsCategories, setProductsCategories] = useState([]);
+	const [originProduct, setOriginProduct] = useState([]);
 	const { t } = useTranslation();
 
 	useEffect(() => {
 		fetchWholesalePrices();
 		fetchWholesaleGroups();
 		fetchProducts();
+		fetchCategories();
 	}, [filters]);
 
 	useEffect(() => {
@@ -127,6 +131,33 @@ function WholesalePrice(props) {
 			toast.error("fail to fetch WholesalePriceApi");
 		} finally {
 			setLoading(false);
+		}
+	};
+
+	const fetchCategories = async () => {
+		try {
+			const res = await CategoryApi.findAll();
+
+			const __product = res.metadata.result.map((_item) => {
+				return {
+					label: _item.name.toUpperCase(),
+					options: _item.products
+						.map((item) => {
+							return {
+								value: item.id,
+								label: item.name,
+								quantity: item.quantity,
+								price: item.price,
+							};
+						})
+						.filter((_item) => _item.quantity > 0),
+				};
+			});
+
+			setProductsCategories(__product);
+		} catch (error) {
+			console.log(error);
+		} finally {
 		}
 	};
 
@@ -227,8 +258,8 @@ function WholesalePrice(props) {
 			return acc;
 		}, {});
 
-		if (products?.value?.length) {
-			formattedData.products = products.value.map((_p) => ({
+		if (originProduct?.length) {
+			formattedData.products = originProduct.map((_p) => ({
 				name: _p.label,
 				id: _p.value,
 			}));
@@ -261,6 +292,7 @@ function WholesalePrice(props) {
 			fetchProducts();
 			fetchWholesaleGroups();
 			fetchWholesalePrices();
+			fetchCategories();
 		}
 	};
 
@@ -358,6 +390,20 @@ function WholesalePrice(props) {
 			</tr>
 		));
 
+	const handleChangeProduct = (itemPicked) => {
+		if (!itemPicked || itemPicked.length === 0) {
+			setOriginProduct([]);
+			return;
+		}
+
+		const newProducts = itemPicked.map((item) => ({
+			...item,
+			quantity: originProduct?.find((p) => p.value === item.value)?.quantity || 1,
+		}));
+
+		setOriginProduct(newProducts);
+	};
+
 	return (
 		<div className="mt-3 p-1">
 			<div className="flex justify-between">
@@ -374,7 +420,6 @@ function WholesalePrice(props) {
 					{/* <ProductFilterForm onSubmit={handleFilterChange} /> */}
 				</div>
 			</div>
-
 			<div className="relative flex flex-col w-full h-full text-gray-700 bg-white shadow-md rounded-lg">
 				<table className="w-full table-fixed text-left">
 					<thead>
@@ -424,7 +469,6 @@ function WholesalePrice(props) {
 					</div>
 				)}
 			</div>
-
 			<Popup
 				isOpen={popupData}
 				title={popupData?.id ? "Edit Wholesale Price" : "Create Wholesale Price"}
@@ -459,9 +503,9 @@ function WholesalePrice(props) {
 					</label>
 					<Select
 						isMultiple
-						value={products.value}
-						onChange={(value) => handleSelectChange("product", value)}
-						options={products.options}
+						value={originProduct}
+						onChange={handleChangeProduct}
+						options={productsCategories}
 					/>
 				</div>
 
@@ -479,7 +523,6 @@ function WholesalePrice(props) {
 					/>
 				</div>
 			</Popup>
-
 			<Popup
 				isOpen={!!wholesalePriceDelete}
 				title={t("common.confirm_delete")}
