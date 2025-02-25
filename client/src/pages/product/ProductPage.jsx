@@ -59,7 +59,7 @@ function ProductsPage() {
 	const [products, setProducts] = useState([]);
 	const [formData, setFormData] = useState(INIT_FORMDATA);
 	const [categories, setCategories] = useState(INIT_CATEGORIES);
-	const [filters, setFilters] = useState({ page: 1, limit: 5, searchTerm: "" });
+	const [filters, setFilters] = useState({ page: 1, limit: 15, searchTerm: "" });
 	const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
 	const { t } = useTranslation();
 	const { isLoading, showLoading, hideLoading } = usePageLoading();
